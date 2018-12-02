@@ -1,0 +1,5 @@
+
+.idea/
+venv/
+haptest/__pycache__/
+haptest/migrations/__pycache__/
