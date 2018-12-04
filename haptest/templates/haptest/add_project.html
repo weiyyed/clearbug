@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html>
 <body>
-<p> </p>
+<p>添加项目</p>
 
 
-<form action="/haptest/add_project/" method="post">
-    项目名称: <input type="text" name="project_name"> <br>
-
-    <input type="submit" value="提交">
+<form method='post'>
+{% csrf_token %}
+{{ form }}
+<input type="submit" value="提交">
 </form>
 
 </body>
 </html>
+

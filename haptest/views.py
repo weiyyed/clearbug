@@ -62,30 +62,23 @@ from .forms import AddForm
 #         # user hits the Back button.
 #         return HttpResponseRedirect(reverse('haptest:results', args=(question.id,)))
 #
-# def add_project(request):
-#     if request.method=='POST':
-#         form=AddProject(request.POST)
-#         if form.is_valid():
-#             Project.objects.create(project_name=form.cleaned_data['project_name'])
-#             # return render(request,'haptest/add_project.html')
-#             print(project_name)
-#             return 1
-#     else:
-#         form=AddProject()
-#     return  render(request,'haptest/add_project.html')
+def add_project(request):
+    if request.method=='POST':
+        form=AddProject(request.POST)
+        if form.is_valid():
+            Project.objects.create(project_name=form.cleaned_data['project_name'])
+
+            # return render(request,'haptest/add_project.html')
+            return render(request, 'haptest/add_project.html', {'form': form})
+
+    else:
+        form=AddProject()
+    # return render(request, 'haptest/index.html', {'form': form})
+    return render(request,'haptest/add_project.html',{'form':form})
 
 #
 # def index(request):
 #     return render(request, 'index.html')
-
-
-def add(request):
-    a = request.GET['a']
-    b = request.GET['b']
-    a = int(a)
-    b = int(b)
-    return HttpResponse(str(a + b))
-
 
 
 def index(request):
