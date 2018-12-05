@@ -1,10 +1,14 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
 from .models import Choice, Question,Project
 from .forms import AddProject
-from .forms import AddForm
+# from .forms import AddForm
+from django.contrib import auth
+from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.models import User
 
 # def index(request):
 #     latest_question_list = Question.objects.order_by('-pub_date')[:5]
@@ -62,18 +66,48 @@ from .forms import AddForm
 #         # user hits the Back button.
 #         return HttpResponseRedirect(reverse('haptest:results', args=(question.id,)))
 #
+def register(request):
+    #注册
+    if request.method == 'GET':
+        return render(request, 'haptest/register.html')
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        password = request.POST.get('password')
+        User.objects.create_user(username=name, password=password)
+        return HttpResponseRedirect('/haptest/login/')
+
+
+def login(request):
+    #登录
+    if request.method == 'GET':
+        return render(request, 'haptest/login.html')
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        password = request.POST.get('password')
+        # 验证用户名和密码，通过的话，返回User对象
+        user = auth.authenticate(username=name, password=password)
+        if user:
+            auth.login(request, user)
+            return HttpResponseRedirect('/haptest/')
+        else:
+            return render(request, 'haptest/login.html','请输入登录名')
+def logout(request):
+    # 退出
+    if request.method == 'GET':
+        auth.logout(request)
+        return HttpResponseRedirect('/haptest/login')
+@login_required
 def add_project(request):
     if request.method=='POST':
         form=AddProject(request.POST)
         if form.is_valid():
             Project.objects.create(project_name=form.cleaned_data['project_name'])
-
+            Project.objects.create(platform=form.cleaned_data['platform'])
             # return render(request,'haptest/add_project.html')
             return render(request, 'haptest/add_project.html', {'form': form})
 
     else:
         form=AddProject()
-    # return render(request, 'haptest/index.html', {'form': form})
     return render(request,'haptest/add_project.html',{'form':form})
 
 #
@@ -84,13 +118,15 @@ def add_project(request):
 def index(request):
     if request.method == 'POST':  # 当提交表单时
 
-        form = AddForm(request.POST)  # form 包含提交的数据
+        # form = AddForm(request.POST)  # form 包含提交的数据
 
-        if form.is_valid():  # 如果提交的数据合法
-            a = form.cleaned_data['a']
-            b = form.cleaned_data['b']
-            # return HttpResponse(str(int(a) + int(b)))
-            return render(request, 'haptest/index.html', {'form': form})
+        # if form.is_valid():  # 如果提交的数据合法
+        #     a = form.cleaned_data['a']
+        #     b = form.cleaned_data['b']
+        #     # return HttpResponse(str(int(a) + int(b)))
+        #     return render(request, 'haptest/index.html', {'form': form})
+        pass
     else:  # 当正常访问时
-        form = AddForm()
-    return render(request, 'haptest/index.html', {'form': form})
+        # form = AddForm()
+        pass
+    return render(request, 'haptest/index.html', )

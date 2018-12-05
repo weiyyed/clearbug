@@ -4,10 +4,20 @@
 <p>添加项目</p>
 
 
-<form method='post'>
-{% csrf_token %}
-{{ form }}
-<input type="submit" value="提交">
+{#<form method='post'>#}
+{##}
+{#{{ form }}#}
+{#<input type="submit" value="提交">#}
+{#</form>#}
+<form action="/haptest/add_project/" method="post">
+    {% csrf_token %}
+{#    <label for="project_name">项目名称: </label>#}
+{#    <input id="your_name" type="text" name="your_name" value="{{ current_name }}">#}
+{##}
+{#    <label for="your_name">标签: </label>#}
+{#    <input id="your_name" type="text" name="your_name" value="{{ current_name }}">#}
+    {{ form.as_ul }}
+    <input type="submit" value="保存">
 </form>
 
 </body>
