@@ -96,8 +96,8 @@ def index(request):
         if form.is_valid():  # 如果提交的数据合法
             a = form.cleaned_data['a']
             b = form.cleaned_data['b']
-            return HttpResponse(str(int(a) + int(b)))
-
+            # return HttpResponse(str(int(a) + int(b)))
+            return render(request, 'haptest/index.html', {'form': form})
     else:  # 当正常访问时
         form = AddForm()
     return render(request, 'haptest/index.html', {'form': form})
