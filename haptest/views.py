@@ -1,13 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
-from django.views import generic
-from .models import Choice, Question,Project
-from .forms import AddProject
-# from .forms import AddForm
+# from django.urls import reverse
+# from django.views import generic
+# from .models import Choice, Question,Project
+from .forms import AddProjectForm
 from django.contrib import auth
-from django.contrib.auth.hashers import make_password, check_password
+# from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import User
 
 # def index(request):
@@ -96,10 +95,10 @@ def logout(request):
     if request.method == 'GET':
         auth.logout(request)
         return HttpResponseRedirect('/haptest/login')
-@login_required
+# @login_required
 def add_project(request):
     if request.method=='POST':
-        form=AddProject(request.POST)
+        form=AddProjectForm(request.POST)
         if form.is_valid():
             Project.objects.create(project_name=form.cleaned_data['project_name'])
             Project.objects.create(platform=form.cleaned_data['platform'])
@@ -107,7 +106,7 @@ def add_project(request):
             return render(request, 'haptest/add_project.html', {'form': form})
 
     else:
-        form=AddProject()
+        form=AddProjectForm()
     return render(request,'haptest/add_project.html',{'form':form})
 
 #

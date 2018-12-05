@@ -1,26 +1,32 @@
 from django.db import models
 
-class Question(models.Model):
-    question_text = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published')
-
+# class Question(models.Model):
+#     question_text = models.CharField(max_length=200)
+#     pub_date = models.DateTimeField('date published')
+#
+#     def __str__(self):
+#         return self.question_text
+#
+# class Choice(models.Model):
+#     question = models.ForeignKey(Question, on_delete=models.CASCADE)
+#     choice_text = models.CharField(max_length=200)
+#     votes = models.IntegerField(default=0)
+class Plateform(models.Model):
+    platform_code=models.SlugField('平台编码',unique=True)
+    platform_name=models.CharField('平台名称',max_length=20)
     def __str__(self):
-        return self.question_text
-
-class Choice(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    choice_text = models.CharField(max_length=200)
-    votes = models.IntegerField(default=0)
-
-
+        return self.platform_name
+    class Meta:
+        verbose_name = '平台信息'
+        db_table = 'Plateform'
 class Project(models.Model):
     project_name=models.CharField('项目名称',max_length=50,unique=True,null=False)
-    platform = models.CharField('平台', max_length=50, null=False,default='prod3')
+    platform = models.ForeignKey(Plateform,on_delete=models.CASCADE, max_length=50, null=False)
     def __str__(self):
         return self.project_name
-    # class Meta:
-    #     verbose_name = '项目信息'
-    #     db_table = 'Project'
+    class Meta:
+        verbose_name = '项目信息'
+        db_table = 'Project'
 
 class Module(models.Model):
     #模块，用例集
