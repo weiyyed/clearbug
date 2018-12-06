@@ -1,4 +1,4 @@
-# from django import forms
+from django import forms
 from django.forms import ModelForm
 from haptest.models import Project
 
@@ -8,6 +8,7 @@ class AddProjectForm(ModelForm):
     class Meta:
         model=Project
         fields="__all__"
+
 
 # class AddForm(forms.Form):
 #     a = forms.IntegerField()
