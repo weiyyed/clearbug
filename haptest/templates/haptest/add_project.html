@@ -1,25 +1,8 @@
-{#<!DOCTYPE html>#}
-{#<html>#}
-{#<body>#}
-{#<p>添加项目</p>#}
-{##}
-{##}
-{#<form action="/haptest/add_project/" method="post">#}
-{#    {% csrf_token %}#}
-{#    {{ form.as_ul }}#}
-{#    <input type="submit" value="保存">#}
-{#</form>#}
-{##}
-{#</body>#}
-{#</html>#}
-
-
 {% extends "haptest/base.html" %}
 {% load staticfiles %}
 {% block content %}
 
     <div class=" admin-content">
-
         <div class="admin-biaogelist">
             <div class="listbiaoti am-cf">
                 <ul class="am-icon-flag on">项目管理</ul>

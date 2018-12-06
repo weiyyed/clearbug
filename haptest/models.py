@@ -21,7 +21,7 @@ class Plateform(models.Model):
         db_table = 'haptest_Plateform'
 class Project(models.Model):
     project_name=models.CharField('项目名称',max_length=50,unique=True,null=False)
-    platform = models.ForeignKey(Plateform,on_delete=models.CASCADE, verbose_name='所属平台', null=False,default='prod3')
+    platform = models.ForeignKey(Plateform,on_delete=models.CASCADE, verbose_name='所属平台', null=False,default='1')
     def __str__(self):
         return self.project_name
     class Meta:

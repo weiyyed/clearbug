@@ -100,10 +100,11 @@ def add_project(request):
     if request.method=='POST':
         form=AddProjectForm(request.POST)
         if form.is_valid():
-            Project.objects.create(project_name=form.cleaned_data['project_name'])
-            Project.objects.create(platform=form.cleaned_data['platform'])
+            # Project.objects.create(project_name=form.cleaned_data['project_name'])
+            # Project.objects.create(platform=form.cleaned_data['platform'])
             # return render(request,'haptest/add_project.html')
-            return render(request, 'haptest/add_project.html', {'form': form})
+            form.save()
+            return render(request, 'haptest/project_list.html')
 
     else:
         form=AddProjectForm()
@@ -115,17 +116,6 @@ def add_project(request):
 
 
 def index(request):
-    if request.method == 'POST':  # 当提交表单时
-
-        # form = AddForm(request.POST)  # form 包含提交的数据
-
-        # if form.is_valid():  # 如果提交的数据合法
-        #     a = form.cleaned_data['a']
-        #     b = form.cleaned_data['b']
-        #     # return HttpResponse(str(int(a) + int(b)))
-        #     return render(request, 'haptest/index.html', {'form': form})
-        pass
-    else:  # 当正常访问时
-        # form = AddForm()
-        pass
     return render(request, 'haptest/index.html', )
+def project_list(request):
+    return render(request, 'haptest/project_list.html', )
