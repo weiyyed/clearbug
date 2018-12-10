@@ -40,13 +40,13 @@ class Module(models.Model):
         db_table = 'haptest_module'
 
 class Element(models.Model):
-    project=models.ForeignKey(Plateform,on_delete=models.CASCADE)
-    page=models.CharField(max_length=50, null=False)
-    element=models.CharField(max_length=50, null=False)
-    by=models.CharField(max_length=50, null=False)
-    value=models.CharField(max_length=50, null=False)
-    custom=models.CharField(max_length=50, null=False)
-    remark=models.CharField(max_length=50, null=False)
+    plateform=models.ForeignKey(Plateform,on_delete=models.CASCADE)
+    page=models.CharField(max_length=50)
+    element=models.CharField(max_length=50)
+    by=models.CharField(max_length=50)
+    value=models.CharField(max_length=50)
+    custom=models.CharField(max_length=50)
+    remark=models.CharField(max_length=50 )
     def __str__(self):
         return self.element
     class Meta:

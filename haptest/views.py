@@ -1,13 +1,14 @@
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
 # from django.urls import reverse
 # from django.views import generic
 # from .models import Choice, Question,Project
+# from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
 from .forms import AddProjectForm
 from django.contrib import auth
-# from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import User
+from haptest.models import Project
 
 # def index(request):
 #     latest_question_list = Question.objects.order_by('-pub_date')[:5]
@@ -110,12 +111,21 @@ def add_project(request):
         form=AddProjectForm()
     return render(request,'haptest/add_project.html',{'form':form})
 
-#
-# def index(request):
-#     return render(request, 'index.html')
-
 
 def index(request):
     return render(request, 'haptest/index.html', )
 def project_list(request):
-    return render(request, 'haptest/project_list.html', )
+    # return render(request, 'haptest/project_list.html', )
+    # filter_query = set_filter_session(request)
+    # pro_list = get_pager_info(
+    #     Project, filter_query, '/api/project_list/', id)
+    manage_info = {
+        # 'account': account,
+        # 'project': pro_list[1],
+        # 'page_list': pro_list[0],
+        # 'info': filter_query,
+        # 'sum': pro_list[2],
+        # 'env': EnvInfo.objects.all().order_by('-create_time'),
+        'project_all': Project.objects.all(),
+    }
+    return render(request, 'haptest/project_list.html', manage_info)
