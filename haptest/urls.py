@@ -8,6 +8,7 @@ urlpatterns = [
     # path('<int:pk>/results/', views.ResultsView.as_view(), name='results'),
     # path('<int:question_id>/vote/', views.vote, name='vote'),
     path('add_project/',views.add_project,name='add_project'),
+    path('add_project/<int:project_id>/',views.add_project,name='add_project'),
     path('', views.index,name='index'),
     # re_path(r'^favicon\.ico$', RedirectView.as_view(url='/static/assets/img/favicon.ico')),
     # re_path('^(?P<app>(\w+))/(?P<function>(\w+))/$', process),

@@ -1,4 +1,4 @@
-# from django.urls import reverse
+from django.urls import reverse
 # from django.views import generic
 # from .models import Choice, Question,Project
 # from django.contrib.auth.hashers import make_password, check_password
@@ -97,19 +97,27 @@ def logout(request):
         auth.logout(request)
         return HttpResponseRedirect('/haptest/login')
 # @login_required
-def add_project(request):
+def add_project(request,project_id):
+
     if request.method=='POST':
-        form=AddProjectForm(request.POST)
+        if project_id !=0:
+            form=AddProjectForm(request.POST,instance=Project.objects.get(id=project_id))
+        else:
+            form=AddProjectForm(request.POST)
         if form.is_valid():
             # Project.objects.create(project_name=form.cleaned_data['project_name'])
             # Project.objects.create(platform=form.cleaned_data['platform'])
             # return render(request,'haptest/add_project.html')
             form.save()
-            return render(request, 'haptest/project_list.html')
+            return HttpResponseRedirect(reverse('haptest:project'))
 
     else:
-        form=AddProjectForm()
-    return render(request,'haptest/add_project.html',{'form':form})
+        if project_id !=0:
+            form=AddProjectForm(instance=Project.objects.get(id=project_id))
+        else:
+            form=AddProjectForm()
+        return render(request,'haptest/add_project.html',{'form':form,'project_id':project_id})
+
 
 
 def index(request):
@@ -121,11 +129,11 @@ def project_list(request):
     #     Project, filter_query, '/api/project_list/', id)
     manage_info = {
         # 'account': account,
-        # 'project': pro_list[1],
+        'projects': Project.objects.all(),
         # 'page_list': pro_list[0],
         # 'info': filter_query,
         # 'sum': pro_list[2],
         # 'env': EnvInfo.objects.all().order_by('-create_time'),
-        'project_all': Project.objects.all(),
+        # 'project_all': Project.objects.all(),
     }
     return render(request, 'haptest/project_list.html', manage_info)
