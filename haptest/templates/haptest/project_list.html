@@ -2,82 +2,19 @@
 {% load staticfiles %}
 {% block content %}
 
-
-    {#    <div class="am-modal am-modal-confirm" tabindex="-1" id="my-invalid">#}
-    {#        <div class="am-modal-dialog">#}
-    {#            <div class="am-modal-hd">HttpRunnerManager</div>#}
-    {#            <div class="am-modal-bd">#}
-    {#                亲，此操作会强制删除该项目下所有模块和用例，请谨慎操作！！！#}
-    {#            </div>#}
-    {#            <div class="am-modal-footer">#}
-    {#                <span class="am-modal-btn" data-am-modal-cancel>取消</span>#}
-    {#                <span class="am-modal-btn" data-am-modal-confirm>确定</span>#}
-    {#            </div>#}
-    {#        </div>#}
-    {#    </div>#}
-    {##}
-    {#    <div class="am-modal am-modal-confirm" tabindex="-1" id="select_env">#}
-    {#        <div class="am-modal-dialog">#}
-    {#            <div class="am-modal-hd">HttpRunnerManager</div>#}
-    {#            <form class="form-horizontal">#}
-    {#                <div class="form-group">#}
-    {#                    <label class="control-label col-sm-3"#}
-    {#                           style="font-weight: inherit; font-size: small ">运行环境:</label>#}
-    {#                    <div class="col-sm-8">#}
-    {#                        <select class="form-control" id="env_name" name="env_name">#}
-    {#                            <option value="">自带环境</option>#}
-    {#                            {% for foo in env %}#}
-    {#                                <option value="{{ foo.base_url }}">{{ foo.env_name }}</option>#}
-    {#                            {% endfor %}#}
-    {##}
-    {#                        </select>#}
-    {#                    </div>#}
-    {#                </div>#}
-    {#                <div class="form-group">#}
-    {#                    <label class="control-label col-sm-3" for="report_name"#}
-    {#                           style="font-weight: inherit; font-size: small ">报告名称：</label>#}
-    {#                    <div class="col-sm-8">#}
-    {#                        <input name="report_name" type="text" id="report_name" class="form-control"#}
-    {#                               placeholder="默认时间戳命名" value="" readonly>#}
-    {#                    </div>#}
-    {#                </div>#}
-    {##}
-    {#                <div class="form-group">#}
-    {#                    <label class="control-label col-sm-3"#}
-    {#                           style="font-weight: inherit; font-size: small ">执行方式:</label>#}
-    {#                    <div class="col-sm-8">#}
-    {#                        <select class="form-control" id="mode" name="mode">#}
-    {#                            <option value="true">同步(执行完立即返回报告)</option>#}
-    {#                            <option value="false">异步(后台执行，完毕后可查看报告)</option>#}
-    {#                        </select>#}
-    {#                    </div>#}
-    {#                </div>#}
-    {#            </form>#}
-    {#            <div class="am-modal-footer">#}
-    {#                <span class="am-modal-btn" data-am-modal-cancel>取消</span>#}
-    {#                <span class="am-modal-btn" data-am-modal-confirm>确定</span>#}
-    {#            </div>#}
-    {#        </div>#}
-    {#    </div>#}
-
     <div class="admin-biaogelist">
         <div class="listbiaoti am-cf">
             <ul class="am-icon-flag on"> 项目列表</ul>
-{#            <dl class="am-icon-home" style="float: right;"> 当前位置： 项目管理 > <a href="#">项目展示</a></dl>#}
             <dl>
                 <a href={% url 'haptest:add_project' 0 %}>
                     <button class="am-btn am-btn-success  am-btn-sm am-radius"> 新增</button>
                 </a>
-{#                <form>#}
-{#                    <a href=''#}
-{#                    <button class="am-btn am-btn-success  am-btn-sm am-radius"> 删除</button>#}
-{#                </a>#}
-{##}
-{#                </form>#}
-
             </dl>
-             <dl>
-
+            <dl>
+                <form id="choice_delete" action={% url 'haptest:project_delete' %} }} method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="am-btn am-btn-success  am-btn-sm am-radius"> 删除</button>
+                </form>
             </dl>
 
         </div>
@@ -114,25 +51,25 @@
                 </ul>
             </form>
         </div>
-        <form class="am-form am-g" id="project_list" name="project_list" method="post" action="/api/run_batch_test/">
+        <div class="am-form am-g" id="project_list" name="project_list" method="post">
             <table width="100%" class="am-table am-table-bordered am-table-radius am-table-striped">
                 <thead>
                 <tr class="am-success">
                     <th class="table-check"><input type="checkbox" id="select_all"/></th>
                     <th class="table-title">序号</th>
-                    <th class="table-type">项目名称</th>
-                    <th class="table-type">平台</th>
+                    <th class="table-title">项目名称</th>
+                    <th class="table-title">平台</th>
                 </tr>
                 </thead>
                 <tbody>
 
                 {% for p in projects %}
                     <tr>
-                        <td><input type="checkbox" name="projects" value="{{ p.id }}"/></td>
+                        <td><input type="checkbox" name="projects_choice" value="{{ p.id }}" form="choice_delete"/></td>
                         <td>{{ forloop.counter }}</td>
                         <td><a href={% url 'haptest:add_project' p.id %}
-                               onclick="edit('{{ p.id }}','{{ p.project_name }}', '{{ p.platform }}'
-                                       ,)">{{ p.project_name }}</a>
+                                       onclick="edit('{{ p.id }}','{{ p.project_name }}', '{{ p.platform }}'
+                            ,)">{{ p.project_name }}</a>
                         </td>
                         <td>{{ p.platform }}</td>
 
@@ -149,7 +86,7 @@
                 </tbody>
             </table>
 
-        </form>
+        </div>
     </div>
     <script type="text/javascript">
         function edit(id, pro_name, responsible_name, test_user, dev_user, publish_app, simple_desc, other_desc) {

@@ -67,7 +67,7 @@ def add_project(request,project_id):
             form=AddProjectForm()
         return render(request,'haptest/add_project.html',{'form':form,'project_id':project_id})
 
-
+# @login_required
 def project_list(request):
     # return render(request, 'haptest/project_list.html', )
     # filter_query = set_filter_session(request)
@@ -83,3 +83,18 @@ def project_list(request):
         # 'project_all': Project.objects.all(),
     }
     return render(request, 'haptest/project_list.html', manage_info)
+
+# @login_required
+def project_delete(request):
+
+    try:
+        choice_set=request.POST.getlist('projects_choice')
+    except KeyError:
+        return project_list(request)
+    else:
+        Project.objects.filter(id__in=choice_set).delete()
+        # print(request.POST.getlist('projects_choice'),request.POST,choice_set)
+        # print(request.POST.itervalues)
+        return project_list(request)
+
+
