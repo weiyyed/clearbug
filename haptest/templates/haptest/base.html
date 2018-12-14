@@ -95,10 +95,10 @@
         <div class="sideMenu am-icon-dashboard" style="color:#aeb2b7; margin: 10px 0 0 0;"> 欢迎您：{{ account }} &nbsp;&nbsp;<a
                 href='/api/log_out/'>注 销</a></div>
         <div class="sideMenu">
-            <h3 class="am-icon-folder"><em></em> <a href="#">项目管理</a></h3>
+            <h3 class="am-icon-folder"><em></em> <a href="#">基础管理</a></h3>
             <ul>
-                <li><a href={% url 'haptest:project' %}>项 目 列 表</a></li>
-                <li><a href={% url 'haptest:add_project' 0 %}>新 增 项 目</a></li>
+                <li><a href={% url 'haptest:project' %}>项目管理</a></li>
+                <li><a href={% url 'haptest:element' %}>元素管理</a></li>
             </ul>
             <h3 class="am-icon-th-list"><em></em> <a href="#"> 模块管理</a></h3>
             <ul>

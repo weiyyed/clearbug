@@ -40,13 +40,13 @@ class Module(models.Model):
         db_table = 'haptest_module'
 
 class Element(models.Model):
-    plateform=models.ForeignKey(Plateform,on_delete=models.CASCADE)
-    page=models.CharField(max_length=50)
-    element=models.CharField(max_length=50)
-    by=models.CharField(max_length=50)
-    value=models.CharField(max_length=50)
-    custom=models.CharField(max_length=50)
-    remark=models.CharField(max_length=50 )
+    plateform=models.ForeignKey(Plateform,on_delete=models.CASCADE,verbose_name='所属平台',default='1')
+    page=models.CharField('页面',max_length=50)
+    element=models.CharField('元素',max_length=50)
+    by=models.CharField('by',max_length=50)
+    value=models.CharField('value',max_length=50)
+    custom=models.CharField('custom',max_length=50,blank=True)
+    remark=models.CharField('备注',max_length=50,blank=True )
     def __str__(self):
         return self.element
     class Meta:

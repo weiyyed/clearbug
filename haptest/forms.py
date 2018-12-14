@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from haptest.models import Project
+from haptest.models import Project,Element
 
 class AddProjectForm(ModelForm):
     # project_name=forms.CharField(label='项目名称', max_length=20,)
@@ -10,6 +10,7 @@ class AddProjectForm(ModelForm):
         fields="__all__"
 
 
-# class AddForm(forms.Form):
-#     a = forms.IntegerField()
-#     b = forms.IntegerField()
+class AddElementForm(ModelForm):
+    class Meta:
+        model=Element
+        fields="__all__"

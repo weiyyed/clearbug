@@ -5,10 +5,10 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from .forms import AddProjectForm
+from .forms import AddProjectForm, AddElementForm
 from django.contrib import auth
 from django.contrib.auth.models import User
-from haptest.models import Project
+from haptest.models import Project,Element
 
 
 def register(request):
@@ -69,10 +69,6 @@ def add_project(request,project_id):
 
 # @login_required
 def project_list(request):
-    # return render(request, 'haptest/project_list.html', )
-    # filter_query = set_filter_session(request)
-    # pro_list = get_pager_info(
-    #     Project, filter_query, '/api/project_list/', id)
     manage_info = {
         # 'account': account,
         'projects': Project.objects.all(),
@@ -97,4 +93,46 @@ def project_delete(request):
         # print(request.POST.itervalues)
         return project_list(request)
 
+# @login_required
+def element_add(request,id):
 
+    if request.method=='POST':
+        if id !=0:
+            form=AddElementForm(request.POST,instance=Element.objects.get(id=id))
+        else:
+            form=AddElementForm(request.POST)
+        if form.is_valid():
+            # Project.objects.create(project_name=form.cleaned_data['project_name'])
+            # Project.objects.create(platform=form.cleaned_data['platform'])
+            # return render(request,'haptest/add_project.html')
+            form.save()
+            return HttpResponseRedirect(reverse('haptest:element'))
+
+    else:
+        if id !=0:
+            form=AddElementForm(instance=Element.objects.get(id=id))
+        else:
+            form=AddElementForm()
+        return render(request,'haptest/element_add.html',{'form':form,'element_id':id})
+
+
+# @login_required
+def element_list(request):
+    manage_info = {
+        'data_set': Element.objects.all(),
+        # 'form':AddElementForm()
+    }
+    return render(request, 'haptest/element_list.html', manage_info)
+
+# @login_required
+def element_delete(request):
+
+    try:
+        choice_set=request.POST.getlist('elements_choice')
+    except KeyError:
+        return project_list(request)
+    else:
+        Element.objects.filter(id__in=choice_set).delete()
+        # print(request.POST.getlist('projects_choice'),request.POST,choice_set)
+        # print(request.POST.itervalues)
+        return element_list(request)
