@@ -3,7 +3,7 @@ from django.urls import reverse
 # from .models import Choice, Question,Project
 # from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
 from django.shortcuts import get_object_or_404, render
 from .forms import AddProjectForm, AddElementForm
 from django.contrib import auth
@@ -136,3 +136,12 @@ def element_delete(request):
         # print(request.POST.getlist('projects_choice'),request.POST,choice_set)
         # print(request.POST.itervalues)
         return element_list(request)
+
+def element_upload(request):
+    if request.method='POST':
+        try:
+            platform_name=request.POST.get('platform_name')
+        except KeyError as e:
+            return JsonResponse({"status":'【所属平台】不能为空'})
+        upload_file=request.FILES.get('upload')
+        file_2_database(upload_file,Element,platform_name)
