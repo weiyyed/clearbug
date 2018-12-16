@@ -1,7 +1,6 @@
 from django.urls import path,re_path
 from haptest import views
 from django.contrib.auth.decorators import login_required
-from haptest.utils.common import Parse_url
 
 app_name = 'haptest'
 urlpatterns = [
@@ -16,6 +15,7 @@ urlpatterns = [
     path('element/',views.element_list,name='element'),
     path('element_delete/', views.element_delete, name='element_delete'),
     path('element_add/<int:id>/', views.element_add,name='element_add'),
+    path('element_upload', views.element_upload,name='element_upload'),
 
 ]
 

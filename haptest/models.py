@@ -44,9 +44,9 @@ class Element(models.Model):
     page=models.CharField('页面',max_length=50)
     element=models.CharField('元素',max_length=50)
     by=models.CharField('by',max_length=50)
-    value=models.CharField('value',max_length=50)
-    custom=models.CharField('custom',max_length=50,blank=True)
-    remark=models.CharField('备注',max_length=50,blank=True )
+    custom = models.CharField('custom', max_length=50, blank=True)
+    value=models.TextField('value',max_length=300)
+    remark=models.TextField('备注',max_length=200,blank=True )
     def __str__(self):
         return self.element
     class Meta:

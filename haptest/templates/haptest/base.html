@@ -40,6 +40,7 @@
 </head>
 <body class="modal-open">
 <form enctype="multipart/form-data" id="upload_project_info">
+    {% csrf_token %}
     <div class="modal fade" id="bulk_uploadcase" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
         <div class="modal-dialog">
@@ -55,19 +56,12 @@
                 <div class="form-group">
                     <div class="input-group col-md-8" style="margin-left: 15px">
                         <div class="input-group-addon" style="color: #0a628f">所属项目</div>
-                        <select id='project' name="project" class="form-control"
+                        <select id='platform' name="platform" class="form-control"
                                 onchange="auto_load('#upload_project_info', '/api/get_project_info/', '#upload_belong_module_id', 'module')">
-                            <option value="请选择">请选择</option>
-                            {% for foo in project %}
-                                <option value="{{ foo.project_name }}">{{ foo.project_name }}</option>
+{#                            <option value="请选择">请选择</option>#}
+                            {% for foo in platform %}
+                                <option value="{{ foo.id }}">{{ foo.platform_name }}</option>
                             {% endfor %}
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-group col-md-8" style="margin-left: 15px">
-                        <div class="input-group-addon" style="color: #0a628f">所属模块</div>
-                        <select id="upload_belong_module_id" name="module" class="form-control">
                         </select>
                     </div>
                 </div>
@@ -159,21 +153,20 @@
                 resizePreference: 'width',
                 uploadAsync: false,                             //采用同步上传
                 language: 'zh', //设置语言
-                uploadUrl: '/api/upload_file/',
-                allowedFileExtensions: ['yml', 'yaml', 'json'],//接收的文件后缀
+                uploadUrl: '{% url 'haptest:element_upload' %}',
+                allowedFileExtensions: ['xlsx'],//接收的文件后缀
                 showUpload: true, //是否显示上传按钮
                 showRemove: false,
                 showCaption: true,//是否显示标题
                 browseClass: "btn btn-primary", //按钮样式
                 previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
-                maxFileCount: 10,
+                maxFileCount: 1,
                 msgFilesTooMany: "选择文件超过了最大数量",
-                maxFileSize: 2000,
+                maxFileSize: 1000,
                 uploadExtraData:
                     function () {     //上传时要传输的其他参数
-                        project_name = $('#project option:selected').val();//选中的文本
-                        module_name = $('#upload_belong_module_id option:selected').val();//选中的文本
-                        return {"project": project_name, "module": module_name};
+                        platform = $('#platform option:selected').val();//选中的文本
+                        return {"platform": platform};
                     },
                 showClose: false,//显示右上角X关闭
                 overwriteInitial: false, //是否显示预览
@@ -185,7 +178,7 @@
             control.on("filebatchuploadsuccess", function (event, data) {
                 var obj = data.response;
                 $("#bulk_uploadcase").trigger('click');
-                if (obj.status.indexOf('/api/') !== -1) {
+                if (obj.status.indexOf('/haptest/') !== -1) {
                     window.location.href = obj.status;
                 } else {
                     myAlert(obj.status);

@@ -5,10 +5,15 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
 from django.shortcuts import get_object_or_404, render
+from django.views.decorators.csrf import csrf_exempt
+
+import os
+
+from haptest.utils.common import file2database
 from .forms import AddProjectForm, AddElementForm
 from django.contrib import auth
 from django.contrib.auth.models import User
-from haptest.models import Project,Element
+from haptest.models import Project,Element,Plateform
 
 
 def register(request):
@@ -120,7 +125,7 @@ def element_add(request,id):
 def element_list(request):
     manage_info = {
         'data_set': Element.objects.all(),
-        # 'form':AddElementForm()
+        'platform':Plateform.objects.all(),
     }
     return render(request, 'haptest/element_list.html', manage_info)
 
@@ -137,11 +142,22 @@ def element_delete(request):
         # print(request.POST.itervalues)
         return element_list(request)
 
+@csrf_exempt
+# @login_required
 def element_upload(request):
-    if request.method='POST':
+    #元素上传
+    if request.method=='POST':
         try:
-            platform_name=request.POST.get('platform_name')
+            platform_id=request.POST.get('platform')
         except KeyError as e:
             return JsonResponse({"status":'【所属平台】不能为空'})
-        upload_file=request.FILES.get('upload')
-        file_2_database(upload_file,Element,platform_name)
+        if platform_id is None:
+            return JsonResponse({"status": '【所属平台】不能为空'})
+        file_obj=request.FILES.get('upload')
+        upload_file=os.path.join('upload',file_obj.name)
+        with open(upload_file,'wb') as data:
+            for line in file_obj.chunks():
+                data.write(line)
+        file2database(upload_file,Element,platform_id)
+        return JsonResponse({'status': reverse('haptest:element')})
+        # return element_list(request)
