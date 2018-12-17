@@ -3,6 +3,21 @@ table#extract tr td, table#hooks tr td, table#params tr td {
     padding: 0px;
 }
 
+table {
+    width: 100%;
+    table-layout: fixed;
+    /*word-break: break-all;*/
+    /*border: 1px solid #999;*/
+}
+
+tr td {
+    width: 1px;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow:ellipsis;
+}
+
 .tips {
 
     color: rgba(0, 0, 0, 0.5);
@@ -29,7 +44,7 @@ table#extract tr td, table#hooks tr td, table#params tr td {
 
 }
 
-#pre_case li{
+#pre_case li {
     position: relative;
 }
 
@@ -46,12 +61,11 @@ table#extract tr td, table#hooks tr td, table#params tr td {
     font-style: normal;
 }
 
-#pre_case li:hover i{
+#pre_case li:hover i {
     opacity: 1;
 }
 
-
-#pre_config li{
+#pre_config li {
     position: relative;
 }
 
@@ -68,6 +82,6 @@ table#extract tr td, table#hooks tr td, table#params tr td {
     font-style: normal;
 }
 
-#pre_config li:hover i{
+#pre_config li:hover i {
     opacity: 1;
 }
