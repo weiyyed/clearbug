@@ -10,10 +10,10 @@ from django.views.decorators.csrf import csrf_exempt
 import os
 
 from haptest.utils.common import file2database
-from .forms import AddProjectForm, AddElementForm
+from .forms import AddProjectForm, AddElementForm, AddTestCaseForm
 from django.contrib import auth
 from django.contrib.auth.models import User
-from haptest.models import Project,Element,Plateform
+from haptest.models import Project, Element, Plateform, TestCase
 
 
 def register(request):
@@ -160,4 +160,31 @@ def element_upload(request):
                 data.write(line)
         file2database(upload_file,Element,platform_id)
         return JsonResponse({'status': reverse('haptest:element')})
-        # return element_list(request)
+
+# @login_required
+def testcase_list(request):
+    manage_info = {
+        'data_set': TestCase.objects.all(),
+        'platform':Plateform.objects.all(),
+    }
+    return render(request, 'haptest/testcase_list.html', manage_info)
+
+# @login_required
+def testcase_add(request,id):
+
+    if request.method=='POST':
+        if id !=0:
+            form=AddTestCaseForm(request.POST,instance=TestCase.objects.get(id=id))
+        else:
+            form=AddElementForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('haptest:testcase'))
+
+    else:
+        if id !=0:
+            form=AddElementForm(instance=Element.objects.get(id=id))
+        else:
+            form=AddElementForm()
+        # return render(request,'haptest/testcase_add.html',{'form':form,'testcase_id':id})
+        return render(reverse('haptest:testcase_add',kwargs={'form':form,'testcase_id':id}))

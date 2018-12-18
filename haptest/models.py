@@ -52,3 +52,37 @@ class Element(models.Model):
     class Meta:
         verbose_name = '元素管理'
         db_table = 'haptest_element'
+        unique_together=('page','element')
+
+class Date(models.Model):
+    #数据
+    project=models.ForeignKey(Project,on_delete=models.CASCADE,verbose_name='所属项目')
+    org_code=models.CharField('组织编码',max_length=30,blank=True)
+    common_code=models.CharField('普通编码',max_length=30,blank=True)
+    phone_num=models.CharField('人员手机号',max_length=30,blank=True)
+    flag=models.CharField('flag',max_length=4,blank=True)
+
+class DateFile(models.Model):
+    #数据
+    project=models.ForeignKey(Project,on_delete=models.CASCADE,verbose_name='所属项目')
+    file=models.FileField('文件',upload_to='data/import/')
+class TestCase(models.Model):
+    #用例
+    project=models.ForeignKey(Project,on_delete=models.CASCADE,verbose_name='所属项目')
+    case_code=models.CharField('用例编号',max_length=40,)
+    title=models.CharField('用例标题',max_length=40,)
+    condition=models.CharField('前置条件',max_length=40,)
+    designer=models.CharField('设计者',max_length=20,)
+    priority=models.CharField('优先级',max_length=20,)
+    remark=models.CharField('备注',max_length=50,)
+
+class CaseStep(models.Model):
+    #步骤
+    no = models.CharField('测试步骤', max_length=10, )
+    keyword = models.CharField('操作', max_length=10, )
+    page = models.CharField('页面', max_length=10, )
+    element = models.CharField('元素', max_length=10, )
+    data = models.CharField('测试数据', max_length=10, )
+    expected = models.CharField('预期结果', max_length=10, blank=True)
+    output = models.CharField('输出数据', max_length=10, )
+    remark = models.CharField('备注', max_length=50, )
