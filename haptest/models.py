@@ -61,28 +61,49 @@ class Date(models.Model):
     common_code=models.CharField('普通编码',max_length=30,blank=True)
     phone_num=models.CharField('人员手机号',max_length=30,blank=True)
     flag=models.CharField('flag',max_length=4,blank=True)
+    def __str__(self):
+        return self.project,self.org_code,self.common_code
+    class Meta:
+        verbose_name = '测试数据'
+        db_table = 'haptest_date'
 
 class DateFile(models.Model):
     #数据
     project=models.ForeignKey(Project,on_delete=models.CASCADE,verbose_name='所属项目')
     file=models.FileField('文件',upload_to='data/import/')
+    def __str__(self):
+        return self.file
+    class Meta:
+        verbose_name = '文件管理'
+        db_table = 'haptest_file'
 class TestCase(models.Model):
     #用例
     project=models.ForeignKey(Project,on_delete=models.CASCADE,verbose_name='所属项目')
     case_code=models.CharField('用例编号',max_length=40,)
     title=models.CharField('用例标题',max_length=40,)
-    condition=models.CharField('前置条件',max_length=40,)
-    designer=models.CharField('设计者',max_length=20,)
-    priority=models.CharField('优先级',max_length=20,)
-    remark=models.CharField('备注',max_length=50,)
+    condition=models.CharField('前置条件',max_length=40,blank=True)
+    designer=models.CharField('设计者',max_length=20,blank=True)
+    priority=models.CharField('优先级',max_length=20,blank=True)
+    remark=models.CharField('备注',max_length=50,blank=True)
+    def __str__(self):
+        return self.title
+    class Meta:
+        verbose_name = '测试用例'
+        db_table = 'haptest_testcase'
 
 class CaseStep(models.Model):
     #步骤
+    testcase = models.ForeignKey(TestCase, on_delete=models.CASCADE, verbose_name='所属用例')
     no = models.CharField('测试步骤', max_length=10, )
     keyword = models.CharField('操作', max_length=10, )
     page = models.CharField('页面', max_length=10, )
     element = models.CharField('元素', max_length=10, )
     data = models.CharField('测试数据', max_length=10, )
     expected = models.CharField('预期结果', max_length=10, blank=True)
-    output = models.CharField('输出数据', max_length=10, )
-    remark = models.CharField('备注', max_length=50, )
+    output = models.CharField('输出数据', max_length=10, blank=True)
+    remark = models.CharField('备注', max_length=50,blank=True )
+    def __str__(self):
+        return self.no,self.keyword,self.page,self.element
+    class Meta:
+        verbose_name = '测试步骤'
+        db_table = 'haptest_casestep'

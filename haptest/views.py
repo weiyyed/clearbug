@@ -176,15 +176,24 @@ def testcase_add(request,id):
         if id !=0:
             form=AddTestCaseForm(request.POST,instance=TestCase.objects.get(id=id))
         else:
-            form=AddElementForm(request.POST)
+            form=AddTestCaseForm(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('haptest:testcase'))
 
     else:
         if id !=0:
-            form=AddElementForm(instance=Element.objects.get(id=id))
+            form=AddTestCaseForm(instance=TestCase.objects.get(id=id))
         else:
-            form=AddElementForm()
-        # return render(request,'haptest/testcase_add.html',{'form':form,'testcase_id':id})
-        return render(reverse('haptest:testcase_add',kwargs={'form':form,'testcase_id':id}))
+            form=AddTestCaseForm()
+        return render(request, 'haptest/testcase_add.html', {'form': form, 'testcase_id': id})
+# @login_required
+def testcase_delete(request):
+
+    try:
+        choice_set=request.POST.getlist('data_choice')
+    except KeyError:
+        return project_list(request)
+    else:
+        TestCase.objects.filter(id__in=choice_set).delete()
+        return testcase_list(request)

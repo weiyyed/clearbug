@@ -4,14 +4,13 @@
 
     <div class="admin-biaogelist">
         <div class="listbiaoti am-cf">
-            <ul class="am-icon-flag on"> 元素</ul>
             <dl>
-                <a href={% url 'haptest:element_add' 0 %}>
+                <a href={% url 'haptest:testcase_add' 0 %}>
                     <button class="am-btn am-btn-success  am-btn-sm am-radius"> 新增</button>
                 </a>
             </dl>
             <dl>
-                <form id="choice_delete" action={% url 'haptest:element_delete' %} }} method="post">
+                <form id="choice_delete" action={% url 'haptest:testcase_delete' %} }} method="post">
                     {% csrf_token %}
                     <button type="submit" class="am-btn am-btn-success  am-btn-sm am-radius"> 删除</button>
                 </form>
@@ -21,6 +20,7 @@
                         data-toggle="modal" data-target="#bulk_uploadcase">导入
                 </button>
             </dl>
+            <ul  style="float: right;">用例管理</ul>
         </div>
 
 
@@ -62,31 +62,27 @@
                 <tr>
                     <th class="table-check"><input type="checkbox" id="select_all"/></th>
                     <th class="table-title">序号</th>
-                    <th class="table-title">页面</th>
-                    <th class="table-title">元素</th>
-                    <th class="table-title">by</th>
-                    <th class="table-title">value</th>
-                    <th class="table-title">custom</th>
-                    <th class="table-title">备注</th>
-                    <th class="table-title">所属平台</th>
+                    <th class="table-title">用例编号</th>
+                    <th class="table-title">用例名称</th>
+                    <th class="table-title">前置条件</th>
+                    <th class="table-title">设计者</th>
+                    <th class="table-title">所属项目</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for p in data_set %}
                     <tr>
-                        <td ><input type="checkbox" name="elements_choice" value="{{ p.id }}" form="choice_delete"/></td>
+                        <td ><input type="checkbox" name="data_choice" value="{{ p.id }}" form="choice_delete"/></td>
                         <td>{{ forloop.counter }}</td>
                         <td >
-                            <a href={% url 'haptest:element_add' p.id %}>{{ p.page }}</a>
+                            <a href={% url 'haptest:testcase_add' p.id %}>{{ p.case_code }}</a>
                         </td>
                         <td>
-                            <a href={% url 'haptest:element_add' p.id %}>{{ p.element }}</a>
+                            <a href={% url 'haptest:testcase_add' p.id %}>{{ p.title }}</a>
                         </td>
-                        <td>{{ p.by }}</td>
-                        <td>{{ p.value }}</td>
-                        <td>{{ p.custom }}</td>
-                        <td>{{ p.remark }}</td>
-                        <td>{{ p.plateform }}</td>
+                        <td>{{ p.condition }}</td>
+                        <td>{{ p.designer }}</td>
+                        <td>{{ p.project }}</td>
 
                         {% for key, value in sum.items %}
                             {% ifequal foo.id key %}
