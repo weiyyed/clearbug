@@ -16,6 +16,8 @@ urlpatterns = [
     path('element_delete/', views.element_delete, name='element_delete'),
     path('element_add/<int:id>/', views.element_add,name='element_add'),
     path('element_upload', views.element_upload,name='element_upload'),
+    path('testcase', views.testcase_list,name='tastcase'),
+    path('testcase_add/<int:id>/', views.testcase_add, name='element_add'),
 
 ]
 
