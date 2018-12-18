@@ -52,3 +52,4 @@ class Element(models.Model):
     class Meta:
         verbose_name = '元素管理'
         db_table = 'haptest_element'
+        unique_together=('page','element')
