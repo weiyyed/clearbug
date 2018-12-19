@@ -38,16 +38,16 @@
     <div class="admin-biaogelist" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 
         <div class="listbiaoti am-cf">
-            <ul class="am-icon-flag on">用例</ul>
+            <dl>
+                <form class="form-horizontal" id="testcase_save" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="保存返回" class="am-btn am-btn-success  am-btn-sm am-radius">
+                    <div style="margin-top: 2%;"></div>
+                </form>
+            </dl>
+            <ul style="float: right;">用例编辑</ul>
         </div>
 
-        <form class="form-horizontal" id="add_project" method="post">
-            {% csrf_token %}
-            <input type="submit" value="保存返回" class="am-btn am-btn-success  am-btn-sm am-radius">
-            <div style="margin-top: 2%;"></div>
-
-
-        </form>
 
         <div class="am-tabs am-margin">
             <ul class="am-tabs-nav am-nav am-nav-tabs" id="tab-test">
@@ -57,18 +57,19 @@
 
             <div class="am-tabs-bd">
                 <div class="am-tab-panel" id="tab1">
-                    <form class="am-form">
-                        <fieldset>
-                            {% for f in form %}
-                                <div class="am-form-group">
-                                    <label
-                                            for={{ f.name }}> {{ f.label }}</label>
-                                    {{ f }}
-                                </div>
+                    <div style="float: left; width: 40%;">
+                        <form class="am-form">
+                            <fieldset>
+                                {% for f in form %}
+                                    <div class="am-form-group">
+                                        <label for={{ f.name }}> {{ f.label }} </label>
+                                        {{ f }}
+                                    </div>
 
-                            {% endfor %}
-                        </fieldset>
-                    </form>
+                                {% endfor %}
+                            </fieldset>
+                        </form>
+                    </div>
                     <div style="float: left; width: 40%;">
                         <form class="form-horizontal" id="belong_message">
                             <div class="form-group">
@@ -303,6 +304,16 @@
                 }
             });
         })
+        {#$('input').attr("form", "testcase_add")#}
+        $(function () {
+                var nodes = ['id_project', 'id_case_code', 'id_title', 'id_condition','id_designer','id_priority','id_remark'];
+                for (var i = 0; i < nodes.length; i++) {
+                    var node = nodes[i];
+                    node = "#" + node;
+                    $(node).attr("form", "testcase_add");
+                }
+            }
+        )
 
     </script>
 

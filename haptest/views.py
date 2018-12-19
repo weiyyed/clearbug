@@ -179,7 +179,7 @@ def testcase_add(request,id):
             form=AddTestCaseForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('haptest:testcase'))
+        return HttpResponseRedirect(reverse('haptest:testcase'))
 
     else:
         if id !=0:
