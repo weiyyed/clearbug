@@ -31,8 +31,7 @@ class Project(models.Model):
 class Module(models.Model):
     #模块，用例集
     module_name = models.CharField('模块名称', max_length=50, null=False)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    # project =models.
+    # project = models.ForeignKey(Project, on_delete=models.CASCADE)
     def __str__(self):
         return self.module_name
     class Meta:
@@ -75,7 +74,7 @@ class DateFile(models.Model):
         return self.file
     class Meta:
         verbose_name = '文件管理'
-        db_table = 'haptest_file'
+        db_table = 'haptest_datafile'
 class TestCase(models.Model):
     #用例
     project=models.ForeignKey(Project,on_delete=models.CASCADE,verbose_name='所属项目')
