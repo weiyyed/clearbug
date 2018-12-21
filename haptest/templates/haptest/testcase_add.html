@@ -2,39 +2,6 @@
 {% load staticfiles %}
 {% block content %}
 
-    {#    <div class=" admin-content">#}
-    {#        <div class="admin-biaogelist">#}
-    {#            <div class="listbiaoti am-cf">#}
-    {#                <ul class="am-icon-flag on">用例</ul>#}
-    {#            </div>#}
-    {#            <div class="fbneirong">#}
-    {##}
-    {#                <form class="form-horizontal" id="add_project" method="post">#}
-    {#                    {% csrf_token %}#}
-    {#                    <input type="submit" value="保存返回" class="am-btn am-btn-success  am-btn-sm am-radius">#}
-    {#                    <div style="margin-top: 2%;"></div>#}
-    {##}
-    {#                    <form class="am-form">#}
-    {#                        <fieldset>#}
-    {#                            {% for f in form %}#}
-    {#                                <div class="am-form-group">#}
-    {#                                    <label#}
-    {#                                            for={{ f.name }}> {{ f.label }}</label>#}
-    {#                                    {{ f }}#}
-    {#                                </div>#}
-    {##}
-    {#                            {% endfor %}#}
-    {#                        </fieldset>#}
-    {#                    </form>#}
-    {##}
-    {#                </form>#}
-    {##}
-    {##}
-    {#            </div>#}
-    {#        </div>#}
-
-
-
     <div class="admin-biaogelist" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 
         <div class="listbiaoti am-cf">
@@ -62,7 +29,6 @@
                             {% for f in form %}
                                 <div class="form-group">
                                     <div class="input-group col-md-10 col-md-offset-1">
-                                        {#                                        <div class="am-form-group">#}
                                         <label class="input-group-addon" for={{ f.name }}> {{ f.label }} </label>
                                         {{ f }}
                                     </div>
@@ -71,23 +37,6 @@
                         </form>
                     </div>
 
-                    {#                    <div style="float: left; width: 40%;">#}
-                    {#                        <form class="form-horizontal" id="belong_message">#}
-                    {#                            <div class="form-group">#}
-                    {#                                <div class="input-group col-md-10 col-md-offset-1">#}
-                    {#                                    <div class="input-group-addon">所属项目</div>#}
-                    {#                                    <select id='project' name="project" class="form-control"#}
-                    {#                                            onchange="auto_load('#belong_message', '/api/add_case/', '#belong_module_id', 'module')">#}
-                    {#                                        <option value="请选择">请选择</option>#}
-                    {#                                        {% for foo in project %}#}
-                    {#                                            <option value="{{ foo.project_name }}">{{ foo.project_name }}</option>#}
-                    {#                                        {% endfor %}#}
-                    {#                                    </select>#}
-                    {#                                </div>#}
-                    {#                            </div>#}
-                    {##}
-                    {#                        </form>#}
-                    {#                    </div>#}
                 </div>
 
                 <div class="am-tab-panel" id="tab2">
@@ -222,7 +171,6 @@
                 }
             });
         })
-        {#$('input').attr("form", "testcase_add")#}
         $(function () {
                 var nodes = ['id_project', 'id_case_code', 'id_title', 'id_condition', 'id_designer', 'id_priority', 'id_remark'];
                 for (var i = 0; i < nodes.length; i++) {
