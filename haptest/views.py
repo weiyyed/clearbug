@@ -6,14 +6,12 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
-
 import os
-
 from haptest.utils.common import file2database
-from .forms import AddProjectForm, AddElementForm, AddTestCaseForm
+from .forms import AddProjectForm, AddElementForm, AddTestCaseForm, AddCaseStepForm
 from django.contrib import auth
 from django.contrib.auth.models import User
-from haptest.models import Project, Element, Plateform, TestCase
+from haptest.models import Project, Element, Plateform, TestCase,CaseStep
 
 
 def register(request):
@@ -197,3 +195,22 @@ def testcase_delete(request):
     else:
         TestCase.objects.filter(id__in=choice_set).delete()
         return testcase_list(request)
+
+# @login_required
+def casestep_add(request,id):
+
+    if request.method=='POST':
+        if id !=0:
+            form=AddCaseStepForm(request.POST,instance=TestCase.objects.get(id=id))
+        else:
+            form=AddTestCaseForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return HttpResponseRedirect(reverse('haptest:testcase'))
+
+    # else:
+    #     if id !=0:
+    #         form=AddTestCaseForm(instance=TestCase.objects.get(id=id))
+    #     else:
+    #         form=AddTestCaseForm()
+    #     return render(request, 'haptest/testcase_add.html', {'form': form, 'testcase_id': id})

@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from haptest.models import Project,Element,TestCase
+from haptest.models import Project,Element,TestCase,CaseStep
 
 class AddProjectForm(ModelForm):
     # project_name=forms.CharField(label='项目名称', max_length=20,)
@@ -18,4 +18,9 @@ class AddElementForm(ModelForm):
 class AddTestCaseForm(ModelForm):
     class Meta:
         model=TestCase
+        fields="__all__"
+
+class AddCaseStepForm(ModelForm):
+    class Meta:
+        model=CaseStep
         fields="__all__"
