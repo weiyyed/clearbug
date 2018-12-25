@@ -40,7 +40,7 @@
                 </div>
 
                 <div class="am-tab-panel" id="tab2">
-                    <button value="添 加" onclick="add_row('variables')">添加行
+                    <button value="添 加" onclick="add_row('casestep')">添加行
                     </button>
                     <button value="删 除" onclick="del_row('variables')">删除行
                     </button>
@@ -50,9 +50,9 @@
                     </form>
                     <form id="form_variables">
                         <table class="table table-hover table-condensed table-bordered table-striped"
-                               id="variables">
-                            <caption> </caption>
-                            <thead>
+                               id="casestep">
+                            <caption></caption>
+                            {#                            <thead>#}
                             <tr>
                                 <th width="5%" align="center"></th>
                                 <th width="8%" align="center">步骤</th>
@@ -62,9 +62,16 @@
                                 <th width="30%" align="center">测试数据</th>
                                 <th width="20%" align="center">输出数据</th>
                             </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
+                            <tr>
+                                <td><input type="checkbox" name=""></td>
+                                <td>{{ casestep_form.no }}</td>
+                                <td>{{ casestep_form.keyword }}</td>
+                                <td>{{ casestep_form.page }}</td>
+                                <td>{{ casestep_form.element }}</td>
+                                <td>{{ casestep_form.data }}</td>
+                                <td>{{ casestep_form.output }}</td>
+                            </tr>
+
                         </table>
                     </form>
 

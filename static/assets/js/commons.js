@@ -349,47 +349,9 @@ function del_row(id) {
 
 
 function add_row(id) {
-    var tabObj = document.getElementById(id);//获取添加数据的表格
-    var rowsNum = tabObj.rows.length;  //获取当前行数
-    var style = 'width:100%; border: none';
-    var table_obj = new Object()
-    table_obj.cell_check = "<input type='checkbox' name='" + id + "' style='width:55px' />";
-    table_obj.cell_no = "<input type='text' name='test[][no]'  value='' style='" + style + "' />";
-    table_obj.cell_keyword = "<input type='text' name='test[][keyword]'  value='' style='" + style + "' />";
-    table_obj.cell_page = "<select name='test[][page]' class='form-control' style='height: 25px; font-size: 15px; " +
-        "padding-top: 0px; padding-left: 0px; border: none'> " +
-        "<option>string</option><option>int</option><option>float</option><option>boolean</option></select>";
-    table_obj.cell_element = "<input type='text' name='test[][keyword]'  value='' style='" + style + "' />";
-    table_obj.cell_data = "<input type='text' name='test[][data]'  value='' style='" + style + "' />";
-    table_obj.cell_expected = "<input type='text' name='test[][expected]'  value='' style='" + style + "' />";
+    var content=$("table#"+id).children().last().html();
+    $("table#"+id).append(content)
 
-    var myNewRow = tabObj.insertRow(rowsNum);
-    var i = 0
-    for (n in table_obj) {
-        myNewRow.insertCell(i).innerHTML = table_obj[n]
-        i++
-    }
-    // var myNewRow = tabObj.insertRow(rowsNum);
-    // var newTdObj0 = myNewRow.insertCell(0);
-    // var newTdObj1 = myNewRow.insertCell(1);
-    // var newTdObj2 = myNewRow.insertCell(2);
-
-
-    // newTdObj0.innerHTML = cell_check
-    // newTdObj1.innerHTML = cell_key;
-    // if (id === 'variables' || id === 'data') {
-    //     var newTdObj3 = myNewRow.insertCell(3);
-    //     newTdObj2.innerHTML = cell_type;
-    //     newTdObj3.innerHTML = cell_value;
-    // } else if (id === 'validate') {
-    //     var newTdObj3 = myNewRow.insertCell(3);
-    //     newTdObj2.innerHTML = cell_comparator;
-    //     newTdObj3.innerHTML = cell_type;
-    //     var newTdObj4 = myNewRow.insertCell(4);
-    //     newTdObj4.innerHTML = cell_value;
-    // } else {
-    //     newTdObj2.innerHTML = cell_value;
-    // }
 }
 
 function add_params(id) {
