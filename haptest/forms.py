@@ -1,6 +1,7 @@
-from django import forms
-from django.forms import ModelForm
+from django.forms import ChoiceField, Select, Textarea
+from django.forms import ModelForm,inlineformset_factory
 from haptest.models import Project,Element,TestCase,CaseStep
+from sweetest.config import web_keywords,common_keywords
 
 class AddProjectForm(ModelForm):
     # project_name=forms.CharField(label='项目名称', max_length=20,)
@@ -8,13 +9,10 @@ class AddProjectForm(ModelForm):
     class Meta:
         model=Project
         fields="__all__"
-
-
 class AddElementForm(ModelForm):
     class Meta:
         model=Element
         fields="__all__"
-
 class AddTestCaseForm(ModelForm):
     class Meta:
         model=TestCase
@@ -24,3 +22,13 @@ class AddCaseStepForm(ModelForm):
     class Meta:
         model=CaseStep
         fields="__all__"
+        keyword_pc=[]
+        web_keywords.update(common_keywords)
+        for k,v in web_keywords.items():
+            if not k.isalpha:
+                keyword_pc.append(k)
+        widgets={
+            'keyword':ChoiceField()
+        }
+
+CaseStepFormSet=inlineformset_factory(TestCase,CaseStep,form=AddCaseStepForm,fields=('id','no','keyword','page','element','data','output'),extra=1)

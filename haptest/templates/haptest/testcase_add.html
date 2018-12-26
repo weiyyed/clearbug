@@ -8,6 +8,8 @@
             <dl>
                 <form class="form-horizontal" id="testcase_save_form" method="post">
                     {% csrf_token %}
+                    {{ casestep_form_set.management_form }}
+                    {#                    {{ casestep_form_set.errors }}#}
                     <input type="submit" value="保存返回" class="am-btn am-btn-success  am-btn-sm am-radius">
                     <div style="margin-top: 2%;"></div>
                 </form>
@@ -44,16 +46,14 @@
                     </button>
                     <button value="删 除" onclick="del_row('variables')">删除行
                     </button>
-                    <form class="form-horizontal" id="testcase_save_form" method="post">
-                        {% csrf_token %}
-                        <input type="submit" value="保存步骤" class="am-btn am-btn-success  am-btn-sm am-radius">
-                    </form>
+
                     <form id="form_variables">
                         <table class="table table-hover table-condensed table-bordered table-striped"
                                id="casestep">
                             <caption></caption>
                             {#                            <thead>#}
                             <tr>
+                                <th width="5%" align="center" hidden>id</th>
                                 <th width="5%" align="center"></th>
                                 <th width="8%" align="center">步骤</th>
                                 <th width="10%" align="center">操作</th>
@@ -62,15 +62,19 @@
                                 <th width="30%" align="center">测试数据</th>
                                 <th width="20%" align="center">输出数据</th>
                             </tr>
-                            <tr>
-                                <td><input type="checkbox" name=""></td>
-                                <td>{{ casestep_form.no }}</td>
-                                <td>{{ casestep_form.keyword }}</td>
-                                <td>{{ casestep_form.page }}</td>
-                                <td>{{ casestep_form.element }}</td>
-                                <td>{{ casestep_form.data }}</td>
-                                <td>{{ casestep_form.output }}</td>
-                            </tr>
+                            {% for casestep_form in casestep_form_set %}
+                                <tr>
+                                    <td hidden>{{ casestep_form.id }}</td>
+                                    <td><input type="checkbox" name=""></td>
+                                    <td>{{ casestep_form.no }}</td>
+{#                                    <div>{{ casestep_form.no.errors }}</div>#}
+                                    <td>{{ casestep_form.keyword }}</td>
+                                    <td>{{ casestep_form.page }}</td>
+                                    <td>{{ casestep_form.element }}</td>
+                                    <td>{{ casestep_form.data }}</td>
+                                    <td>{{ casestep_form.output }}</td>
+                                </tr>
+                            {% endfor %}
 
                         </table>
                     </form>
@@ -194,6 +198,9 @@
                 }
             }
         )
+        $(function () {
+            $("tr td").children().attr({form: "testcase_save_form",});
+        })
 
     </script>
 

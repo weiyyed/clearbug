@@ -349,8 +349,12 @@ function del_row(id) {
 
 
 function add_row(id) {
-    var content=$("table#"+id).children().last().html();
-    $("table#"+id).append(content)
+    var content=$("table#"+id+' tbody').children('tr').last().html();
+    var last_no=$("table#"+id+' tbody tr').length-2;
+    var new_no=last_no+1
+    var exp=RegExp('-'+last_no+'-','g')
+    var new_content=content.replace(exp,'-'+new_no+'-')
+    $("table#"+id+' tbody').children('tr').last().after("<tr>"+new_content+"</tr>")
 
 }
 
