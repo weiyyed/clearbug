@@ -95,8 +95,8 @@ class CaseStep(models.Model):
     #步骤
     testcase = models.ForeignKey(TestCase, on_delete=models.CASCADE, verbose_name='所属用例')
     no = models.CharField('测试步骤', max_length=10, )
-
-    keyword = models.CharField('操作', max_length=10, )
+    # choices=[]
+    keyword = models.CharField('操作', max_length=10)
     page = models.CharField('页面', max_length=10, )
     element = models.CharField('元素', max_length=10, )
     data = models.CharField('测试数据', max_length=10, )
