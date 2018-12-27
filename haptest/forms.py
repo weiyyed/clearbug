@@ -35,12 +35,15 @@ class AddCaseStepForm(ModelForm):
             if not k.isupper():
                 keyword_pc.append((v,k))
         page_set=[]
+        ele_set=[]
         for x in Element.objects.values('page').distinct():
             page_set.append((x['page'],x['page']))
+        for x in Element.objects.values('element').distinct():
+            ele_set.append((x['element'],x['element']))
         widgets={
             'keyword':Select(choices=keyword_pc),
             'page':Select(choices=page_set),
-            'element':Select(choices=Element.objects.none())
+            'element':Select(choices=ele_set)
         }
 
 CaseStepFormSet = inlineformset_factory(TestCase, CaseStep, form=AddCaseStepForm,

@@ -89,110 +89,22 @@
     <script>
         editor = null;
 
-        $('#DataType').on('change', function () {
-            if ($('#DataType').val() === 'json') {
-                $('#add_data').attr('disabled', true);
-                $('#del_data').attr('disabled', true);
-                $('#data').remove();
-                var json_text = "<span style=\"font-size:10px;\" id=\"json-text\">\n" +
-                    " <div style=\"margin-left: 0px; margin-top: 5px; height: 200px\">" +
-                    "<pre id=\"code\" class=\"ace_editor\" style=\"margin-top: 0px; margin-bottom: 0px; min-height: 200px;\">\n" +
-                    "<textarea>\n" +
-                    "{\"key\":\"value\"}\n" +
-                    "</textarea>\n" +
-                    "</pre></div></span>";
-
-                $('#form_request_data').append(json_text);
-
-                editor = ace.edit("code");
-                init_acs('json', 'github', editor);
-
-            } else {
-                var table = '<table class="table table-hover table-condensed table-bordered table-striped" id="data">\n' +
-                    '                                <caption>' + $('#DataType').val() + ':</caption>\n' +
-                    '                                <thead>\n' +
-                    '                                <tr class="active text-success">\n' +
-                    '                                    <th width="5%" align="center">Option</th>\n' +
-                    '                                    <th width="30%" align="center">Key</th>\n' +
-                    '                                    <th width="5%" align="center">Type</th>\n' +
-                    '                                    <th width="60%" align="center">Value</th>\n' +
-                    '                                </tr>\n' +
-                    '                                </thead>\n' +
-                    '                                <tbody>\n' +
-                    '                                </tbody>\n' +
-                    '                            </table>';
-
-                $('#add_data').text('add ' + $('#DataType').val());
-                $('#del_data').text('del ' + $('#DataType').val());
-
-                $('#add_data').removeAttr("disabled");
-                $('#del_data').removeAttr("disabled");
-                $('#data').remove();
-                $('#json-text').remove();
-                $('#form_request_data').append(table);
-            }
-        });
-
         $("#tab-test").on("click", "li", function () {
             $(this).addClass("am-active").siblings("li").removeClass("am-active");
             var target = $(this).children("a").attr("data-target");
             $(target).addClass("am-active").siblings(".am-tab-panel").removeClass("am-active");
         }).find("li").eq(0).trigger("click");
 
-        $(function () {
-            $("#pre_case").sortable();
-            $("#pre_case").disableSelection();
-        });
-
-        $('#config').on('change', function () {
-            if ($('#config').val() !== '请选择') {
-                var case_id = $('#config').val();
-                var case_name = $('#config option:selected').text();
-                var href = "<li disbaled id=" + case_id + " name='pre_config'><a style='color: cadetblue' href='/api/edit_config/" + case_id + "/' id = " + case_id + ">" + case_name + "" +
-                    "</a><i class=\"js-remove\" onclick=remove_self('#" + case_id + "')>✖</i></li>";
-                $("li[name='pre_config']").remove();
-                $("#pre_case").prepend(href);
-                $('#config_pre').val("{'config': ['" + case_id + "', '" + case_name + "']}");
-            }
-        });
-
-        $("li[name='pre_config'] a i").on('click', function () {
-            $('#config_pre').val("");
-        });
-
-        $('#belong_case_id').on('change', function () {
-            if ($('#belong_case_id').val() !== '请选择') {
-                var case_id = $('#belong_case_id').val();
-                var case_name = $('#belong_case_id option:selected').text();
-                var href = "<li id=" + case_id + "><a href='/api/edit_case/" + case_id + "/' id = " + case_id + ">" + case_name + "" +
-                    "</a><i class=\"js-remove\" onclick=remove_self('#" + case_id + "')>✖</i></li>";
-                $("#pre_case").append(href);
-            }
-        });
 
         function remove_self(id) {
             $(id).remove();
         };
 
-        $('#save').on('click', function () {
-            if ($("li[name='pre_config']").length <= 0) {
-                $('#config_pre').val("");
-            }
-            $('#save_test').modal({
-                relatedTarget: this,
-                onConfirm: function () {
-                    case_ajax('add', editor)
-                },
-                onCancel: function () {
-                }
-            });
-        });
         $(function () {
                 var nodes = ['id_project', 'id_case_code', 'id_title', 'id_condition', 'id_designer', 'id_priority', 'id_remark'];
                 for (var i = 0; i < nodes.length; i++) {
                     var node = nodes[i];
                     node = "#" + node;
-                    {#$(node).attr("form", "testcase_save_form");#}
                     $(node).attr({form: "testcase_save_form", class: "form-control"});
                 }
             }
@@ -201,12 +113,14 @@
             $("tr td").children().attr({form: "testcase_save_form",});
         })
         $('select[id*="id_casestep_set"][id*="page"]').change(function () {
-            var data = $(this).val();
-            var url = '/haptest/page_element/'+data;
+            var data0 = $(this).val();
+            var url = '/haptest/page_element/' + data0;
+            var ele_this = $(this)
             $.get(url, function (data) {
-                $(this).parent().next().children().html('111111');
+                ele_this.parent().next().children().html(data);
             });
         });
+
     </script>
 
 
