@@ -39,7 +39,8 @@ class AddCaseStepForm(ModelForm):
             page_set.append((x['page'],x['page']))
         widgets={
             'keyword':Select(choices=keyword_pc),
-            'page':Select(choices=page_set)
+            'page':Select(choices=page_set),
+            'element':Select(choices=Element.objects.none())
         }
 
 CaseStepFormSet = inlineformset_factory(TestCase, CaseStep, form=AddCaseStepForm,

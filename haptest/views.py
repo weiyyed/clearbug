@@ -219,6 +219,19 @@ def testcase_delete(request):
         return testcase_list(request)
 
 
+def get_page_of_elelemt(request,page):
+    # 获取页面元素
+    if request.method=='GET':
+        e_obj=Element.objects.all()
+        ele=[]
+        page_ele_dic={}
+        for e in e_obj:
+            if page_ele_dic.get(e.page,None):
+                page_ele_dic[e.page].append(e.element)
+            else:
+                page_ele_dic[e.page]=[e.element]
+        elements=page_ele_dic[page]
+    return render(request,'haptest/page_element.html',{'elements':elements})
 # # @login_required
 # def casestep_add(request, id):
 #     if request.method == 'POST':

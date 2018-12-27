@@ -46,12 +46,11 @@
                     </button>
                     <button value="删 除" onclick="del_row('variables')">删除行
                     </button>
-
-                    <form id="form_variables">
+                    {#page_element_url={% url 'haptest:page_element ' %}#}
+                    <form id="form_casesteps">
                         <table class="table table-hover table-condensed table-bordered table-striped"
                                id="casestep">
                             <caption></caption>
-                            {#                            <thead>#}
                             <tr>
                                 <th width="5%" align="center" hidden>id</th>
                                 <th width="5%" align="center"></th>
@@ -67,7 +66,7 @@
                                     <td hidden>{{ casestep_form.id }}</td>
                                     <td><input type="checkbox" name=""></td>
                                     <td>{{ casestep_form.no }}</td>
-{#                                    <div>{{ casestep_form.no.errors }}</div>#}
+                                    {#                                    <div>{{ casestep_form.no.errors }}</div>#}
                                     <td>{{ casestep_form.keyword }}</td>
                                     <td>{{ casestep_form.page }}</td>
                                     <td>{{ casestep_form.element }}</td>
@@ -173,7 +172,7 @@
 
         function remove_self(id) {
             $(id).remove();
-        }
+        };
 
         $('#save').on('click', function () {
             if ($("li[name='pre_config']").length <= 0) {
@@ -187,7 +186,7 @@
                 onCancel: function () {
                 }
             });
-        })
+        });
         $(function () {
                 var nodes = ['id_project', 'id_case_code', 'id_title', 'id_condition', 'id_designer', 'id_priority', 'id_remark'];
                 for (var i = 0; i < nodes.length; i++) {
@@ -197,11 +196,17 @@
                     $(node).attr({form: "testcase_save_form", class: "form-control"});
                 }
             }
-        )
+        );
         $(function () {
             $("tr td").children().attr({form: "testcase_save_form",});
         })
-
+        $('select[id*="id_casestep_set"][id*="page"]').change(function () {
+            var data = $(this).val();
+            var url = '/haptest/page_element/'+data;
+            $.get(url, function (data) {
+                $(this).parent().next().children().html('111111');
+            });
+        });
     </script>
 
 

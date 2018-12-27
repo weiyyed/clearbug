@@ -19,5 +19,6 @@ urlpatterns = [
     path('testcase', views.testcase_list, name='testcase'),
     path('testcase_add/<int:id>/', views.testcase_add, name='testcase_add'),
     path('testcase_delete/', views.testcase_delete, name='testcase_delete'),
+    path('page_element/<str:page>/', views.get_page_of_elelemt, name='page_element'),
 
 ]
