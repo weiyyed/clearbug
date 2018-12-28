@@ -2,14 +2,17 @@
 {% load staticfiles %}
 {% block content %}
 
-    <div class="admin-biaogelist" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 
+    <div class="admin-biaogelist" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+        {% if casestep_form_set.errors %}
+            <div>{{ casestep_form_set.errors }}</div>
+        {% endif %}
         <div class="listbiaoti am-cf">
             <dl>
                 <form class="form-horizontal" id="testcase_save_form" method="post">
                     {% csrf_token %}
                     {{ casestep_form_set.management_form }}
-                    {#                    {{ casestep_form_set.errors }}#}
+
                     <input type="submit" value="保存返回" class="am-btn am-btn-success  am-btn-sm am-radius">
                     <div style="margin-top: 2%;"></div>
                 </form>
@@ -61,6 +64,7 @@
                                 <th width="30%" align="center">测试数据</th>
                                 <th width="20%" align="center">输出数据</th>
                             </tr>
+                            {{ casestep_form_set.management_form }}
                             {% for casestep_form in casestep_form_set %}
                                 <tr>
                                     <td hidden>{{ casestep_form.id }}</td>
@@ -111,7 +115,8 @@
         );
         $(function () {
             $("tr td").children().attr({form: "testcase_save_form",});
-        })
+        });
+
         $('select[id*="id_casestep_set"][id*="page"]').change(function () {
             var data0 = $(this).val();
             var url = '/haptest/page_element/' + data0;

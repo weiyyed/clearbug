@@ -46,5 +46,8 @@ class AddCaseStepForm(ModelForm):
             'element':Select(choices=ele_set)
         }
 
-CaseStepFormSet = inlineformset_factory(TestCase, CaseStep, form=AddCaseStepForm,
-                                        fields=('id', 'no', 'keyword', 'page', 'element', 'data', 'output'), extra=1)
+# CaseStepFormSet = inlineformset_factory(TestCase, CaseStep, form=AddCaseStepForm,
+#                                         fields=('id', 'no', 'keyword', 'page', 'element', 'data', 'output'), extra=1)
+def get_CaseStepFormSet(extra=0):
+    return inlineformset_factory(TestCase, CaseStep, form=AddCaseStepForm,
+                                        fields=('id', 'no', 'keyword', 'page', 'element', 'data', 'output'), extra=extra)

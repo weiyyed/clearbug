@@ -353,27 +353,16 @@ function add_row(id) {
     var last_no=$("table#"+id+' tbody tr').length-2;
     var new_no=last_no+1
     var exp=RegExp('-'+last_no+'-','g')
-    var new_content=content.replace(exp,'-'+new_no+'-')
+    var new_content=content.replace(exp,'-'+new_no+'-') //替换行数
+    new_content=new_content.replace(/"\s(value=.*?)\s/g,'" ')
     $("table#"+id+' tbody').children('tr').last().after("<tr>"+new_content+"</tr>")
-
+    //表单数量
+    var totalform=$('#id_casestep_set-TOTAL_FORMS');
+    var newval=Number(totalform.val())+1;
+    totalform.val(newval);
 }
 
-function add_params(id) {
-    var tabObj = document.getElementById(id);//获取添加数据的表格
-    var rowsNum = tabObj.rows.length;  //获取当前行数
-    var style = 'width:100%; border: none';
-    var check = "<input type='checkbox' name='" + id + "' style='width:55px' />";
-    var placeholder = '单个:["value1", "value2],  多个:[["name1", "pwd1"],["name2","pwd2"]]';
-    var key = "<textarea  name='test[][key]'  placeholder='单个:key, 多个:key1-key2'  style='" + style + "' />";
-    var value = "<textarea  name='test[][value]'  placeholder='" + placeholder + "' style='" + style + "' />";
-    var myNewRow = tabObj.insertRow(rowsNum);
-    var newTdObj0 = myNewRow.insertCell(0);
-    var newTdObj1 = myNewRow.insertCell(1);
-    var newTdObj2 = myNewRow.insertCell(2);
-    newTdObj0.innerHTML = check;
-    newTdObj1.innerHTML = key;
-    newTdObj2.innerHTML = value;
-}
+
 
 
 function init_acs(language, theme, editor) {

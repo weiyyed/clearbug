@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 import os
 from haptest.utils.common import file2database
-from .forms import AddProjectForm, AddElementForm, AddTestCaseForm, AddCaseStepForm,CaseStepFormSet
+from .forms import AddProjectForm, AddElementForm, AddTestCaseForm, AddCaseStepForm,get_CaseStepFormSet
 from django.contrib import auth
 from django.contrib.auth.models import User
 from haptest.models import Project, Element, Plateform, TestCase, CaseStep
@@ -184,24 +184,25 @@ def testcase_add(request, id):
             form = AddTestCaseForm(request.POST)
         if form.is_valid():
             testcase=form.save()
-            casestep_formset=CaseStepFormSet(request.POST,instance=testcase)
+            casestep_formset=get_CaseStepFormSet()(request.POST,instance=testcase)
             if casestep_formset.is_valid():
                 casestep_formset.save()
             else:
-                return render(request, 'haptest/testcase_add.html', {'form': form,
-                                                             'testcase_id': id,
-                                                             'casestep_form_set':casestep_formset,
-                                                             })
+                # return render(request, 'haptest/testcase_add.html', {'form': form,
+                #                                              'testcase_id': id,
+                #                                              'casestep_form_set':casestep_formset,
+                #                                              })
+                pass
         return HttpResponseRedirect(reverse('haptest:testcase'))
 
     else:
         if id != 0:
             testcase_data =TestCase.objects.get(id=id)
             form = AddTestCaseForm(instance=testcase_data)
-            casestep_formset = CaseStepFormSet(instance=testcase_data)
+            casestep_formset = get_CaseStepFormSet()(instance=testcase_data)
         else:
             form = AddTestCaseForm()
-            casestep_formset = CaseStepFormSet()
+            casestep_formset = get_CaseStepFormSet(extra=1)()
         return render(request, 'haptest/testcase_add.html', {'form': form,
                                                              'testcase_id': id,
                                                              'casestep_form_set':casestep_formset,
@@ -232,20 +233,4 @@ def get_page_of_elelemt(request,page):
                 page_ele_dic[e.page]=[e.element]
         elements=page_ele_dic[page]
     return render(request,'haptest/page_element.html',{'elements':elements})
-# # @login_required
-# def casestep_add(request, id):
-#     if request.method == 'POST':
-#         if id != 0:
-#             form = AddCaseStepForm(request.POST, instance=TestCase.objects.get(id=id))
-#         else:
-#             form = AddTestCaseForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#         return HttpResponseRedirect(reverse('haptest:testcase'))
 
-    # else:
-    #     if id !=0:
-    #         form=AddTestCaseForm(instance=TestCase.objects.get(id=id))
-    #     else:
-    #         form=AddTestCaseForm()
-    #     return render(request, 'haptest/testcase_add.html', {'form': form, 'testcase_id': id})
