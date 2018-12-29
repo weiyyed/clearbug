@@ -22,3 +22,43 @@ class Choice(models.Model):
 
     def __str__(self):
         return self.choice_text
+# 多表继承
+class Place(models.Model):
+    name = models.CharField(max_length=50)
+    address = models.CharField(max_length=80)
+
+class Restaurant(Place):
+    food = models.CharField(max_length=50)
+    pizza = models.BooleanField(default=False)
+
+    # 代理
+class Person(models.Model):
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+
+class MyPerson(Person):
+    class Meta:
+        proxy = True
+        ordering = ["last_name"]
+
+    def do_something(self):
+        pass
+# 多重继承
+class Article(models.Model):
+    article_id = models.AutoField(primary_key=True) #自定义id
+    art_name= models.CharField(max_length=30)
+
+class Book(models.Model):
+    book_id = models.AutoField(primary_key=True) #自定义id
+    book_name = models.CharField(max_length=30)
+
+class BookReview(Book, Article):
+    review_name=models.CharField(max_length=30,help_text='review_name帮助信息',null=True,blank=True)
+    dur_data=models.DurationField(blank=True)
+    filePathField_case=models.FilePathField(blank=True,path=r'd:/')
+    fileField_case=models.FileField(blank=True)
+    # ImageField_case=models.ImageField(blank=True)
+    TimeField_case=models.TimeField(blank=True)
+    ForeignKey_case=models.ForeignKey('self',on_delete=models.CASCADE,blank=True)
+    def __str__(self):
+        return self.review_name

@@ -2,7 +2,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
+
+from polls.forms import BookReview_form
 from .models import Choice, Question
+
 
 # 使用普通方式
 # def index(request):
@@ -58,3 +61,8 @@ def vote(request, question_id):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
+
+def  test(request):
+    form=BookReview_form()
+    return render(request,'polls/test.html',{'form':form})
