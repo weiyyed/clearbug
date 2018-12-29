@@ -3,3 +3,4 @@
 venv/
 haptest/__pycache__/
 haptest/migrations/*
+polls/migrations/*
