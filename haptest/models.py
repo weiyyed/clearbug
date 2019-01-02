@@ -98,3 +98,18 @@ class CaseStep(models.Model):
     class Meta:
         verbose_name = '测试步骤'
         db_table = 'haptest_casestep'
+class Environment(models.Model):
+    # 环境
+    env_name=models.CharField('环境名称',max_length=20)
+    desired_caps=models.TextField('运行参数',default="{'platformName': 'Desktop', 'browserName': 'Chrome'}")
+    pc_url=models.CharField('pc端地址',default='',max_length=50)
+    server_url=models.CharField('server_url',default='',max_length=50)
+    def __str__(self):
+        return self.env_name
+class RunCase(models.Model):
+    # 运行用例
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name='所属项目')
+    group=models.ManyToManyField(Module,verbose_name="包含模块")
+    environment=models.ForeignKey(Environment,on_delete=models.SET_NULL,null=True,verbose_name="运行环境")
+    def __str__(self):
+        return self.project,self.group,self.environment

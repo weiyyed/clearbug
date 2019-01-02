@@ -1,6 +1,6 @@
 from django.forms import ChoiceField, Textarea, Select
 from django.forms import ModelForm, inlineformset_factory
-from haptest.models import Project, Element, TestCase, CaseStep
+from haptest.models import Project, Element, TestCase, CaseStep, RunCase
 from sweetest.config import web_keywords, common_keywords
 # from django import forms
 
@@ -49,5 +49,11 @@ class AddCaseStepForm(ModelForm):
 # CaseStepFormSet = inlineformset_factory(TestCase, CaseStep, form=AddCaseStepForm,
 #                                         fields=('id', 'no', 'keyword', 'page', 'element', 'data', 'output'), extra=1)
 def get_CaseStepFormSet(extra=0):
+    # 用例步骤
     return inlineformset_factory(TestCase, CaseStep, form=AddCaseStepForm,
                                         fields=('id', 'no', 'keyword', 'page', 'element', 'data', 'output'), extra=extra,can_delete=True)
+
+class RunCaseForm(ModelForm):
+    class Meta:
+        model = RunCase
+        fields = "__all__"

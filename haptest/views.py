@@ -9,10 +9,10 @@ from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 import os
 from haptest.utils.common import file2database
-from .forms import AddProjectForm, AddElementForm, AddTestCaseForm, AddCaseStepForm,get_CaseStepFormSet
+from .forms import AddProjectForm, AddElementForm, AddTestCaseForm, AddCaseStepForm, get_CaseStepFormSet, RunCaseForm
 from django.contrib import auth
 from django.contrib.auth.models import User
-from haptest.models import Project, Element, Plateform, TestCase, CaseStep
+from haptest.models import Project, Element, Plateform, TestCase, CaseStep, RunCase
 
 
 def register(request):
@@ -220,15 +220,6 @@ def testcase_delete(request):
         TestCase.objects.filter(id__in=choice_set).delete()
         return testcase_list(request)
 
-# @login_required
-def casestep_delete(request):
-    try:
-        choice_set = request.POST.getlist('data_choice')
-    except KeyError:
-        return
-    else:
-        CaseStep.objects.filter(id__in=choice_set).delete()
-        return
 
 def get_page_of_elelemt(request,page):
     # 获取页面元素
@@ -244,3 +235,45 @@ def get_page_of_elelemt(request,page):
         elements=page_ele_dic[page]
     return render(request,'haptest/page_element.html',{'elements':elements})
 
+# @login_required
+def run_case(request):
+    # 运行用例
+    return render(request, "haptest/run_case_add.html")
+
+# @login_required
+def run_case_add(request, id):
+    if request.method == 'POST':
+        if id != 0:
+            form = RunCaseForm(request.POST, instance=RunCase.objects.get(id=id))
+        else:
+            form = RunCaseForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('haptest:run_case'))
+
+    else:
+        if id != 0:
+            form = RunCaseForm(instance=RunCase.objects.get(id=id))
+        else:
+            form = RunCaseForm()
+        return render(request, 'haptest/run_case_add.html', {'form': form, 'run_case_id': id})
+
+
+# @login_required
+def run_case(request):
+    manage_info = {
+        'data_set': RunCase.objects.all(),
+        'project': Project.objects.all(),
+    }
+    return render(request, 'haptest/run_case_list.html', manage_info)
+
+
+# @login_required
+def run_case_delete(request):
+    try:
+        choice_set = request.POST.getlist('run_case_choice')
+    except KeyError:
+        return RunCase(request)
+    else:
+        RunCase.objects.filter(id__in=choice_set).delete()
+        return run_case(request)
