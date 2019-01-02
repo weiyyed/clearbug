@@ -68,6 +68,7 @@ class DateFile(models.Model):
 class TestCase(models.Model):
     #用例
     project=models.ForeignKey(Project,on_delete=models.CASCADE,verbose_name='所属项目')
+    module_name=models.ForeignKey(Module,verbose_name='所属模块',on_delete=models.SET_NULL,null=True,blank=False)
     case_code=models.CharField('用例编号',max_length=40,)
     title=models.CharField('用例标题',max_length=40,)
     condition=models.CharField('前置条件',max_length=40,blank=True)

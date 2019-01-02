@@ -187,12 +187,13 @@ def testcase_add(request, id):
             casestep_formset=get_CaseStepFormSet()(request.POST,instance=testcase)
             if casestep_formset.is_valid():
                 casestep_formset.save()
-            else:
+                # return HttpResponseRedirect(reverse('haptest:testcase'))
+            # else:
                 # return render(request, 'haptest/testcase_add.html', {'form': form,
                 #                                              'testcase_id': id,
                 #                                              'casestep_form_set':casestep_formset,
                 #                                              })
-                pass
+                # return HttpResponseRedirect(reverse('haptest:testcase_add',kwargs={'id':id}))
         return HttpResponseRedirect(reverse('haptest:testcase'))
 
     else:
@@ -219,6 +220,15 @@ def testcase_delete(request):
         TestCase.objects.filter(id__in=choice_set).delete()
         return testcase_list(request)
 
+# @login_required
+def casestep_delete(request):
+    try:
+        choice_set = request.POST.getlist('data_choice')
+    except KeyError:
+        return
+    else:
+        CaseStep.objects.filter(id__in=choice_set).delete()
+        return
 
 def get_page_of_elelemt(request,page):
     # 获取页面元素

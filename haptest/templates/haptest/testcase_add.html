@@ -47,7 +47,7 @@
                 <div class="am-tab-panel" id="tab2">
                     <button value="添 加" onclick="add_row('casestep')">添加行
                     </button>
-                    <button value="删 除" onclick="del_row('variables')">删除行
+                    <button value="删 除" onclick="del_row('casestep')">删除行
                     </button>
                     {#page_element_url={% url 'haptest:page_element ' %}#}
                     <form id="form_casesteps">
@@ -63,19 +63,26 @@
                                 <th width="30%" align="center">元素</th>
                                 <th width="30%" align="center">测试数据</th>
                                 <th width="20%" align="center">输出数据</th>
+                                <th width="5%" align="center">标记删除</th>
                             </tr>
                             {{ casestep_form_set.management_form }}
                             {% for casestep_form in casestep_form_set %}
                                 <tr>
                                     <td hidden>{{ casestep_form.id }}</td>
-                                    <td><input type="checkbox" name=""></td>
+                                    <td><input type="checkbox" name="casestep" value="{{ casestep_form.id.value }}"
+                                               form=""></td>
                                     <td>{{ casestep_form.no }}</td>
                                     {#                                    <div>{{ casestep_form.no.errors }}</div>#}
                                     <td>{{ casestep_form.keyword }}</td>
                                     <td>{{ casestep_form.page }}</td>
                                     <td>{{ casestep_form.element }}</td>
+                                    {#                                    <td>#}
+                                    {#                                        <select name="casestep_set-{{ forloop.counter0 }}-element" maxlength="10"#}
+                                    {#                                                id="id_casestep_set-{{ forloop.counter0 }}-element" form="testcase_save_form" value={{ casestep_for }}></select>#}
+                                    {#                                    </td>#}
                                     <td>{{ casestep_form.data }}</td>
                                     <td>{{ casestep_form.output }}</td>
+                                    <td>{{ casestep_form.DELETE }}</td>
                                 </tr>
                             {% endfor %}
 
@@ -105,7 +112,7 @@
         };
 
         $(function () {
-                var nodes = ['id_project', 'id_case_code', 'id_title', 'id_condition', 'id_designer', 'id_priority', 'id_remark'];
+                var nodes = ['id_project', 'id_case_code', 'id_title', 'id_condition', 'id_designer', 'id_priority', 'id_remark',"id_module_name"];
                 for (var i = 0; i < nodes.length; i++) {
                     var node = nodes[i];
                     node = "#" + node;
@@ -113,8 +120,10 @@
                 }
             }
         );
+        {#表单form属性添加#}
         $(function () {
             $("tr td").children().attr({form: "testcase_save_form",});
+            $("tr td:nth-of-type(2) input[type=\"checkbox\"]").attr({form: "choice_delete",});
         });
 
         $('select[id*="id_casestep_set"][id*="page"]').change(function () {

@@ -343,26 +343,39 @@ function del_row(id) {
         if (chkObj[k].checked) {
             tabObj.deleteRow(k + 1);
             k = -1;
+            //表单数量
+            var totalform = $('#id_casestep_set-TOTAL_FORMS');
+            var newval = Number(totalform.val()) - 1;
+            totalform.val(newval);
         }
     }
 }
 
-
+//添加行
 function add_row(id) {
-    var content=$("table#"+id+' tbody').children('tr').last().html();
-    var last_no=$("table#"+id+' tbody tr').length-2;
-    var new_no=last_no+1
-    var exp=RegExp('-'+last_no+'-','g')
-    var new_content=content.replace(exp,'-'+new_no+'-') //替换行数
-    new_content=new_content.replace(/"\s(value=.*?)\s/g,'" ')
-    $("table#"+id+' tbody').children('tr').last().after("<tr>"+new_content+"</tr>")
+    var content = $("table#" + id + ' tbody').children('tr').last().html();
+    var last_no = $("table#" + id + ' tbody tr').length - 2;
+    var new_no = last_no + 1
+    var exp = RegExp('-' + last_no + '-', 'g')
+    var new_content = content.replace(exp, '-' + new_no + '-') //替换行数
+    new_content = new_content.replace(/"\s(value=.*?)\s/g, '" ')
+    new_content = new_content.replace(/selected/g, '')
+    $("table#" + id + ' tbody').children('tr').last().after("<tr>" + new_content + "</tr>")
     //表单数量
-    var totalform=$('#id_casestep_set-TOTAL_FORMS');
-    var newval=Number(totalform.val())+1;
+    var totalform = $('#id_casestep_set-TOTAL_FORMS');
+    var newval = Number(totalform.val()) + 1;
     totalform.val(newval);
 }
 
-
+//元素选择变更
+function change_element(id) {
+    var page = $('#' + id);
+    var page_data = page.val();
+    var url = '/haptest/page_element/' + page_data;
+    $.get(url, function (data) {
+        page.parent().next().children().html(data);
+    });
+};
 
 
 function init_acs(language, theme, editor) {

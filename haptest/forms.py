@@ -29,20 +29,20 @@ class AddCaseStepForm(ModelForm):
     class Meta:
         model=CaseStep
         fields="__all__"
-        keyword_pc=[]
+        keyword_pc=[('',"---")]
         web_keywords.update(common_keywords)
         for k,v in web_keywords.items():
             if not k.isupper():
                 keyword_pc.append((v,k))
-        page_set=[]
-        ele_set=[]
+        page_set=[('',"---")]
+        ele_set=[('',"---")]
         for x in Element.objects.values('page').distinct():
             page_set.append((x['page'],x['page']))
         for x in Element.objects.values('element').distinct():
             ele_set.append((x['element'],x['element']))
         widgets={
             'keyword':Select(choices=keyword_pc),
-            'page':Select(choices=page_set),
+            'page':Select(choices=page_set,attrs={'onchange':'change_element(this.id)'}),
             'element':Select(choices=ele_set)
         }
 
@@ -50,4 +50,4 @@ class AddCaseStepForm(ModelForm):
 #                                         fields=('id', 'no', 'keyword', 'page', 'element', 'data', 'output'), extra=1)
 def get_CaseStepFormSet(extra=0):
     return inlineformset_factory(TestCase, CaseStep, form=AddCaseStepForm,
-                                        fields=('id', 'no', 'keyword', 'page', 'element', 'data', 'output'), extra=extra)
+                                        fields=('id', 'no', 'keyword', 'page', 'element', 'data', 'output'), extra=extra,can_delete=True)
