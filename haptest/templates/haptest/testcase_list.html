@@ -80,7 +80,7 @@
                         <td>
                             <a href={% url 'haptest:testcase_add' p.id %}>{{ p.title }}</a>
                         </td>
-                        <td>{{ p.condition }}</td>
+                        <td>{{ p.get_condition_display }}</td>
                         <td>{{ p.designer }}</td>
                         <td>{{ p.project }}</td>
 

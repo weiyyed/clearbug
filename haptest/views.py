@@ -266,7 +266,8 @@ def run_case(request, id=None):
         sheet_name = [m.module_name for m in runobj.module.all()]
         desired_caps = runobj.environment.desired_caps
         server_url = runobj.environment.server_url
-        build(project_name, sheet_name, desired_caps, server_url)
+        # server_url=eval(server_url)
+        build(project_name, sheet_name, eval(desired_caps),server_url)
         return HttpResponse("执行用例成功")
     else:
         manage_info = {
