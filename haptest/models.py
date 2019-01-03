@@ -86,8 +86,8 @@ class CaseStep(models.Model):
     testcase = models.ForeignKey(TestCase, on_delete=models.CASCADE, verbose_name='所属用例')
     no = models.CharField('测试步骤', max_length=10, )
     # choices=[]
-    keyword = models.CharField('操作', max_length=10)
-    page = models.CharField('页面', max_length=10, )
+    keyword = models.CharField('操作', max_length=20)
+    page = models.CharField('页面', max_length=20, )
     element = models.CharField('元素', max_length=10, )
     data = models.CharField('测试数据', max_length=10, )
     expected = models.CharField('预期结果', max_length=10, blank=True)
@@ -103,13 +103,13 @@ class Environment(models.Model):
     env_name=models.CharField('环境名称',max_length=20)
     desired_caps=models.TextField('运行参数',default="{'platformName': 'Desktop', 'browserName': 'Chrome'}")
     pc_url=models.CharField('pc端地址',default='',max_length=50)
-    server_url=models.CharField('server_url',default='',max_length=50)
+    server_url=models.CharField('server_url',default='',max_length=50,blank=True)
     def __str__(self):
         return self.env_name
 class RunCase(models.Model):
     # 运行用例
     project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name='所属项目')
-    group=models.ManyToManyField(Module,verbose_name="包含模块")
+    module=models.ManyToManyField(Module,verbose_name="包含模块")
     environment=models.ForeignKey(Environment,on_delete=models.SET_NULL,null=True,verbose_name="运行环境")
     def __str__(self):
-        return self.project,self.group,self.environment
+        return str(self.project)+str(self.group)+str(self.environment)

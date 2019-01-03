@@ -15,85 +15,46 @@
                     <button type="submit" class="am-btn am-btn-success  am-btn-sm am-radius"> 删除</button>
                 </form>
             </dl>
-            <dl>
-                <button type="button" class="am-btn am-btn-success  am-btn-sm am-radius"
-                        data-toggle="modal" data-target="#bulk_uploadcase">导入
-                </button>
-            </dl>
-            <ul  style="float: right;">元素管理</ul>
+
+            <ul style="float: right;">用例运行</ul>
         </div>
 
 
-        <div class="am-btn-toolbars am-btn-toolbar am-kg am-cf">
-            <form id="pro_filter" method="post" action="/api/project_list/1/">
-                <ul>
-                    <li style="padding-top: 5px">
-                        <select name="project" class="am-input-zm am-input-xm">
-                            <option value="{{ info.belong_project }}"
-                                    selected>{{ info.belong_project }}</option>
-
-                            {% for foo in project_all %}
-                                {% ifnotequal info.belong_project foo.project_name %}
-                                    <option value="{{ foo.project_name }}">{{ foo.project_name }}</option>
-                                {% endifnotequal %}
-
-                            {% endfor %}
-
-                            {% if info.belong_project != 'All' %}
-                                <option value="All">All</option>
-                            {% endif %}
-                        </select>
-                    </li>
-                    <li style="padding-top: 5px"><input value="{{ info.user }}" type="text" name="user"
-                                                        class="am-input-sm am-input-xm"
-                                                        placeholder="负责人"/></li>
-
-                    <li>
-                        <button style="padding-top: 5px; margin-top: 9px"
-                                class="am-btn am-radius am-btn-xs am-btn-success">搜索
-                        </button>
-                    </li>
-                </ul>
-            </form>
-        </div>
         <div class="am-form am-g" id="project_list" name="project_list" method="post">
-            <table  class="am-table am-table-bordered am-table-radius am-table-striped">
+            <table class="am-table am-table-bordered am-table-radius am-table-striped">
                 <thead>
                 <tr>
                     <th class="table-check"><input type="checkbox" id="select_all"/></th>
                     <th class="table-title">序号</th>
-                    <th class="table-title">页面</th>
-                    <th class="table-title">元素</th>
-                    <th class="table-title">by</th>
-                    <th class="table-title">value</th>
-                    <th class="table-title">custom</th>
-                    <th class="table-title">备注</th>
-                    <th class="table-title">所属平台</th>
+                    <th class="table-title">项目</th>
+                    <th class="table-title">运行环境</th>
+                    <th class="table-title">包含模块/用例组</th>
+                    <th class="table-title">操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for p in data_set %}
                     <tr>
-                        <td ><input type="checkbox" name="run_case_choice" value="{{ p.id }}" form="choice_delete"/></td>
+                        <td><input type="checkbox" name="run_case_choice" value="{{ p.id }}" form="choice_delete"
+                                   onclick="click_hidden()"/></td>
                         <td>{{ forloop.counter }}</td>
-                        <td >
-                            <a href={% url 'haptest:run_case_add' p.id %}>{{ p.page }}</a>
+                        <td>
+                            <a href={% url 'haptest:run_case_add' p.id %}>{{ p.project }}</a>
                         </td>
                         <td>
-                            <a href={% url 'haptest:run_case_add' p.id %}>{{ p.run_case }}</a>
+                            <a href={% url 'haptest:run_case_add' p.id %}>{{ p.environment }}</a>
                         </td>
-                        <td>{{ p.by }}</td>
-                        <td>{{ p.value }}</td>
-                        <td>{{ p.custom }}</td>
-                        <td>{{ p.remark }}</td>
-                        <td>{{ p.plateform }}</td>
-
-                        {% for key, value in sum.items %}
-                            {% ifequal foo.id key %}
-                                <td>{{ value }}</td>
-                            {% endifequal %}
-                        {% endfor %}
-
+                        <td>{{ p.module.all|join:"," }}</td>
+                        {# 用于运行用例时选择#}
+                        <td>
+                            <form id="choice_submit" action={% url 'haptest:run_case' %} }} method="post">
+                                {% csrf_token %}
+                                <button class="am-btn am-btn-success  am-btn-sm am-radius" type="submit"
+                                        name="run_case_choice_submit" value="{{ p.id }}"
+                                > 运行用例
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                 {% endfor %}
 
@@ -195,6 +156,21 @@
             var isChecked = $(this).prop("checked");
             $("input[name^='project']").prop("checked", isChecked);
         })
+        {#运行用例#}
+
+        function run_test_case() {
+            if ($("input:checked").size() != 1) {
+                myAlert("请选择一条数据");
+            } else {
+                var id_value = $("input:checked").attr("value");
+                var url = '/haptest/run_case/';
+                $.post(url, {id: id_value}, function (data, status) {
+                    alert(status + data)
+                });
+            }
+        };
+
+
     </script>
 
 

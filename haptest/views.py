@@ -13,6 +13,7 @@ from .forms import AddProjectForm, AddElementForm, AddTestCaseForm, AddCaseStepF
 from django.contrib import auth
 from django.contrib.auth.models import User
 from haptest.models import Project, Element, Plateform, TestCase, CaseStep, RunCase
+from sweetest.runcase import build
 
 
 def register(request):
@@ -183,22 +184,22 @@ def testcase_add(request, id):
         else:
             form = AddTestCaseForm(request.POST)
         if form.is_valid():
-            testcase=form.save()
-            casestep_formset=get_CaseStepFormSet()(request.POST,instance=testcase)
+            testcase = form.save()
+            casestep_formset = get_CaseStepFormSet()(request.POST, instance=testcase)
             if casestep_formset.is_valid():
                 casestep_formset.save()
-                # return HttpResponseRedirect(reverse('haptest:testcase'))
-            # else:
-                # return render(request, 'haptest/testcase_add.html', {'form': form,
-                #                                              'testcase_id': id,
-                #                                              'casestep_form_set':casestep_formset,
-                #                                              })
-                # return HttpResponseRedirect(reverse('haptest:testcase_add',kwargs={'id':id}))
-        return HttpResponseRedirect(reverse('haptest:testcase'))
+                return HttpResponseRedirect(reverse('haptest:testcase'))
+            else:
+                # return HttpResponse("用例步骤保存失败" + str(casestep_formset.errors))
+                return render(request, 'haptest/testcase_add.html', {'form': form,
+                                                                     'testcase_id': id,
+                                                                     'casestep_form_set': casestep_formset,
+                                                                     })
+        # return HttpResponseRedirect(reverse('haptest:testcase'))
 
     else:
         if id != 0:
-            testcase_data =TestCase.objects.get(id=id)
+            testcase_data = TestCase.objects.get(id=id)
             form = AddTestCaseForm(instance=testcase_data)
             casestep_formset = get_CaseStepFormSet()(instance=testcase_data)
         else:
@@ -206,7 +207,7 @@ def testcase_add(request, id):
             casestep_formset = get_CaseStepFormSet(extra=1)()
         return render(request, 'haptest/testcase_add.html', {'form': form,
                                                              'testcase_id': id,
-                                                             'casestep_form_set':casestep_formset,
+                                                             'casestep_form_set': casestep_formset,
                                                              })
 
 
@@ -221,24 +222,20 @@ def testcase_delete(request):
         return testcase_list(request)
 
 
-def get_page_of_elelemt(request,page):
+def get_page_of_elelemt(request, page):
     # 获取页面元素
-    if request.method=='GET':
-        e_obj=Element.objects.all()
-        ele=[]
-        page_ele_dic={}
+    if request.method == 'GET':
+        e_obj = Element.objects.all()
+        ele = []
+        page_ele_dic = {}
         for e in e_obj:
-            if page_ele_dic.get(e.page,None):
+            if page_ele_dic.get(e.page, None):
                 page_ele_dic[e.page].append(e.element)
             else:
-                page_ele_dic[e.page]=[e.element]
-        elements=page_ele_dic[page]
-    return render(request,'haptest/page_element.html',{'elements':elements})
+                page_ele_dic[e.page] = [e.element]
+        elements = page_ele_dic[page]
+    return render(request, 'haptest/page_element.html', {'elements': elements})
 
-# @login_required
-def run_case(request):
-    # 运行用例
-    return render(request, "haptest/run_case_add.html")
 
 # @login_required
 def run_case_add(request, id):
@@ -260,20 +257,31 @@ def run_case_add(request, id):
 
 
 # @login_required
-def run_case(request):
-    manage_info = {
-        'data_set': RunCase.objects.all(),
-        'project': Project.objects.all(),
-    }
-    return render(request, 'haptest/run_case_list.html', manage_info)
+def run_case(request, id=None):
+    # 执行用例
+    if request.method == "POST":
+        choice_id = request.POST.get('run_case_choice_submit')
+        runobj = RunCase.objects.get(pk=int(choice_id))
+        project_name = runobj.project.project_name
+        sheet_name = [m.module_name for m in runobj.module.all()]
+        desired_caps = runobj.environment.desired_caps
+        server_url = runobj.environment.server_url
+        build(project_name, sheet_name, desired_caps, server_url)
+        return HttpResponse("执行用例成功")
+    else:
+        manage_info = {
+            'data_set': RunCase.objects.all(),
+            # 'module': Project.objects.all(),
+        }
+        return render(request, 'haptest/run_case_list.html', manage_info)
 
 
 # @login_required
 def run_case_delete(request):
-    try:
+    if request.method == "POST":
         choice_set = request.POST.getlist('run_case_choice')
-    except KeyError:
-        return RunCase(request)
-    else:
-        RunCase.objects.filter(id__in=choice_set).delete()
-        return run_case(request)
+        if choice_set:
+            RunCase.objects.filter(id__in=choice_set).delete()
+            return HttpResponse("删除数据成功")
+        else:
+            return HttpResponse("没有选择数据")

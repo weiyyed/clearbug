@@ -7,6 +7,9 @@
         {% if casestep_form_set.errors %}
             <div>{{ casestep_form_set.errors }}</div>
         {% endif %}
+        {% if casestep_form_set.non_form_errors %}
+            <div>{{ casestep_form_set.non_form_errors }}</div>
+        {% endif %}
         <div class="listbiaoti am-cf">
             <dl>
                 <form class="form-horizontal" id="testcase_save_form" method="post">
@@ -72,7 +75,6 @@
                                     <td><input type="checkbox" name="casestep" value="{{ casestep_form.id.value }}"
                                                form=""></td>
                                     <td>{{ casestep_form.no }}</td>
-                                    {#                                    <div>{{ casestep_form.no.errors }}</div>#}
                                     <td>{{ casestep_form.keyword }}</td>
                                     <td>{{ casestep_form.page }}</td>
                                     <td>{{ casestep_form.element }}</td>
@@ -112,7 +114,7 @@
         };
 
         $(function () {
-                var nodes = ['id_project', 'id_case_code', 'id_title', 'id_condition', 'id_designer', 'id_priority', 'id_remark',"id_module_name"];
+                var nodes = ['id_project', 'id_case_code', 'id_title', 'id_condition', 'id_designer', 'id_priority', 'id_remark', "id_module_name"];
                 for (var i = 0; i < nodes.length; i++) {
                     var node = nodes[i];
                     node = "#" + node;
