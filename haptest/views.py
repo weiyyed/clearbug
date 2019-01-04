@@ -13,7 +13,7 @@ from .forms import AddProjectForm, AddElementForm, AddTestCaseForm, AddCaseStepF
 from django.contrib import auth
 from django.contrib.auth.models import User
 from haptest.models import Project, Element, Plateform, TestCase, CaseStep, RunCase
-from sweetest.runcase import build
+from sweetest.runcase import Autotest4database
 
 
 def register(request):
@@ -262,12 +262,8 @@ def run_case(request, id=None):
     if request.method == "POST":
         choice_id = request.POST.get('run_case_choice_submit')
         runobj = RunCase.objects.get(pk=int(choice_id))
-        project_name = runobj.project.project_name
-        sheet_name = [m.module_name for m in runobj.module.all()]
-        desired_caps = runobj.environment.desired_caps
-        server_url = runobj.environment.server_url
-        # server_url=eval(server_url)
-        build(project_name, sheet_name, eval(desired_caps),server_url)
+        run_obj=Autotest4database(run_case_obj=RunCase.objects.get(pk=int(choice_id)))
+        run_obj.plan()
         return HttpResponse("执行用例成功")
     else:
         manage_info = {

@@ -1,4 +1,6 @@
 from django.db import models
+
+from haptest.managers import TestCaseManager, CaseStepManager, ElementManager
 from sweetest.config import web_keywords,common_keywords
 
 class Plateform(models.Model):
@@ -43,6 +45,8 @@ class Element(models.Model):
         db_table = 'haptest_element'
         unique_together=('page','element')
 
+    objects=ElementManager()
+
 class Date(models.Model):
     #数据
     project=models.ForeignKey(Project,on_delete=models.CASCADE,verbose_name='所属项目')
@@ -67,6 +71,7 @@ class DateFile(models.Model):
         db_table = 'haptest_datafile'
 class TestCase(models.Model):
     #用例
+    objects=TestCaseManager()
     condition_choices=[("","---"),
                        ("BASE","用例集执行前执行"),
                        ("SETUP","每个用例执行前执行"),
@@ -75,7 +80,8 @@ class TestCase(models.Model):
                        ("SKIP","跳过不执行"),
                        ("SNIPPET","用例片段"),
                        ]
-    project=models.ForeignKey(Project,on_delete=models.CASCADE,verbose_name='所属项目')
+    plateform = models.ForeignKey(Plateform, on_delete=models.SET_NULL, verbose_name='所属平台', null=True)
+    project=models.ForeignKey(Project,on_delete=models.SET_NULL,verbose_name='所属项目',blank=True,null=True)
     module_name=models.ForeignKey(Module,verbose_name='所属模块',on_delete=models.SET_NULL,null=True,blank=False)
     case_code=models.CharField('用例编号',max_length=40,)
     title=models.CharField('用例标题',max_length=40,)
@@ -91,6 +97,7 @@ class TestCase(models.Model):
 
 class CaseStep(models.Model):
     #步骤
+    objects=CaseStepManager()
     testcase = models.ForeignKey(TestCase, on_delete=models.CASCADE, verbose_name='所属用例')
     no = models.CharField('测试步骤', max_length=10, )
     # choices=[]
@@ -116,8 +123,10 @@ class Environment(models.Model):
         return self.env_name
 class RunCase(models.Model):
     # 运行用例
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name='所属项目')
+    runcase_name=models.CharField("构建名称",max_length=20)
+    plateform = models.ForeignKey(Plateform, on_delete=models.SET_NULL, verbose_name='所属平台', null=True)
+    # project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name='所属项目')
     module=models.ManyToManyField(Module,verbose_name="包含模块")
     environment=models.ForeignKey(Environment,on_delete=models.SET_NULL,null=True,verbose_name="运行环境")
     def __str__(self):
-        return str(self.project)+str(self.group)+str(self.environment)
+        return self.runcase_name

@@ -3,6 +3,7 @@ from sweetest.log import logger
 
 
 def elements_format(data):
+    # 转为字典｛page-element：｛原字典｝，｝
     elements = {}
     page = ''
     custom = ''
@@ -32,6 +33,9 @@ class Elements:
     def get_elements(self, elements_file):
         d = Excel(elements_file)
         self.elements = elements_format(data2dict(d.read('elements')))
+    def get_elements4data(self, data):
+        # 数据库获取元素
+        self.elements = elements_format(data)
 
     def have(self, page, element):
         '''返回2个值，frame和元素别名（页面-元素）'''

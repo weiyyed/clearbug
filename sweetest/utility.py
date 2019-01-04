@@ -80,7 +80,7 @@ class Excel:
 def data2dict(data):
     # def list_list2list_dict(data):
     '''
-    把带头标题的二维数组，转换成以标题为 key 的 dict  的 list
+    把带头标题的二维数组，转换成以标题为 key 的 dict  的 list,[{},{}]
     '''
     list_dict_data = []
     key = []
