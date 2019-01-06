@@ -1,6 +1,6 @@
 from django.db import models
 
-from haptest.managers import TestCaseManager, CaseStepManager, ElementManager
+from haptest.managers import TestCaseManager, CaseStepManager, ElementManager,RunCaseManager
 from sweetest.config import web_keywords,common_keywords
 
 class Plateform(models.Model):
@@ -130,3 +130,5 @@ class RunCase(models.Model):
     environment=models.ForeignKey(Environment,on_delete=models.SET_NULL,null=True,verbose_name="运行环境")
     def __str__(self):
         return self.runcase_name
+
+    objects = RunCaseManager()

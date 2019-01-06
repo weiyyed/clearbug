@@ -195,7 +195,11 @@ def testcase_add(request, id):
                                                                      'testcase_id': id,
                                                                      'casestep_form_set': casestep_formset,
                                                                      })
-        # return HttpResponseRedirect(reverse('haptest:testcase'))
+        else:
+            return render(request, 'haptest/testcase_add.html', {'form': form,
+                                                                 'testcase_id': id,
+                                                                 # 'casestep_form_set': casestep_formset,
+                                                                 })
 
     else:
         if id != 0:
