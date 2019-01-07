@@ -53,7 +53,7 @@ class Data(models.Model):
     project=models.ForeignKey(Project,on_delete=models.CASCADE,verbose_name='所属项目')
     org_code=models.CharField('组织编码',max_length=30,blank=True)
     common_code=models.CharField('普通编码',max_length=30,blank=True)
-    phone_num=models.CharField('人员手机号',max_length=30,blank=True)
+    phone_num=models.CharField('手机号',max_length=30,blank=True)
     flag=models.CharField('flag',max_length=4,blank=True,default="N")
     def __str__(self):
         return str(self.id)

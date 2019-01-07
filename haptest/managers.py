@@ -13,15 +13,30 @@ class DataManager(Base):
     def get_dict(self,**kwargs):
         # 获取第一条未使用数据
         d=super().filter(**kwargs)
-        data_first=d.exclude(flag="Y")[:1]
-        d_dicts=data_first.values()[:1]
-        if d_dicts:
-            # data_first.update(flag="Y")
-            super().filter(pk=data_first.get().id).update(flag="Y")
-            return d_dicts
-        d.update(flag="N")
-        self.get_dict(**kwargs)
-
+        if d:
+            data_first=d.exclude(flag="Y")[:1]
+            d_dicts=data_first.values()[:1]
+            new_dic = {}
+            if d_dicts:
+                # 重置为N
+                d_dicts=[d for d in d_dicts]
+                super().filter(pk=data_first.get().id).update(flag="Y")
+                verbose_dic=self.get_verbose_dic()
+                for name,vername in verbose_dic.items():
+                    new_dic[vername]=d_dicts[0][name]
+                return new_dic
+            d.update(flag="N")
+            self.get_dict(**kwargs)
+        else:
+            return {}
+    def get_verbose_dic(self):
+        obj=self.model
+        v_dic={}
+        for filed in obj._meta.fields:
+            v_dic[filed.name]=filed.verbose_name
+        for x in ["id","project","flag"]:
+            v_dic.pop(x)
+        return v_dic
 class GlobalDataManager(Base):
     pass
 
