@@ -1,6 +1,7 @@
 from django.db import models
 
-from haptest.managers import TestCaseManager, CaseStepManager, ElementManager,RunCaseManager
+from haptest.managers import TestCaseManager, CaseStepManager, ElementManager, RunCaseManager, DataManager, \
+    GlobalDataManager
 from sweetest.config import web_keywords,common_keywords
 
 class Plateform(models.Model):
@@ -47,21 +48,32 @@ class Element(models.Model):
 
     objects=ElementManager()
 
-class Date(models.Model):
+class Data(models.Model):
     #数据
     project=models.ForeignKey(Project,on_delete=models.CASCADE,verbose_name='所属项目')
     org_code=models.CharField('组织编码',max_length=30,blank=True)
     common_code=models.CharField('普通编码',max_length=30,blank=True)
     phone_num=models.CharField('人员手机号',max_length=30,blank=True)
-    flag=models.CharField('flag',max_length=4,blank=True)
+    flag=models.CharField('flag',max_length=4,blank=True,default="N")
     def __str__(self):
-        return self.project,self.org_code,self.common_code
+        return str(self.id)
     class Meta:
         verbose_name = '测试数据'
-        db_table = 'haptest_date'
+        db_table = 'haptest_data'
+    objects=DataManager()
+class GlobalData(models.Model):
+#     全局数据变量
+    varible=models.CharField("变量名",max_length=20,unique=True)
+    value=models.CharField("变量值",max_length=30)
+    def __str__(self):
+        return str(self.id)
+    class Meta:
+        verbose_name = '全局变量'
+        db_table="haptest_global_data"
+    objects=GlobalDataManager()
 
-class DateFile(models.Model):
-    #数据
+class DataFile(models.Model):
+    #数据文件
     project=models.ForeignKey(Project,on_delete=models.CASCADE,verbose_name='所属项目')
     file=models.FileField('文件',upload_to='data/import/')
     def __str__(self):
@@ -81,7 +93,7 @@ class TestCase(models.Model):
                        ("SNIPPET","用例片段"),
                        ]
     plateform = models.ForeignKey(Plateform, on_delete=models.SET_NULL, verbose_name='所属平台', null=True)
-    project=models.ForeignKey(Project,on_delete=models.SET_NULL,verbose_name='所属项目',blank=True,null=True)
+    # project=models.ForeignKey(Project,on_delete=models.SET_NULL,verbose_name='所属项目',blank=True,null=True)
     module_name=models.ForeignKey(Module,verbose_name='所属模块',on_delete=models.SET_NULL,null=True,blank=False)
     case_code=models.CharField('用例编号',max_length=40,)
     title=models.CharField('用例标题',max_length=40,)
@@ -89,6 +101,7 @@ class TestCase(models.Model):
     designer=models.CharField('设计者',max_length=20,blank=True)
     priority=models.CharField('优先级',max_length=20,blank=True)
     remark=models.CharField('备注',max_length=50,blank=True)
+    flag=models.BooleanField('自动化标记',blank=True,default="True")
     def __str__(self):
         return self.title
     class Meta:
@@ -109,7 +122,7 @@ class CaseStep(models.Model):
     output = models.CharField('输出数据', max_length=20, blank=True)
     remark = models.CharField('备注', max_length=50,blank=True )
     def __str__(self):
-        return self.no,self.keyword,self.page,self.element
+        return str(self.testcase)+"-"+str(self.no)
     class Meta:
         verbose_name = '测试步骤'
         db_table = 'haptest_casestep'
@@ -125,7 +138,7 @@ class RunCase(models.Model):
     # 运行用例
     runcase_name=models.CharField("构建名称",max_length=20)
     plateform = models.ForeignKey(Plateform, on_delete=models.SET_NULL, verbose_name='所属平台', null=True)
-    # project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name='所属项目')
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name='所属项目')
     module=models.ManyToManyField(Module,verbose_name="包含模块")
     environment=models.ForeignKey(Environment,on_delete=models.SET_NULL,null=True,verbose_name="运行环境")
     def __str__(self):

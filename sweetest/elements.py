@@ -34,7 +34,10 @@ class Elements:
         d = Excel(elements_file)
         self.elements = elements_format(data2dict(d.read('elements')))
     def get_elements4data(self, data):
-        # 数据库获取元素
+        '''
+        数据库获取元素
+        data为：以标题为 key 的 dict  的 list,[{},{}]
+        '''
         self.elements = elements_format(data)
 
     def have(self, page, element):

@@ -4,8 +4,8 @@ import time
 import sys
 import json
 
-from haptest.models import Element, RunCase,TestCase as TestCase_haptest
-from sweetest.data import testsuite_format, testsuite2data, testsuite2report
+from haptest.models import Element, RunCase, TestCase as TestCase_haptest, Data, GlobalData
+from sweetest.data import testsuite_format, testsuite2data, testsuite2report, testsuite_format4database
 from sweetest.parse import parse
 from sweetest.elements import e
 from sweetest.globals import g
@@ -27,7 +27,7 @@ class Autotest4database:
 
         self.platform_id=run_case_obj.project.platform.id
         self.platform_name=run_case_obj.project.platform.platform_name
-        self.project_name = run_case_obj.project.project_name
+        self.project_id = run_case_obj.project
         self.modules_name = [m.module_name for m in run_case_obj.module.all()]
         desired_caps = run_case_obj.environment.desired_caps
         self.desired_caps=eval(desired_caps)
@@ -78,7 +78,7 @@ class Autotest4database:
         try:
             # e.get_elements(self.elements_file)
             # e_dic=[e for e in Element.objects.filter(plateform=self.platform_id).values_list()]
-            e.get_elements4data(Element.objects.get_dicts(self.platform_id))
+            e.get_elements4data(Element.objects.get_dicts(plateform=self.platform_id))
         except:
             logger.exception('*** Parse config file fail ***')
             self.code = -1
@@ -92,7 +92,7 @@ class Autotest4database:
             g.sheet_name = runcase_name
             # xml 测试报告初始化
             self.report_ts[runcase_name] = self.report.create_suite(
-                g.plateform, runcase_name)
+                g.project_name, runcase_name)
             self.report_ts[runcase_name].start()
 
             self.run(runcase_name)
@@ -110,7 +110,7 @@ class Autotest4database:
         try:
             # data = self.testcase_workbook.read(runcase_name)
             # testsuite = testsuite_format(data)
-            testsuite=(TestCase_haptest.objects.get_dicts())
+            testsuite=testsuite_format4database(TestCase_haptest.objects.get_dicts(RunCase.objects.get_testcases(runcase_name=runcase_name)))
             # logger.info('Testsuite imported from Excel:\n' +
             #             json.dumps(testsuite, ensure_ascii=False, indent=4))
             logger.info('From Excel import testsuite success')
@@ -124,14 +124,16 @@ class Autotest4database:
             g.init(self.desired_caps, self.server_url)
             g.set_driver()
             # 如果测试数据文件存在，则从该文件里读取一行数据，赋值到全局变量列表里
-            data_file = path.join(
-                'data', g.plateform + '-' + runcase_name + '.csv')
-            if path.exists(data_file):
-                g.var = get_record(data_file)
-            data_file = path.join(
-                'data', g.plateform + '-' + runcase_name + '-globle.txt')
-            if path.exists(data_file):
-                g.var.update(get_all_record(data_file))
+            # data_file = path.join(
+            #     'data', g.plateform + '-' + runcase_name + '.csv')
+            # if path.exists(data_file):
+            #     g.var = get_record(data_file)
+
+            g.var=Data.objects.get_dict(project=self.project_id)
+            # data_file = path.join(
+            #     'data', g.plateform + '-' + runcase_name + '-globle.txt')
+            # if path.exists(data_file):
+            g.var.update(GlobalData.objects.get_dicts())
             w.init()
         except:
             logger.exception('*** Init global object fail ***')

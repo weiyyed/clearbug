@@ -105,36 +105,37 @@ def testsuite_format4database(data):
     testsuite = []
     testcase = {}
     for d in data:
-        # 如果用例编号不为空，则为新的用例
-        if d['id'].strip():
-            # 如果 testcase 非空，则添加到 testsuite 里，并重新初始化 testcase
-            if testcase:
-                testsuite.append(testcase)
-                testcase = {}
-            for key in ('id', 'title', 'condition', 'designer', 'flag', 'result', 'remark'):
-                testcase[key] = d[key]
-            testcase['priority'] = d['priority'] if d['priority'] else 'M'
-            testcase['steps'] = []
-        # 如果测试步骤不为空，则为有效步骤，否则用例解析结束
-        no = str(d['step']).strip()
-        if no:
+        # 如果 testcase 非空，则添加到 testsuite 里，并重新初始化 testcase
+        if testcase:
+            testsuite.append(testcase)
+            testcase = {}
+        testcase["id"] = d["case_code"]
+        for key in ( 'title', 'condition', 'designer', 'flag', 'result', 'remark'):
+            testcase[key] = d.get(key)
+        testcase['priority'] = d['priority'] if d['priority'] else 'M'
+        testcase['flag'] ="Y" if d['flag']==True else 'N'
+        testcase['steps'] = []
+
+        # 步骤替换
+        for d_step in d["steps"]:
             step = {}
             step['control'] = ''
+            no=d_step["no"]
             if no[0] in ('^', '>', '<', '#'):
                 step['control'] = no[0]
                 step['no'] = no
             else:
-                step['no'] = str(int(d['step']))
+                step['no'] = str(no)
             for key in ('keyword', 'page', 'element', 'data', 'expected', 'output', 'score', 'remark'):
-                step[key] = d.get(key, '')
+                step[key] = d_step.get(key, '')
 
             # 仅作为测试结果输出时，保持原样
-            step['_keyword'] = d['keyword']
-            step['_element'] = d['element']
-            step['_data'] = d['data']
-            step['vdata'] = d['data']
-            step['_expected'] = d.get('expected', '')
-            step['_output'] = d['output']
+            step['_keyword'] = d_step['keyword']
+            step['_element'] = d_step['element']
+            step['_data'] = d_step['data']
+            step['vdata'] = d_step['data']
+            step['_expected'] = d_step.get('expected', '')
+            step['_output'] = d_step['output']
             testcase['steps'].append(step)
     if testcase:
         testsuite.append(testcase)
