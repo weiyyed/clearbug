@@ -17,7 +17,7 @@ class DataManager(Base):
         d_dicts=data_first.values()[:1]
         if d_dicts:
             # data_first.update(flag="Y")
-            super().get(pk=data_first.id).update(flag="Y")
+            super().filter(pk=data_first.get().id).update(flag="Y")
             return d_dicts
         d.update(flag="N")
         self.get_dict(**kwargs)
