@@ -10,7 +10,7 @@ class Base(models.Manager):
 
 
 class DataManager(Base):
-    def get_dict(self,**kwargs):
+    def get_data_dict(self,**kwargs):
         # 获取第一条未使用数据
         d=super().filter(**kwargs)
         if d:
@@ -21,15 +21,17 @@ class DataManager(Base):
                 # 重置为N
                 d_dicts=[d for d in d_dicts]
                 super().filter(pk=data_first.get().id).update(flag="Y")
-                verbose_dic=self.get_verbose_dic()
+                verbose_dic=self.__get_verbose_dic()
                 for name,vername in verbose_dic.items():
                     new_dic[vername]=d_dicts[0][name]
                 return new_dic
-            d.update(flag="N")
-            self.get_dict(**kwargs)
+            else:
+                d.update(flag="N")
+                self.get_data_dict(**kwargs)
         else:
             return {}
-    def get_verbose_dic(self):
+    def __get_verbose_dic(self):
+        # 获取字典｛name:verbosename｝
         obj=self.model
         v_dic={}
         for filed in obj._meta.fields:
@@ -38,7 +40,13 @@ class DataManager(Base):
             v_dic.pop(x)
         return v_dic
 class GlobalDataManager(Base):
-    pass
+    def get_data_dict(self):
+    #     获取全局变量字典
+        data_dict={}
+        g_dic_list=self.get_dicts()
+        for gdic in g_dic_list:
+            data_dict[gdic["varible"]]=gdic["value"]
+        return data_dict
 
 class TestCaseManager(Base):
 

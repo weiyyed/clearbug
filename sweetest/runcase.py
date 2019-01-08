@@ -129,11 +129,12 @@ class Autotest4database:
             # if path.exists(data_file):
             #     g.var = get_record(data_file)
 
-            g.var=Data.objects.get_dict(project=self.project_id)
+            g.var=Data.objects.get_data_dict(project=self.project_id)
             # data_file = path.join(
             #     'data', g.plateform + '-' + runcase_name + '-globle.txt')
             # if path.exists(data_file):
-            g.var.update(GlobalData.objects.get_dicts())
+            g_data=GlobalData.objects.get_data_dict()
+            g.var.update(g_data)
             w.init()
         except:
             logger.exception('*** Init global object fail ***')
