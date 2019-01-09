@@ -105,6 +105,20 @@ def data2dict(data):
         list_dict_data.append(dict_data)
     return list_dict_data
 
+def set_g_header(testcases):
+#     data为用例字典
+    g.header_custom = {}  # 用户自定义的标题
+    for d,v in testcases[0].items():
+        k = d.strip().split('#')[0]
+        # 如果为中文，则替换成英文
+        h = d.lower()
+        g.header_custom[h] = d.strip()
+    for sk,sv in testcases[0].get("steps")[0].items():
+        g.header_custom[sk] = sk.strip()
+    g.header_custom["step"]=""
+    if not g.header_custom.get('expected'):
+        g.header_custom['expected'] = ''
+
 
 def replace_dict(data,keyword=''):
     # 变量替换

@@ -27,7 +27,7 @@ class DataManager(Base):
                 return new_dic
             else:
                 d.update(flag="N")
-                self.get_data_dict(**kwargs)
+                return self.get_data_dict(**kwargs)
         else:
             return {}
     def __get_verbose_dic(self):
@@ -64,11 +64,19 @@ class TestCaseManager(Base):
         testcases_dicts=[t for t in testcase_queryset.values()]
         for case in testcases_dicts:
             steps=testcase_queryset.get(pk=case["id"]).casestep_set.all().values()
-            case["steps"]=[s for s in steps]
+            case["steps"]=[]
+            for step in steps:
+                step["element"]+=step["ele_parameter"]
+                case["steps"].append(step)
+            # case["steps"]=[s for s in steps]
         return  testcases_dicts
 
 class CaseStepManager(Base):
     pass
+    # def get_all():
+    #     obj=self.model
+    #     obj.ele_parameter
+    #     super().all()
 class ElementManager(Base):
     pass
 class RunCaseManager(Base):

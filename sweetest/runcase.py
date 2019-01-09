@@ -12,7 +12,7 @@ from sweetest.globals import g
 from sweetest.windows import w
 from sweetest.testsuite import TestSuite
 from sweetest.testcase import TestCase
-from sweetest.utility import Excel, get_record,get_all_record
+from sweetest.utility import Excel, get_record, get_all_record, set_g_header
 from sweetest.log import logger
 from sweetest.report import Report
 from sweetest.config import _testcase, _elements, _report
@@ -33,6 +33,7 @@ class Autotest4database:
         self.desired_caps=eval(desired_caps)
         self.server_url = run_case_obj.environment.server_url
         self.runcase_name=run_case_obj.runcase_name
+        self.login_url=run_case_obj.environment.pc_login_url
 
         if self.desired_caps:
             desired_caps_init = {
@@ -111,6 +112,7 @@ class Autotest4database:
             # data = self.testcase_workbook.read(runcase_name)
             # testsuite = testsuite_format(data)
             testsuite=testsuite_format4database(TestCase_haptest.objects.get_dicts(RunCase.objects.get_testcases(runcase_name=runcase_name)))
+            set_g_header(testsuite)
             # logger.info('Testsuite imported from Excel:\n' +
             #             json.dumps(testsuite, ensure_ascii=False, indent=4))
             logger.info('From Excel import testsuite success')
@@ -135,6 +137,7 @@ class Autotest4database:
             # if path.exists(data_file):
             g_data=GlobalData.objects.get_data_dict()
             g.var.update(g_data)
+            g.var.update({"登录地址":self.login_url})
             w.init()
         except:
             logger.exception('*** Init global object fail ***')
@@ -145,10 +148,11 @@ class Autotest4database:
         try:
             parse(testsuite)
             logger.debug('testsuite has been parsed:\n' + str(testsuite))
-        except:
+        except :
             logger.exception('*** Parse testsuite fail ***')
             self.code = -1
             sys.exit(self.code)
+            # return
 
         # 4.执行测试套件
         ts = TestSuite(testsuite, self.report_ts[runcase_name], self.conditions)

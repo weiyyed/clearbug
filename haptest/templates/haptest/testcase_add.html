@@ -59,12 +59,13 @@
                                id="casestep">
                             <caption></caption>
                             <tr>
-                                <th width="5%" align="center" hidden>id</th>
-                                <th width="5%" align="center"></th>
-                                <th width="8%" align="center">步骤</th>
+                                <th width="1%" align="center" hidden>id</th>
+                                <th width="2%" align="center"></th>
+                                <th width="5%" align="center">步骤</th>
                                 <th width="10%" align="center">操作</th>
                                 <th width="10%" align="center">页面</th>
                                 <th width="30%" align="center">元素</th>
+                                <th width="30%" align="center">元素参数</th>
                                 <th width="30%" align="center">测试数据</th>
                                 <th width="20%" align="center">输出数据</th>
                                 <th width="5%" align="center">标记删除</th>
@@ -79,10 +80,7 @@
                                     <td>{{ casestep_form.keyword }}</td>
                                     <td>{{ casestep_form.page }}</td>
                                     <td>{{ casestep_form.element }}</td>
-                                    {#                                    <td>#}
-                                    {#                                        <select name="casestep_set-{{ forloop.counter0 }}-element" maxlength="10"#}
-                                    {#                                                id="id_casestep_set-{{ forloop.counter0 }}-element" form="testcase_save_form" value={{ casestep_for }}></select>#}
-                                    {#                                    </td>#}
+                                    <td>{{ casestep_form.ele_parameter }}</td>
                                     <td>{{ casestep_form.data }}</td>
                                     <td>{{ casestep_form.output }}</td>
                                     <td>{{ casestep_form.DELETE }}</td>

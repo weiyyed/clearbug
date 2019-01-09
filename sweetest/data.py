@@ -76,31 +76,6 @@ def testsuite_format(data):
 def testsuite_format4database(data):
     '''
     data: key-value字典
-    testcase 的格式：
-    {
-        'id': 'Login_001',  #用例编号
-        'title': 'Login OK',  #用例标题
-        'condition': '',  #前置条件
-        'designer': 'Leo',  #设计者
-        'flag': '',  #自动化标记
-        'result': '',  #用例结果
-        'remark': '',  #备注
-        'steps':
-            [
-                {
-                'no': 1,  #测试步骤
-                'keyword': '输入',
-                'page': '产品管系统登录页',
-                'element': '用户名',
-                'data': 'user1',  #测试数据
-                'output': '',  #输出数据
-                'score': '',  #测试结果
-                'remark': ''  #备注
-                },
-                {……}
-                ……
-            ]
-    }
     '''
     testsuite = []
     testcase = {}

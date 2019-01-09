@@ -117,12 +117,16 @@ class CaseStep(models.Model):
     keyword = models.CharField('操作', max_length=20)
     page = models.CharField('页面', max_length=20, )
     element = models.CharField('元素', max_length=20, )
+    ele_parameter=models.CharField("元素参数",max_length=20,blank=True)
     data = models.CharField('测试数据', max_length=20,blank=True )
     expected = models.CharField('预期结果', max_length=20, blank=True)
     output = models.CharField('输出数据', max_length=20, blank=True)
     remark = models.CharField('备注', max_length=50,blank=True )
     def __str__(self):
         return str(self.testcase)+"-"+str(self.no)
+    @property
+    def element_full(self):
+        return self.element+self.ele_parameter
     class Meta:
         verbose_name = '测试步骤'
         db_table = 'haptest_casestep'
@@ -130,8 +134,8 @@ class Environment(models.Model):
     # 环境
     env_name=models.CharField('环境名称',max_length=20)
     desired_caps=models.TextField('运行参数',default="{'platformName': 'Desktop', 'browserName': 'Chrome'}")
-    pc_url=models.CharField('pc端地址',default='',max_length=50)
-    server_url=models.CharField('server_url',default='',max_length=50,blank=True)
+    pc_login_url=models.URLField('登录地址',default='',max_length=50)
+    server_url=models.URLField('server_url',max_length=50,blank=True,default="http://127.0.0.1:4723/wd/hub")
     def __str__(self):
         return self.env_name
 class RunCase(models.Model):

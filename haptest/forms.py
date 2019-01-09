@@ -51,7 +51,7 @@ class AddCaseStepForm(ModelForm):
 def get_CaseStepFormSet(extra=0):
     # 用例步骤
     return inlineformset_factory(TestCase, CaseStep, form=AddCaseStepForm,
-                                        fields=('id', 'no', 'keyword', 'page', 'element', 'data', 'output'), extra=extra,can_delete=True)
+                                        fields=('id', 'no', 'keyword', 'page', 'element',"ele_parameter", 'data', 'output'), extra=extra,can_delete=True)
 
 class RunCaseForm(ModelForm):
     class Meta:
