@@ -111,6 +111,7 @@ class TestCase(models.Model):
 class CaseStep(models.Model):
     #步骤
     objects=CaseStepManager()
+
     testcase = models.ForeignKey(TestCase, on_delete=models.CASCADE, verbose_name='所属用例')
     no = models.CharField('测试步骤', max_length=10, )
     # choices=[]
@@ -135,6 +136,8 @@ class Environment(models.Model):
     env_name=models.CharField('环境名称',max_length=20)
     desired_caps=models.TextField('运行参数',default="{'platformName': 'Desktop', 'browserName': 'Chrome'}")
     pc_login_url=models.URLField('登录地址',default='',max_length=50)
+    login_user=models.CharField('用户',max_length=10)
+    login_password=models.CharField('密码',max_length=10)
     server_url=models.URLField('server_url',max_length=50,blank=True,default="http://127.0.0.1:4723/wd/hub")
     def __str__(self):
         return self.env_name

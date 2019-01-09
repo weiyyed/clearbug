@@ -1,13 +1,16 @@
 from django.db import models
 
-
 class Base(models.Manager):
-    # 获取字典列表，[{field:vlaue},{}]
+
     def get_dicts(self,**kwargs):
-
-        # obj=self.model()
+        # 获取字典列表，[{field:vlaue},{}]
         return  [m for m in super().filter(**kwargs).values()]
-
+    def __get_tuple(self,field):
+        # 获取元素值tuple
+        ele_set = [('', "---")]
+        for x in super().values('field').distinct():
+            ele_set.append((x['field'],x['field']))
+        return ele_set
 
 class DataManager(Base):
     def get_data_dict(self,**kwargs):
@@ -50,15 +53,6 @@ class GlobalDataManager(Base):
 
 class TestCaseManager(Base):
 
-    # def get_dicts(self,**kwargs):
-    #     # 获取字典列表，包含steps[{field:vlaue},{}]
-    #     testcases_dicts=super().get_dicts(**kwargs)
-    #     testcases=super().all()
-    #     for case in testcases_dicts:
-    #         steps=testcases.get(case["id"]).casestep_set().values()
-    #         case["steps"]=[s for s in steps]
-    #     return  testcases_dicts
-
     def get_dicts(self,testcase_queryset):
         # 获取字典列表，包含steps[{field:vlaue},{}],传入testcase的queryset
         testcases_dicts=[t for t in testcase_queryset.values()]
@@ -70,7 +64,8 @@ class TestCaseManager(Base):
                 case["steps"].append(step)
             # case["steps"]=[s for s in steps]
         return  testcases_dicts
-
+    def get_snippet_tuple(self):
+        return self.__get_tuple("")
 class CaseStepManager(Base):
     pass
     # def get_all():
@@ -78,7 +73,14 @@ class CaseStepManager(Base):
     #     obj.ele_parameter
     #     super().all()
 class ElementManager(Base):
-    pass
+
+    def get_page_tuple(self):
+        # 获取page元组
+        return self.__get_tuple("page").append("用例片段","用例片段")
+
+    def get_element_tuple(self):
+        return self.__get_tuple("element")
+
 class RunCaseManager(Base):
     def get_testcases(self,**kwargs):
         r=super().get(**kwargs)

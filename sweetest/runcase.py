@@ -24,7 +24,7 @@ class Autotest4database:
 
     def __init__(self, run_case_obj=RunCase.objects.get()):
         g.start_time = time.strftime("@%Y%m%d_%H%M%S", time.localtime())
-
+        self.run_obj=run_case_obj
         self.platform_id=run_case_obj.project.platform.id
         self.platform_name=run_case_obj.project.platform.platform_name
         self.project_id = run_case_obj.project
@@ -34,6 +34,8 @@ class Autotest4database:
         self.server_url = run_case_obj.environment.server_url
         self.runcase_name=run_case_obj.runcase_name
         self.login_url=run_case_obj.environment.pc_login_url
+        self.login_user=run_case_obj.environment.login_user
+        self.login_password=run_case_obj.environment.login_password
 
         if self.desired_caps:
             desired_caps_init = {
@@ -115,9 +117,9 @@ class Autotest4database:
             set_g_header(testsuite)
             # logger.info('Testsuite imported from Excel:\n' +
             #             json.dumps(testsuite, ensure_ascii=False, indent=4))
-            logger.info('From Excel import testsuite success')
-        except:
-            logger.exception('*** From Excel import testsuite fail ***')
+            logger.info('From database import testsuite success')
+        except Exception as e:
+            logger.exception('*** From database import testsuite fail ***')
             self.code = -1
             sys.exit(self.code)
 
@@ -137,10 +139,13 @@ class Autotest4database:
             # if path.exists(data_file):
             g_data=GlobalData.objects.get_data_dict()
             g.var.update(g_data)
-            g.var.update({"登录地址":self.login_url})
+            g.var.update({"登录地址":self.login_url,
+                          "用户":self.login_user,
+                          "密码":self.login_password,})
             w.init()
-        except:
+        except Exception as e:
             logger.exception('*** Init global object fail ***')
+            logger.exception(e)
             self.code = -1
             sys.exit(self.code)
 
