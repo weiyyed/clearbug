@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 import os
-from haptest.utils.common import file2database
+from haptest.utils.common import file2database, upload2database
 from .forms import AddProjectForm, AddElementForm, AddTestCaseForm, AddCaseStepForm, get_CaseStepFormSet, RunCaseForm
 from django.contrib import auth
 from django.contrib.auth.models import User
@@ -159,11 +159,12 @@ def element_upload(request):
         if platform_id is None:
             return JsonResponse({"status": '【所属平台】不能为空'})
         file_obj = request.FILES.get('upload')
-        upload_file = os.path.join('upload', file_obj.name)
-        with open(upload_file, 'wb') as data:
-            for line in file_obj.chunks():
-                data.write(line)
-        file2database(upload_file, Element, platform_id)
+        upload2database(file_obj,Element,platform=platform_id)
+        # upload_file = os.path.join('upload', file_obj.name)
+        # with open(upload_file, 'wb') as data:
+        #     for line in file_obj.chunks():
+        #         data.write(line)
+        # file2database(upload_file, Element, platform_id)
         return JsonResponse({'status': reverse('haptest:element')})
 
 
@@ -225,6 +226,20 @@ def testcase_delete(request):
         TestCase.objects.filter(id__in=choice_set).delete()
         return testcase_list(request)
 
+@csrf_exempt
+# @login_required
+def testcase_upload(request):
+    # 元素上传
+    if request.method == 'POST':
+        # try:
+        #     platform_id = request.POST.get('platform')
+        # except KeyError as e:
+        #     return JsonResponse({"status": '【所属平台】不能为空'})
+        # if platform_id is None:
+        #     return JsonResponse({"status": '【所属平台】不能为空'})
+        file_obj = request.FILES.get('upload')
+        upload2database(file_obj,TestCase)
+        return JsonResponse({'status': reverse('haptest:element')})
 
 def get_page_of_elelemt(request, page):
     # 获取页面元素

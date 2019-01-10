@@ -1,0 +1,27 @@
+2019-01-08 14:12:36,953 [INFO] runcase.py line:116: From Excel import testsuite success
+2019-01-08 14:12:40,118 [ERROR] runcase.py line:139: *** Init global object fail ***
+Traceback (most recent call last):
+  File "E:/py_workspaces/clearbug\sweetest\runcase.py", line 136, in run
+    g.var.update(GlobalData.objects.get_dicts())
+ValueError: dictionary update sequence element #0 has length 3; 2 is required
+2019-01-08 14:19:00,801 [INFO] runcase.py line:116: From Excel import testsuite success
+2019-01-08 14:19:54,236 [INFO] runcase.py line:116: From Excel import testsuite success
+2019-01-08 17:18:52,131 [INFO] runcase.py line:116: From Excel import testsuite success
+2019-01-08 17:22:33,817 [INFO] runcase.py line:116: From Excel import testsuite success
+2019-01-08 17:22:36,382 [ERROR] runcase.py line:140: *** Init global object fail ***
+Traceback (most recent call last):
+  File "E:/py_workspaces/clearbug\sweetest\runcase.py", line 132, in run
+    g.var=Data.objects.get_dict(project=self.project_id)
+AttributeError: 'DataManager' object has no attribute 'get_dict'
+2019-01-08 17:22:59,293 [INFO] runcase.py line:116: From Excel import testsuite success
+2019-01-08 17:23:01,987 [ERROR] runcase.py line:140: *** Init global object fail ***
+Traceback (most recent call last):
+  File "E:/py_workspaces/clearbug\sweetest\runcase.py", line 132, in run
+    g.var=Data.objects.get_dict(project=self.project_id)
+AttributeError: 'DataManager' object has no attribute 'get_dict'
+2019-01-08 17:37:53,180 [INFO] runcase.py line:116: From Excel import testsuite success
+2019-01-08 17:38:50,995 [INFO] runcase.py line:116: From Excel import testsuite success
+2019-01-08 17:42:23,469 [INFO] runcase.py line:116: From Excel import testsuite success
+2019-01-08 17:53:48,261 [INFO] runcase.py line:116: From Excel import testsuite success
+2019-01-08 18:07:24,892 [INFO] runcase.py line:116: From Excel import testsuite success
+2019-01-08 18:08:49,067 [INFO] runcase.py line:116: From Excel import testsuite success

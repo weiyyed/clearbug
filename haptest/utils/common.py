@@ -1,23 +1,25 @@
+import os
 from sweetest.utility import Excel,data2dict
-# class Parse_url():
-#
-#     func=None
-#     @classmethod
-#     def parse_url(cls,request,**kwargs):
-#         #解析url
-#         app=kwargs.pop('app')
-#         cls.func=kwargs.pop('func')
-#         id=kwargs.pop('id',None)
-#         app=__import__('%s.views'%app)
-#         views=getattr(app,'views')
-#         views_func=getattr(views,'func')
-#         return views_func(request,id) if id else views_func(request)
-def file2database(excel_file,model,platform_id):
-    #excel导入数据库
+
+def upload2database(file_obj,model,platform=None):
+    # 处理上传文件存数据库
+    upload_file = os.path.join('upload', file_obj.name)
+    with open(upload_file, 'wb') as data:
+        for line in file_obj.chunks():
+            data.write(line)
+    file2database(upload_file, model, platform_id=platform)
+    os.remove(upload_file)
+
+
+def file2database(excel_file,model,platform_id=None):
+    #excel转数据库
     excel_file_obj=Excel(excel_file)
     datas=excel_file_obj.read('import')
+    if not datas:
+        print("excel文件读取为空")
     datas_dic_list=data2dict(datas)
-    for d in datas_dic_list:
-        d['plateform_id']=platform_id
+    if platform_id:
+        for d in datas_dic_list:
+            d['plateform_id']=platform_id
     for d_dic in datas_dic_list:
-        model.objects.create(**d_dic)
+        model.objects.update_or_create(**d_dic)

@@ -5,7 +5,7 @@ class Base(models.Manager):
     def get_dicts(self,**kwargs):
         # 获取字典列表，[{field:vlaue},{}]
         return  [m for m in super().filter(**kwargs).values()]
-    def __get_tuple(self,field):
+    def __get_tuples(self, field):
         # 获取元素值tuple
         ele_set = [('', "---")]
         for x in super().values('field').distinct():
@@ -64,8 +64,11 @@ class TestCaseManager(Base):
                 case["steps"].append(step)
             # case["steps"]=[s for s in steps]
         return  testcases_dicts
-    def get_snippet_tuple(self):
-        return self.__get_tuple("")
+    def get_snippet_tuples(self):
+        s_set=[]
+        for x in self.filter(condition="SNIPPET").values("case_code"):
+            s_set.append((x["case_code"],x["case_code"]))
+        return s_set
 class CaseStepManager(Base):
     pass
     # def get_all():
@@ -76,10 +79,10 @@ class ElementManager(Base):
 
     def get_page_tuple(self):
         # 获取page元组
-        return self.__get_tuple("page").append("用例片段","用例片段")
+        return self.__get_tuples("page").append("用例片段", "用例片段")
 
-    def get_element_tuple(self):
-        return self.__get_tuple("element")
+    def get_element_tuples(self):
+        return self.__get_tuples("element")
 
 class RunCaseManager(Base):
     def get_testcases(self,**kwargs):
