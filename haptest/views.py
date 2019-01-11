@@ -8,11 +8,11 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 import os
-from haptest.utils.common import file2database, upload2database
+from haptest.utils.common import dic2database, upload2dicts,testcase2database
 from .forms import AddProjectForm, AddElementForm, AddTestCaseForm, AddCaseStepForm, get_CaseStepFormSet, RunCaseForm
 from django.contrib import auth
 from django.contrib.auth.models import User
-from haptest.models import Project, Element, Plateform, TestCase, CaseStep, RunCase
+from haptest.models import Project, Element, Plateform, TestCase, CaseStep, RunCase, Module
 from sweetest.runcase import Autotest4database
 
 
@@ -159,7 +159,8 @@ def element_upload(request):
         if platform_id is None:
             return JsonResponse({"status": '【所属平台】不能为空'})
         file_obj = request.FILES.get('upload')
-        upload2database(file_obj,Element,platform=platform_id)
+        ele_dics=upload2dicts(file_obj,Element,platform_id=platform_id)
+        dic2database(ele_dics)
         # upload_file = os.path.join('upload', file_obj.name)
         # with open(upload_file, 'wb') as data:
         #     for line in file_obj.chunks():
@@ -173,6 +174,8 @@ def testcase_list(request):
     manage_info = {
         'data_set': TestCase.objects.all(),
         'platform': Plateform.objects.all(),
+        'module': Module.objects.all(),
+
     }
     return render(request, 'haptest/testcase_list.html', manage_info)
 
@@ -231,15 +234,16 @@ def testcase_delete(request):
 def testcase_upload(request):
     # 元素上传
     if request.method == 'POST':
-        # try:
-        #     platform_id = request.POST.get('platform')
-        # except KeyError as e:
-        #     return JsonResponse({"status": '【所属平台】不能为空'})
-        # if platform_id is None:
-        #     return JsonResponse({"status": '【所属平台】不能为空'})
+        try:
+            platform_id ,module_id= request.POST.get('platform'),request.POST.get("module")
+        except KeyError as e:
+            return JsonResponse({"status": '【所属平台】、或所属模块不能为空'})
+        if platform_id is None:
+            return JsonResponse({"status": '【所属平台】不能为空'})
         file_obj = request.FILES.get('upload')
-        upload2database(file_obj,TestCase)
-        return JsonResponse({'status': reverse('haptest:element')})
+        case_dicts=upload2dicts(file_obj,TestCase,platform_id=platform_id,module_id=module_id)
+        testcase2database(case_dicts)
+        return JsonResponse({'status': reverse('haptest:testcase')})
 
 def get_page_of_elelemt(request, page):
     # 获取页面元素

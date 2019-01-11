@@ -4,7 +4,7 @@
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-{#    <title>{% block title %}{% endblock %}</title>#}
+    {#    <title>{% block title %}{% endblock %}</title>#}
     <title>海顿测试</title>
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes">
@@ -47,23 +47,38 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">haptest</h4>
+                    <h4 class="modal-title" id="myModalLabel">导入</h4>
                 </div>
                 <div class="modal-body">
-                    <input name="upload" id="uploadfile" type="file" class="file" />
+                    <input name="upload" id="uploadfile" type="file" class="file"/>
                     <div id="kartik-file-errors"></div>
                 </div>
                 <div class="form-group">
+                 {% if platform %}
                     <div class="input-group col-md-8" style="margin-left: 15px">
-                        <div class="input-group-addon" style="color: #0a628f">所属项目</div>
+                        <div class="input-group-addon" style="color: #0a628f">所属平台</div>
                         <select id='platform' name="platform" class="form-control"
-                                onchange="auto_load('#upload_project_info', '/api/get_project_info/', '#upload_belong_module_id', 'module')">
-{#                            <option value="请选择">请选择</option>#}
+{#                                onchange="auto_load('#upload_project_info', '/api/get_project_info/', '#upload_belong_module_id', 'module')"#}
+                        >
+                            {#                            <option value="请选择">请选择</option>#}
                             {% for foo in platform %}
                                 <option value="{{ foo.id }}">{{ foo.platform_name }}</option>
                             {% endfor %}
                         </select>
                     </div>
+                {% endif %}
+                {% if module %}
+                    <div class="input-group col-md-8" style="margin-left: 15px">
+                        <div class="input-group-addon" style="color: #0a628f">所属模块</div>
+                        <select id='module' name="module" class="form-control"
+                                >
+                            {#                            <option value="请选择">请选择</option>#}
+                            {% for foo in module %}
+                                <option value="{{ foo.id }}">{{ foo.module_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endif %}
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
@@ -120,15 +135,15 @@
             returnDefault: false //鼠标从.sideMen移走后返回默认状态（默认false）
         });
 
-        function initFileInput(ctrlName) {
+        function initFileInput(ctrlName,up_url) {
             var control = $('#' + ctrlName);
             control.fileinput({
                 resizeImage: true,
                 resizePreference: 'width',
                 uploadAsync: false,                             //采用同步上传
                 language: 'zh', //设置语言
-                uploadUrl: '{% url 'haptest:element_upload' %}',
-                allowedFileExtensions: ['xlsx','xls'],//接收的文件后缀
+                uploadUrl: up_url,
+                allowedFileExtensions: ['xlsx', 'xls'],//接收的文件后缀
                 showUpload: true, //是否显示上传按钮
                 showRemove: false,
                 showCaption: true,//是否显示标题
@@ -160,7 +175,7 @@
             });
         }
 
-        initFileInput("uploadfile");
+        initFileInput("uploadfile",);
     </script>
 </div>
 

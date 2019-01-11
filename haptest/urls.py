@@ -19,6 +19,7 @@ urlpatterns = [
     path('testcase', views.testcase_list, name='testcase'),
     path('testcase_add/<int:id>/', views.testcase_add, name='testcase_add'),
     path('testcase_delete/', views.testcase_delete, name='testcase_delete'),
+    path('testcase_upload/', views.testcase_upload, name='testcase_upload'),
     path('page_element/<str:page>/', views.get_page_of_elelemt, name='page_element'),
     # path('run_case/', views.run_case, name='run_case_list'),
     path('run_case/', views.run_case, name='run_case'),

@@ -119,6 +119,7 @@ header = {
     '操作': 'keyword',
     '页面': 'page',
     '元素': 'element',
+    "元素参数":"ele_parameter",
     '测试数据': 'data',
     '预期结果': 'expected',
     '输出数据': 'output',
