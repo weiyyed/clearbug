@@ -2,7 +2,7 @@
 .idea/
 venv/
 haptest/__pycache__/
-haptest/migrations/*
+haptest/migrations/
 polls/migrations/*
 junit/
 report/

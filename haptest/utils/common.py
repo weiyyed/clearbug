@@ -4,7 +4,6 @@ from sweetest.config import all_keywords
 from haptest.models import TestCase, CaseStep
 from django.db.models import Model
 
-
 def upload2dicts(file_obj,platform_id=None,module_name_id=None):
     # 处理上传文件存数据库,字典参数为id
     upload_file = os.path.join('upload', file_obj.name)
@@ -26,7 +25,6 @@ def upload2dicts(file_obj,platform_id=None,module_name_id=None):
     #   用例集转换
     return datas_dic_list
 
-
 def testcases2standard(testcase_dics):
 #     用例字典转换为用例主子：[{testcase:{..},steps{[...]}},{....}]
     testsuite = [] #返回值
@@ -45,6 +43,9 @@ def testcases2standard(testcase_dics):
             # testcase_step_dic["testcase"] = testcase_dic_std
             # testsuite.append(testcase_step_dic)
                 testcase_step_dic.clear()
+                testcase_dic_std.clear()
+                step_dic_list.clear()
+                step_dic.clear()
             if not case_field_list:
                 case_field_list=[f.name for f in TestCase._meta.get_fields()]
                 case_field_list.extend(["platform_id","module_name_id"])
@@ -74,13 +75,14 @@ def testcases2standard(testcase_dics):
         step_dic["no"]=testcase_dic["step"]
         step_dic_list.append(step_dic.copy())
         testcase_step_dic["steps"] = step_dic_list
-    return testsuite
 
+
+    testsuite.append(copy.deepcopy(testcase_step_dic))
+    return testsuite
 def dic2database(datas_dic_list,Model):
     # 单表保存
     for d_dic in datas_dic_list:
         Model.objects.update_or_create(**d_dic)
-
 def testcase2database(datas_dic_list):
     # 用例主子表保存
     case_dics=testcases2standard(datas_dic_list)

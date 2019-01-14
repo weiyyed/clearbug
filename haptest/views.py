@@ -146,7 +146,6 @@ def element_delete(request):
         # print(request.POST.itervalues)
         return element_list(request)
 
-
 @csrf_exempt
 # @login_required
 def element_upload(request):

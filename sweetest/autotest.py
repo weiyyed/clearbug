@@ -18,7 +18,6 @@ from sweetest.config import _testcase, _elements, _report
 
 
 class Autotest:
-
     def __init__(self, file_name, sheet_name, desired_caps={}, server_url=''):
         g.start_time = time.strftime("@%Y%m%d_%H%M%S", time.localtime())
 
@@ -36,7 +35,7 @@ class Autotest:
         self.server_url = server_url
 
         self.conditions = {}
-        
+
         g.project_name = file_name.split('-')[0]
         self.testcase_file = path.join(
             'testcase', file_name + '-' + _testcase + '.xlsx')

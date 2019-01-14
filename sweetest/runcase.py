@@ -17,11 +17,8 @@ from sweetest.log import logger
 from sweetest.report import Report
 from sweetest.config import _testcase, _elements, _report
 
-
-
 # 数据库执行用例
 class Autotest4database:
-
     def __init__(self, run_case_obj=RunCase.objects.get()):
         g.start_time = time.strftime("@%Y%m%d_%H%M%S", time.localtime())
         self.run_obj=run_case_obj
