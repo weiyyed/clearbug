@@ -155,7 +155,8 @@
                 uploadExtraData:
                     function () {     //上传时要传输的其他参数
                         platform = $('#platform option:selected').val();//选中的文本
-                        return {"platform": platform};
+                        module = $('#module option:selected').val();//选中的文本
+                        return {"platform": platform,"module":module};
                     },
                 showClose: false,//显示右上角X关闭
                 overwriteInitial: false, //是否显示预览
@@ -175,8 +176,10 @@
             });
         }
 
-        initFileInput("uploadfile",);
     </script>
+
+{% block script %}
+{% endblock %}
 </div>
 
 </body>

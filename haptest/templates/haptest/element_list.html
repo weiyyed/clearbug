@@ -201,3 +201,9 @@
 
 
 {% endblock %}
+
+{% block script %}
+    <script>
+        initFileInput("uploadfile", "{% url 'haptest:element_upload' %}");
+    </script>
+{% endblock %}

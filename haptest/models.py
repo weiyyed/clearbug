@@ -4,17 +4,17 @@ from haptest.managers import TestCaseManager, CaseStepManager, ElementManager, R
     GlobalDataManager
 from sweetest.config import web_keywords,common_keywords
 
-class Plateform(models.Model):
+class Platform(models.Model):
     platform_code=models.SlugField('平台编码',unique=True)
     platform_name=models.CharField('平台名称',max_length=20)
     def __str__(self):
         return self.platform_name
     class Meta:
         verbose_name = '平台信息'
-        db_table = 'haptest_Plateform'
+        db_table = 'haptest_Platform'
 class Project(models.Model):
     project_name=models.CharField('项目名称',max_length=50,unique=True,null=False)
-    platform = models.ForeignKey(Plateform,on_delete=models.CASCADE, verbose_name='所属平台', null=False,default='1')
+    platform = models.ForeignKey(Platform, on_delete=models.CASCADE, verbose_name='所属平台', null=False, default='1')
     def __str__(self):
         return self.project_name
     class Meta:
@@ -32,7 +32,7 @@ class Module(models.Model):
         db_table = 'haptest_module'
 
 class Element(models.Model):
-    plateform=models.ForeignKey(Plateform,on_delete=models.CASCADE,verbose_name='所属平台',default='1')
+    platform=models.ForeignKey(Platform, on_delete=models.CASCADE, verbose_name='所属平台', default='1')
     page=models.CharField('页面',max_length=50)
     element=models.CharField('元素',max_length=50)
     by=models.CharField('by',max_length=50)
@@ -92,7 +92,7 @@ class TestCase(models.Model):
                        ("SKIP","跳过不执行"),
                        ("SNIPPET","用例片段"),
                        ]
-    plateform = models.ForeignKey(Plateform, on_delete=models.SET_NULL, verbose_name='所属平台', null=True)
+    platform = models.ForeignKey(Platform, on_delete=models.SET_NULL, verbose_name='所属平台', null=True)
     # project=models.ForeignKey(Project,on_delete=models.SET_NULL,verbose_name='所属项目',blank=True,null=True)
     module_name=models.ForeignKey(Module,verbose_name='所属模块',on_delete=models.SET_NULL,null=True,blank=False)
     case_code=models.CharField('用例编号',max_length=40,unique=True)
@@ -107,7 +107,6 @@ class TestCase(models.Model):
     class Meta:
         verbose_name = '测试用例'
         db_table = 'haptest_testcase'
-
 class CaseStep(models.Model):
     #步骤
     objects=CaseStepManager()
@@ -119,7 +118,7 @@ class CaseStep(models.Model):
     page = models.CharField('页面', max_length=20, )
     element = models.CharField('元素', max_length=20, )
     ele_parameter=models.CharField("元素参数",max_length=20,blank=True)
-    data = models.CharField('测试数据', max_length=20,blank=True )
+    data = models.CharField('测试数据', max_length=80,blank=True )
     expected = models.CharField('预期结果', max_length=20, blank=True)
     output = models.CharField('输出数据', max_length=20, blank=True)
     remark = models.CharField('备注', max_length=50,blank=True )
@@ -144,7 +143,7 @@ class Environment(models.Model):
 class RunCase(models.Model):
     # 运行用例
     runcase_name=models.CharField("构建名称",max_length=20)
-    plateform = models.ForeignKey(Plateform, on_delete=models.SET_NULL, verbose_name='所属平台', null=True)
+    platform = models.ForeignKey(Platform, on_delete=models.SET_NULL, verbose_name='所属平台', null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name='所属项目')
     module=models.ManyToManyField(Module,verbose_name="包含模块")
     environment=models.ForeignKey(Environment,on_delete=models.SET_NULL,null=True,verbose_name="运行环境")

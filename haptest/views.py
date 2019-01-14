@@ -12,7 +12,7 @@ from haptest.utils.common import dic2database, upload2dicts,testcase2database
 from .forms import AddProjectForm, AddElementForm, AddTestCaseForm, AddCaseStepForm, get_CaseStepFormSet, RunCaseForm
 from django.contrib import auth
 from django.contrib.auth.models import User
-from haptest.models import Project, Element, Plateform, TestCase, CaseStep, RunCase, Module
+from haptest.models import Project, Element, Platform, TestCase, CaseStep, RunCase, Module
 from sweetest.runcase import Autotest4database
 
 
@@ -129,7 +129,7 @@ def element_add(request, id):
 def element_list(request):
     manage_info = {
         'data_set': Element.objects.all(),
-        'platform': Plateform.objects.all(),
+        'platform': Platform.objects.all(),
     }
     return render(request, 'haptest/element_list.html', manage_info)
 
@@ -159,8 +159,8 @@ def element_upload(request):
         if platform_id is None:
             return JsonResponse({"status": '【所属平台】不能为空'})
         file_obj = request.FILES.get('upload')
-        ele_dics=upload2dicts(file_obj,Element,platform_id=platform_id)
-        dic2database(ele_dics)
+        ele_dics=upload2dicts(file_obj,platform=platform_id)
+        dic2database(ele_dics,Element)
         # upload_file = os.path.join('upload', file_obj.name)
         # with open(upload_file, 'wb') as data:
         #     for line in file_obj.chunks():
@@ -168,17 +168,15 @@ def element_upload(request):
         # file2database(upload_file, Element, platform_id)
         return JsonResponse({'status': reverse('haptest:element')})
 
-
 # @login_required
 def testcase_list(request):
     manage_info = {
         'data_set': TestCase.objects.all(),
-        'platform': Plateform.objects.all(),
+        'platform': Platform.objects.all(),
         'module': Module.objects.all(),
 
     }
     return render(request, 'haptest/testcase_list.html', manage_info)
-
 
 # @login_required
 def testcase_add(request, id):
@@ -218,7 +216,6 @@ def testcase_add(request, id):
                                                              'casestep_form_set': casestep_formset,
                                                              })
 
-
 # @login_required
 def testcase_delete(request):
     try:
@@ -241,7 +238,7 @@ def testcase_upload(request):
         if platform_id is None:
             return JsonResponse({"status": '【所属平台】不能为空'})
         file_obj = request.FILES.get('upload')
-        case_dicts=upload2dicts(file_obj,TestCase,platform_id=platform_id,module_id=module_id)
+        case_dicts=upload2dicts(file_obj,platform_id=platform_id,module_name_id=module_id)
         testcase2database(case_dicts)
         return JsonResponse({'status': reverse('haptest:testcase')})
 
@@ -258,7 +255,6 @@ def get_page_of_elelemt(request, page):
                 page_ele_dic[e.page] = [e.element]
         elements = page_ele_dic[page]
     return render(request, 'haptest/page_element.html', {'elements': elements})
-
 
 # @login_required
 def run_case_add(request, id):
@@ -278,7 +274,6 @@ def run_case_add(request, id):
             form = RunCaseForm()
         return render(request, 'haptest/run_case_add.html', {'form': form, 'run_case_id': id})
 
-
 # @login_required
 def run_case(request, id=None):
     # 执行用例
@@ -294,7 +289,6 @@ def run_case(request, id=None):
             # 'module': Project.objects.all(),
         }
         return render(request, 'haptest/run_case_list.html', manage_info)
-
 
 # @login_required
 def run_case_delete(request):
