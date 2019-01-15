@@ -9,10 +9,11 @@ from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 import os
 from haptest.utils.common import dic2database, upload2dicts,testcase2database
-from .forms import AddProjectForm, AddElementForm, AddTestCaseForm, AddCaseStepForm, get_CaseStepFormSet, RunCaseForm
+from .forms import AddProjectForm, AddElementForm, AddTestCaseForm, AddCaseStepForm, get_CaseStepFormSet, RunCaseForm, \
+    AddEnvironmentForm
 from django.contrib import auth
 from django.contrib.auth.models import User
-from haptest.models import Project, Element, Platform, TestCase, CaseStep, RunCase, Module
+from haptest.models import Project, Element, Platform, TestCase, CaseStep, RunCase, Module, Environment
 from sweetest.runcase import Autotest4database
 
 
@@ -53,7 +54,6 @@ def logout(request):
 def index(request):
     return render(request, 'haptest/index.html', )
 
-
 # @login_required
 def add_project(request, project_id):
     if request.method == 'POST':
@@ -62,19 +62,14 @@ def add_project(request, project_id):
         else:
             form = AddProjectForm(request.POST)
         if form.is_valid():
-            # Project.objects.create(project_name=form.cleaned_data['project_name'])
-            # Project.objects.create(platform=form.cleaned_data['platform'])
-            # return render(request,'haptest/add_project.html')
             form.save()
             return HttpResponseRedirect(reverse('haptest:project'))
-
     else:
         if project_id != 0:
             form = AddProjectForm(instance=Project.objects.get(id=project_id))
         else:
             form = AddProjectForm()
         return render(request, 'haptest/add_project.html', {'form': form, 'project_id': project_id})
-
 
 # @login_required
 def project_list(request):
@@ -89,7 +84,6 @@ def project_list(request):
     }
     return render(request, 'haptest/project_list.html', manage_info)
 
-
 # @login_required
 def project_delete(request):
     try:
@@ -101,7 +95,6 @@ def project_delete(request):
         # print(request.POST.getlist('projects_choice'),request.POST,choice_set)
         # print(request.POST.itervalues)
         return project_list(request)
-
 
 # @login_required
 def element_add(request, id):
@@ -124,7 +117,6 @@ def element_add(request, id):
             form = AddElementForm()
         return render(request, 'haptest/element_add.html', {'form': form, 'element_id': id})
 
-
 # @login_required
 def element_list(request):
     manage_info = {
@@ -132,7 +124,6 @@ def element_list(request):
         'platform': Platform.objects.all(),
     }
     return render(request, 'haptest/element_list.html', manage_info)
-
 
 # @login_required
 def element_delete(request):
@@ -244,15 +235,9 @@ def testcase_upload(request):
 def get_page_of_elelemt(request, page):
     # 获取页面元素
     if request.method == 'GET':
-        e_obj = Element.objects.all()
-        ele = []
-        page_ele_dic = {}
-        for e in e_obj:
-            if page_ele_dic.get(e.page, None):
-                page_ele_dic[e.page].append(e.element)
-            else:
-                page_ele_dic[e.page] = [e.element]
-        elements = page_ele_dic[page]
+        elements_all = Element.objects.get_page_ele_dic()
+        elements_all.update(TestCase.objects.get_snippet_code_dics())
+        elements=elements_all.get(page)
     return render(request, 'haptest/page_element.html', {'elements': elements})
 
 # @login_required
@@ -298,3 +283,28 @@ def run_case_delete(request):
             return HttpResponse("删除数据成功")
         else:
             return HttpResponse("没有选择数据")
+
+# @login_required
+def environment_add(request, pk):
+    if request.method == 'POST':
+        if pk != 0:
+            form = AddEnvironmentForm(request.POST, instance=Environment.objects.get(id=pk))
+        else:
+            form = AddEnvironmentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('haptest:environment'))
+
+    else:
+        if pk != 0:
+            form = AddEnvironmentForm(instance=Environment.objects.get(id=pk))
+        else:
+            form = AddEnvironmentForm()
+        return render(request, 'haptest/environment_add.html', {'form': form, 'project_id': pk})
+
+# @login_required
+def environment(request):
+    manage_info = {
+        'model_set': Environment.objects.all(),
+    }
+    return render(request, 'haptest/environment.html', manage_info)

@@ -25,5 +25,7 @@ urlpatterns = [
     path('run_case/', views.run_case, name='run_case'),
     path('run_case_delete/', views.run_case_delete, name='run_case_delete'),
     path('run_case_add/<int:id>/', views.run_case_add, name='run_case_add'),
+    path('environment_add/<int:pk>/', views.environment_add, name='environment_add'),
+    path('environment/', views.environment, name='environment'),
 
 ]

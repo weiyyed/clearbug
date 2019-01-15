@@ -1,9 +1,8 @@
 from django.forms import ChoiceField, Textarea, Select
 from django.forms import ModelForm, inlineformset_factory
-from haptest.models import Project, Element, TestCase, CaseStep, RunCase
+from haptest.models import Project, Element, TestCase, CaseStep, RunCase, Environment
 from sweetest.config import web_keywords, common_keywords
 # from django import forms
-
 
 class AddProjectForm(ModelForm):
     # project_name=forms.CharField(label='项目名称', max_length=20,)
@@ -12,18 +11,15 @@ class AddProjectForm(ModelForm):
         model = Project
         fields = "__all__"
 
-
 class AddElementForm(ModelForm):
     class Meta:
         model = Element
         fields = "__all__"
 
-
 class AddTestCaseForm(ModelForm):
     class Meta:
         model = TestCase
         fields = "__all__"
-
 
 class AddCaseStepForm(ModelForm):
     class Meta:
@@ -34,20 +30,15 @@ class AddCaseStepForm(ModelForm):
         for k,v in web_keywords.items():
             if not k.isupper():
                 keyword_pc.append((v,k))
-        page_set=[('',"---")]
-        ele_set=[('',"---")]
-        for x in Element.objects.values('page').distinct():
-            page_set.append((x['page'],x['page']))
-        for x in Element.objects.values('element').distinct():
-            ele_set.append((x['element'],x['element']))
+        page_set= Element.objects.get_page_tuples()
+        ele_set=Element.objects.get_element_tuples()
+        ele_set.extend(TestCase.objects.get_snippet_tuples())
         widgets={
             'keyword':Select(choices=keyword_pc),
             'page':Select(choices=page_set,attrs={'onchange':'change_element(this.id)'}),
             'element':Select(choices=ele_set)
         }
 
-# CaseStepFormSet = inlineformset_factory(TestCase, CaseStep, form=AddCaseStepForm,
-#                                         fields=('id', 'no', 'keyword', 'page', 'element', 'data', 'output'), extra=1)
 def get_CaseStepFormSet(extra=0):
     # 用例步骤
     return inlineformset_factory(TestCase, CaseStep, form=AddCaseStepForm,
@@ -56,4 +47,10 @@ def get_CaseStepFormSet(extra=0):
 class RunCaseForm(ModelForm):
     class Meta:
         model = RunCase
+        fields = "__all__"
+
+class AddEnvironmentForm(ModelForm):
+
+    class Meta:
+        model = Environment
         fields = "__all__"

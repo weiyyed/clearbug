@@ -4,7 +4,6 @@
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    {#    <title>{% block title %}{% endblock %}</title>#}
     <title>海顿测试</title>
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes">
@@ -54,31 +53,28 @@
                     <div id="kartik-file-errors"></div>
                 </div>
                 <div class="form-group">
-                 {% if platform %}
-                    <div class="input-group col-md-8" style="margin-left: 15px">
-                        <div class="input-group-addon" style="color: #0a628f">所属平台</div>
-                        <select id='platform' name="platform" class="form-control"
-{#                                onchange="auto_load('#upload_project_info', '/api/get_project_info/', '#upload_belong_module_id', 'module')"#}
-                        >
-                            {#                            <option value="请选择">请选择</option>#}
+                    {% if platform %}
+                        <div class="input-group col-md-8" style="margin-left: 15px">
+                            <div class="input-group-addon" style="color: #0a628f">所属平台</div>
+                            <select id='platform' name="platform" class="form-control"
                             {% for foo in platform %}
                                 <option value="{{ foo.id }}">{{ foo.platform_name }}</option>
                             {% endfor %}
-                        </select>
-                    </div>
-                {% endif %}
-                {% if module %}
-                    <div class="input-group col-md-8" style="margin-left: 15px">
-                        <div class="input-group-addon" style="color: #0a628f">所属模块</div>
-                        <select id='module' name="module" class="form-control"
-                                >
-                            {#                            <option value="请选择">请选择</option>#}
-                            {% for foo in module %}
-                                <option value="{{ foo.id }}">{{ foo.module_name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                {% endif %}
+                            </select>
+                        </div>
+                    {% endif %}
+                    {% if module %}
+                        <div class="input-group col-md-8" style="margin-left: 15px">
+                            <div class="input-group-addon" style="color: #0a628f">所属模块</div>
+                            <select id='module' name="module" class="form-control"
+                            >
+                                {#                            <option value="请选择">请选择</option>#}
+                                {% for foo in module %}
+                                    <option value="{{ foo.id }}">{{ foo.module_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% endif %}
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
@@ -100,13 +96,13 @@
 
     <div class="nav-navicon admin-main admin-sidebar">
 
-
         <div class="sideMenu am-icon-dashboard" style="color:#aeb2b7; margin: 10px 0 0 0;"> 欢迎您：{{ account }} &nbsp;&nbsp;<a
                 href='/api/log_out/'>注 销</a></div>
         <div class="sideMenu">
             <h3 class="am-icon-folder"><em></em> <a href="#">基础配置</a></h3>
             <ul>
                 <li><a href={% url 'haptest:project' %}>项目管理</a></li>
+                <li><a href={% url 'haptest:environment' %}>环境维护</a></li>
                 <li><a href={% url 'haptest:element' %}>元素管理</a></li>
             </ul>
 
@@ -135,7 +131,7 @@
             returnDefault: false //鼠标从.sideMen移走后返回默认状态（默认false）
         });
 
-        function initFileInput(ctrlName,up_url) {
+        function initFileInput(ctrlName, up_url) {
             var control = $('#' + ctrlName);
             control.fileinput({
                 resizeImage: true,
@@ -156,7 +152,7 @@
                     function () {     //上传时要传输的其他参数
                         platform = $('#platform option:selected').val();//选中的文本
                         module = $('#module option:selected').val();//选中的文本
-                        return {"platform": platform,"module":module};
+                        return {"platform": platform, "module": module};
                     },
                 showClose: false,//显示右上角X关闭
                 overwriteInitial: false, //是否显示预览
@@ -178,8 +174,8 @@
 
     </script>
 
-{% block script %}
-{% endblock %}
+    {% block script %}
+    {% endblock %}
 </div>
 
 </body>

@@ -71,7 +71,6 @@ class GlobalData(models.Model):
         verbose_name = '全局变量'
         db_table="haptest_global_data"
     objects=GlobalDataManager()
-
 class DataFile(models.Model):
     #数据文件
     project=models.ForeignKey(Project,on_delete=models.CASCADE,verbose_name='所属项目')
@@ -100,13 +99,14 @@ class TestCase(models.Model):
     condition=models.CharField('前置条件',max_length=40,blank=True,choices=condition_choices)
     designer=models.CharField('设计者',max_length=20,blank=True)
     priority=models.CharField('优先级',max_length=20,blank=True)
-    remark=models.CharField('备注',max_length=50,blank=True)
+    remark=models.TextField('备注',max_length=250,blank=True)
     flag=models.BooleanField('自动化标记',blank=True,default="True")
     def __str__(self):
         return self.title
     class Meta:
         verbose_name = '测试用例'
         db_table = 'haptest_testcase'
+        ordering=["case_code"]
 class CaseStep(models.Model):
     #步骤
     objects=CaseStepManager()
@@ -115,13 +115,13 @@ class CaseStep(models.Model):
     no = models.CharField('测试步骤', max_length=10, )
     # choices=[]
     keyword = models.CharField('操作', max_length=20)
-    page = models.CharField('页面', max_length=20, )
-    element = models.CharField('元素', max_length=20, )
+    page = models.CharField('页面', max_length=20,blank=True )
+    element = models.CharField('元素', max_length=20,blank=True )
     ele_parameter=models.CharField("元素参数",max_length=20,blank=True)
     data = models.CharField('测试数据', max_length=80,blank=True )
     expected = models.CharField('预期结果', max_length=20, blank=True)
     output = models.CharField('输出数据', max_length=20, blank=True)
-    remark = models.CharField('备注', max_length=50,blank=True )
+    # remark = models.CharField('备注', max_length=50,blank=True )
     def __str__(self):
         return str(self.testcase)+"-"+str(self.no)
     @property

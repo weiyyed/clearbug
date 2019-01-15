@@ -126,7 +126,7 @@
             $("tr td").children().attr({form: "testcase_save_form",});
             $("tr td:nth-of-type(2) input[type=\"checkbox\"]").attr({form: "choice_delete",});
         });
-
+        {#设置下拉项#}
         $('select[id*="id_casestep_set"][id*="page"]').change(function () {
             var data0 = $(this).val();
             var url = '/haptest/page_element/' + data0;

@@ -2,14 +2,14 @@ from django.db import models
 
 class Base(models.Manager):
 
-    def get_dicts(self,**kwargs):
+    def to_testcase_dicts(self, **kwargs):
         # 获取字典列表，[{field:vlaue},{}]
         return  [m for m in super().filter(**kwargs).values()]
-    def __get_tuples(self, field):
+    def _get_tuples(self, field):
         # 获取元素值tuple
         ele_set = [('', "---")]
-        for x in super().values('field').distinct():
-            ele_set.append((x['field'],x['field']))
+        for x in super().values(field).distinct():
+            ele_set.append((x[field],x[field]))
         return ele_set
 
 class DataManager(Base):
@@ -46,15 +46,15 @@ class GlobalDataManager(Base):
     def get_data_dict(self):
     #     获取全局变量字典
         data_dict={}
-        g_dic_list=self.get_dicts()
+        g_dic_list=self.to_testcase_dicts()
         for gdic in g_dic_list:
             data_dict[gdic["varible"]]=gdic["value"]
         return data_dict
 
 class TestCaseManager(Base):
 
-    def get_dicts(self,testcase_queryset):
-        # 获取字典列表，包含steps[{field:vlaue},{}],传入testcase的queryset
+    def to_testcase_dicts(self, testcase_queryset):
+        # 获取字典格式的用例，包含steps[{field:vlaue},{}],传入testcase的queryset，连接元素和元素参数
         testcases_dicts=[t for t in testcase_queryset.values()]
         for case in testcases_dicts:
             steps=testcase_queryset.get(pk=case["id"]).casestep_set.all().values()
@@ -69,6 +69,9 @@ class TestCaseManager(Base):
         for x in self.filter(condition="SNIPPET").values("case_code"):
             s_set.append((x["case_code"],x["case_code"]))
         return s_set
+    def get_snippet_code_dics(self):
+#         获取｛用例片段：[casecode,]｝的字典
+        return {"用例片段":[c[0] for c in super().filter(condition="SNIPPET").values_list("case_code")]}
 class CaseStepManager(Base):
     pass
     # def get_all():
@@ -77,15 +80,29 @@ class CaseStepManager(Base):
     #     super().all()
 class ElementManager(Base):
 
-    def get_page_tuple(self):
-        # 获取page元组
-        return self.__get_tuples("page").append("用例片段", "用例片段")
+    def get_page_tuples(self):
+        # 获取page元组并添加用例片段选项
+        p_list=self._get_tuples("page")
+        p_list.append(("用例片段", "用例片段"))
+        return p_list
 
     def get_element_tuples(self):
-        return self.__get_tuples("element")
-
+        # 获取element元组
+        return self._get_tuples("element")
+    def get_page_ele_dic(self):
+        # 获取页面-元组的字典
+        e_obj = super().all()
+        ele = []
+        page_ele_dic = {}
+        for e in e_obj:
+            if page_ele_dic.get(e.page, None):
+                page_ele_dic[e.page].append(e.element)
+            else:
+                page_ele_dic[e.page] = [e.element]
+        return page_ele_dic
 class RunCaseManager(Base):
     def get_testcases(self,**kwargs):
         r=super().get(**kwargs)
         modules = r.module.all()
-        return r.plateform.testcase_set.all().filter(module_name__in=modules)
+        return r.platform.testcase_set.all().filter(module_name__in=modules)
+

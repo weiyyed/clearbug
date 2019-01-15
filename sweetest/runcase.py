@@ -47,18 +47,10 @@ class Autotest4database:
 
         self.conditions = {}
         g.project_name = self.platform_name
-        # self.testcase_file = path.join(
-        #     'testcase', file_name + '-' + _testcase + '.xlsx')
-        # self.elements_file = path.join(
-        #     'element', g.plateform + '-' + _elements + '.xlsx')
         if not path.exists('junit'):
             os.mkdir('junit')
         self.report_xml = path.join(
             'junit', self.runcase_name + '-' + _report + g.start_time + '.xml')
-        # 打开excel
-        # self.testcase_workbook = Excel(self.testcase_file, 'r')
-        # 获取列表
-        # self.sheet_names = self.testcase_workbook.get_sheet(sheet_name)
         if not path.exists('report'):
             os.mkdir('report')
             # 写方式打开report-excel
@@ -76,9 +68,7 @@ class Autotest4database:
         self.code = 0  # 返回码
         # 1.解析配置文件
         try:
-            # e.get_elements(self.elements_file)
-            # e_dic=[e for e in Element.objects.filter(plateform=self.platform_id).values_list()]
-            e.get_elements4data(Element.objects.get_dicts(plateform=self.platform_id))
+            e.get_elements4data(Element.objects.to_testcase_dicts(platform=self.platform_id))
         except:
             logger.exception('*** Parse config file fail ***')
             self.code = -1
@@ -110,7 +100,7 @@ class Autotest4database:
         try:
             # data = self.testcase_workbook.read(runcase_name)
             # testsuite = testsuite_format(data)
-            testsuite=testsuite_format4database(TestCase_haptest.objects.get_dicts(RunCase.objects.get_testcases(runcase_name=runcase_name)))
+            testsuite=testsuite_format4database(TestCase_haptest.objects.to_testcase_dicts(RunCase.objects.get_testcases(runcase_name=runcase_name)))
             set_g_header(testsuite)
             # logger.info('Testsuite imported from Excel:\n' +
             #             json.dumps(testsuite, ensure_ascii=False, indent=4))
