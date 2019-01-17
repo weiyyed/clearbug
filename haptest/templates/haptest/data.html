@@ -1,0 +1,51 @@
+{% extends "haptest/base.html" %}
+{% load staticfiles %}
+{% block content %}
+
+    <div class="admin-biaogelist">
+        <div class="listbiaoti am-cf">
+            <dl>
+                <a href={% url 'haptest:environment_add' 0 %}>
+                    <button class="am-btn am-btn-success  am-btn-sm am-radius"> 新增</button>
+                </a>
+            </dl>
+            <ul style="float: right;">测试数据</ul>
+        </div>
+
+        <div class="am-form am-g" id="project_list" name="project_list" method="post">
+            <table width="100%" class="am-table am-table-bordered am-table-radius am-table-striped">
+                <thead>
+                <tr>
+                    <th class="table-check"><input type="checkbox" id="select_all"/></th>
+                    <th class="table-title">序号</th>
+                    <th class="table-title">变量名称</th>
+                    <th class="table-title">预览数据</th>
+                    <th class="table-title">所属项目</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for p in model_set %}
+                    <tr>
+                        <td><input type="checkbox" name="del_choice" value="{{ p.id }}" form="choice_delete"/></td>
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            <a href={% url 'haptest:data_add' p.id %} </a>{{ p.name }}
+                        </td>
+                        <td>{{ p.display }}</td>
+                        <td>{{ p.project }}</td>
+
+                    </tr>
+                {% endfor %}
+
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <script type="text/javascript">
+
+    </script>
+
+{% endblock %}

@@ -1,12 +1,10 @@
 from django.forms import ChoiceField, Textarea, Select
 from django.forms import ModelForm, inlineformset_factory
-from haptest.models import Project, Element, TestCase, CaseStep, RunCase, Environment
+from haptest.models import Project, Element, TestCase, CaseStep, RunCase, Environment, Data
 from sweetest.config import web_keywords, common_keywords
 # from django import forms
 
 class AddProjectForm(ModelForm):
-    # project_name=forms.CharField(label='项目名称', max_length=20,)
-    # platform=forms.CharField(label='平台', max_length=20,initial='prod3')
     class Meta:
         model = Project
         fields = "__all__"
@@ -50,7 +48,12 @@ class RunCaseForm(ModelForm):
         fields = "__all__"
 
 class AddEnvironmentForm(ModelForm):
-
+    # 环境信息
     class Meta:
         model = Environment
+        fields = "__all__"
+class DataForm(ModelForm):
+
+    class Meta:
+        model = Data
         fields = "__all__"

@@ -19,10 +19,11 @@ class DataManager(Base):
             return {}
         data_dict={}
         for data in dataset:
-            next_num=self._increase(data.current_seq_num)
-            filter(name=data).update(current_seq_num=next_num)
-            super().filter(name=data).update(current_seq_num=next_num)
-            data_dict[data.name]=data.current_seq
+            data_dict[data.name] = data.current_seq
+            if data.current_seq_num:
+                next_num=self._increase(data.current_seq_num)
+                filter(name=data).update(current_seq_num=next_num)
+                super().filter(name=data).update(current_seq_num=next_num)
         return data_dict
     def _increase(self,num_str):
         while True:
