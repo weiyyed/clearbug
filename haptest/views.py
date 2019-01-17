@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.forms import inlineformset_factory
 from django.urls import reverse
 # from django.views import generic
@@ -119,8 +120,10 @@ def element_add(request, id):
 
 # @login_required
 def element_list(request):
+    paginator = Paginator(Element.objects.all(), 10)
+    page = request.GET.get('page')
     manage_info = {
-        'data_set': Element.objects.all(),
+        'data_set': paginator.get_page(page),
         'platform': Platform.objects.all(),
     }
     return render(request, 'haptest/element_list.html', manage_info)

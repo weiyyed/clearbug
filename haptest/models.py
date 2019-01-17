@@ -1,5 +1,4 @@
 from django.db import models
-
 from haptest.managers import TestCaseManager, CaseStepManager, ElementManager, RunCaseManager, DataManager, \
     GlobalDataManager
 from sweetest.config import web_keywords,common_keywords
