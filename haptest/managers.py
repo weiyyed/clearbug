@@ -14,25 +14,42 @@ class Base(models.Manager):
 
 class DataManager(Base):
     def get_data_dict(self,**kwargs):
-        # 获取第一条未使用数据
-        d=super().filter(**kwargs)
-        if d:
-            data_first=d.exclude(flag="Y")[:1]
-            d_dicts=data_first.values()[:1]
-            new_dic = {}
-            if d_dicts:
-                # 重置为N
-                d_dicts=[d for d in d_dicts]
-                super().filter(pk=data_first.get().id).update(flag="Y")
-                verbose_dic=self.__get_verbose_dic()
-                for name,vername in verbose_dic.items():
-                    new_dic[vername]=d_dicts[0][name]
-                return new_dic
-            else:
-                d.update(flag="N")
-                return self.get_data_dict(**kwargs)
-        else:
+        dataset=super().filter(**kwargs)
+        if not dataset:
             return {}
+        data_dict={}
+        for data in dataset:
+            next_num=self._increase(data.current_seq_num)
+            filter(name=data).update(current_seq_num=next_num)
+            super().filter(name=data).update(current_seq_num=next_num)
+            data_dict[data.name]=data.current_seq
+        return data_dict
+    def _increase(self,num_str):
+        while True:
+            lenth=len(num_str)
+            yield str(int(num_str)+1).zfill(lenth)
+
+
+
+        # # 获取第一条未使用数据
+        # d=super().filter(**kwargs)
+        # if d:
+        #     data_first=d.exclude(flag="Y")[:1]
+        #     d_dicts=data_first.values()[:1]
+        #     new_dic = {}
+        #     if d_dicts:
+        #         # 重置为N
+        #         d_dicts=[d for d in d_dicts]
+        #         super().filter(pk=data_first.get().id).update(flag="Y")
+        #         verbose_dic=self.__get_verbose_dic()
+        #         for name,vername in verbose_dic.items():
+        #             new_dic[vername]=d_dicts[0][name]
+        #         return new_dic
+        #     else:
+        #         d.update(flag="N")
+        #         return self.get_data_dict(**kwargs)
+        # else:
+        #     return {}
     def __get_verbose_dic(self):
         # 获取字典｛name:verbosename｝
         obj=self.model

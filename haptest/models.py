@@ -50,16 +50,26 @@ class Element(models.Model):
 class Data(models.Model):
     #数据
     project=models.ForeignKey(Project,on_delete=models.CASCADE,verbose_name='所属项目')
-    org_code=models.CharField('组织编码',max_length=30,blank=True)
-    common_code=models.CharField('普通编码',max_length=30,blank=True)
-    phone_num=models.CharField('手机号',max_length=30,blank=True)
-    flag=models.CharField('flag',max_length=4,blank=True,default="N")
-    def __str__(self):
-        return str(self.id)
+    # org_code=models.CharField('组织编码',max_length=30,blank=True)
+    # common_code=models.CharField('普通编码',max_length=30,blank=True)
+    # phone_num=models.CharField('手机号',max_length=30,blank=True)
+    # flag=models.CharField('flag',max_length=4,blank=True,default="N")
+    name=models.CharField("名称",max_length=10,blank=True,primary_key=True)
+    prefix=models.CharField("前缀",max_length=10,blank=True)
+    current_seq_num = models.CharField("当前序号", max_length=10)
+    # start_num=models.CharField("起始序号",max_length=10)
+    suffix=models.CharField("后缀",max_length=10,blank=True)
+
+
     class Meta:
         verbose_name = '测试数据'
         db_table = 'haptest_data'
     objects=DataManager()
+    def __str__(self):
+        return str(self.name)
+    @property
+    def current_seq(self):
+        return self.prefix+self.sequence_num+self.suffix
 class GlobalData(models.Model):
 #     全局数据变量
     varible=models.CharField("变量名",max_length=20,unique=True)
