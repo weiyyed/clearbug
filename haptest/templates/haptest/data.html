@@ -5,7 +5,7 @@
     <div class="admin-biaogelist">
         <div class="listbiaoti am-cf">
             <dl>
-                <a href={% url 'haptest:environment_add' 0 %}>
+                <a href={% url 'haptest:data_add' 0 %}>
                     <button class="am-btn am-btn-success  am-btn-sm am-radius"> 新增</button>
                 </a>
             </dl>
@@ -32,7 +32,7 @@
                         <td>
                             <a href={% url 'haptest:data_add' p.id %} </a>{{ p.name }}
                         </td>
-                        <td>{{ p.display }}</td>
+                        <td>{{ p.value }}</td>
                         <td>{{ p.project }}</td>
 
                     </tr>

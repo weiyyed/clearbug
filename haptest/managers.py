@@ -19,7 +19,7 @@ class DataManager(Base):
             return {}
         data_dict={}
         for data in dataset:
-            data_dict[data.name] = data.current_seq
+            data_dict[data.name] = data.value
             if data.current_seq_num:
                 next_num=self._increase(data.current_seq_num)
                 filter(name=data).update(current_seq_num=next_num)

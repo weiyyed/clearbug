@@ -124,7 +124,7 @@ def testsuite_from_excel(file_name, sheet_name):
 
 def testsuite2data(data):
     # result = [list(header.values())]
-    result = [[g.header_custom[key.lower()] for key in header.values()]]
+    result = [[g.header_custom[key.lower()] for key in header.values() if key !="ele_parameter"]]
     for d in data:
         s = d['steps'][0]  # 第一步和用例标题同一行
         testcase = [d['id'], d['title'], d['condition'], s['no'], s['_keyword'], s['page'], s['_element'],

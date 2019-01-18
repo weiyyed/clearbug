@@ -1,4 +1,4 @@
-from django.forms import ChoiceField, Textarea, Select
+from django.forms import ChoiceField, Textarea, Select,CharField
 from django.forms import ModelForm, inlineformset_factory
 from haptest.models import Project, Element, TestCase, CaseStep, RunCase, Environment, Data
 from sweetest.config import web_keywords, common_keywords
@@ -57,3 +57,7 @@ class DataForm(ModelForm):
     class Meta:
         model = Data
         fields = "__all__"
+        widgets={
+            # "value":CharField(widget={})
+            "value":Textarea(attrs={"readonly":True})
+        }

@@ -11,6 +11,7 @@ class Platform(models.Model):
     class Meta:
         verbose_name = '平台信息'
         db_table = 'haptest_Platform'
+
 class Project(models.Model):
     project_name=models.CharField('项目名称',max_length=50,unique=True,null=False)
     platform = models.ForeignKey(Platform, on_delete=models.CASCADE, verbose_name='所属平台', null=False, default='1')
@@ -31,10 +32,11 @@ class Module(models.Model):
         db_table = 'haptest_module'
 
 class Element(models.Model):
+    bylist=("title","current_url","alert","url","id","partial_link_text","link_text","xpath","class_name","name")
     platform=models.ForeignKey(Platform, on_delete=models.CASCADE, verbose_name='所属平台', default='1')
     page=models.CharField('页面',max_length=50)
     element=models.CharField('元素',max_length=50)
-    by=models.CharField('by',max_length=50)
+    by=models.CharField('by',max_length=50,choices=tuple(zip(bylist,bylist)))
     custom = models.CharField('custom', max_length=50, blank=True)
     value=models.TextField('value',max_length=300)
     remark=models.TextField('备注',max_length=200,blank=True )
@@ -49,17 +51,17 @@ class Element(models.Model):
 
 class Data(models.Model):
     #数据
-    project=models.ForeignKey(Project,on_delete=models.CASCADE,verbose_name='所属项目',blank=True)
+    project=models.ForeignKey(Project,on_delete=models.SET_NULL,verbose_name='所属项目',blank=True,null=True)
     # org_code=models.CharField('组织编码',max_length=30,blank=True)
     # common_code=models.CharField('普通编码',max_length=30,blank=True)
     # phone_num=models.CharField('手机号',max_length=30,blank=True)
     # flag=models.CharField('flag',max_length=4,blank=True,default="N")
-    name=models.CharField("变量名称",max_length=10,blank=True,unique=True)
+    name=models.CharField("变量名称",max_length=10,unique=True)
     prefix=models.CharField("前缀",max_length=10,blank=True)
-    current_seq_num = models.CharField("当前序号", max_length=10,blank=True)
+    current_seq_num = models.CharField("自增序号", max_length=10,blank=True)
     # start_num=models.CharField("起始序号",max_length=10)
     suffix=models.CharField("后缀",max_length=10,blank=True)
-    display=models.CharField("预览数据",max_length=10,blank=True)
+    value=models.CharField("预览数据",max_length=10,blank=True)
 
     class Meta:
         verbose_name = '测试数据'
@@ -67,9 +69,13 @@ class Data(models.Model):
     objects=DataManager()
     def __str__(self):
         return str(self.name)
-    @property
-    def current_seq(self):
-        return self.prefix+self.sequence_num+self.suffix
+    def get_value(self):
+        # 字段值预览
+        return self.prefix+self.current_seq_num+self.suffix
+    def save(self, *args,**kwargs):
+        self.value=self.get_value()
+        super().save(*args,**kwargs)
+
 class GlobalData(models.Model):
 #     全局数据变量
     varible=models.CharField("变量名",max_length=20,unique=True)
@@ -80,6 +86,7 @@ class GlobalData(models.Model):
         verbose_name = '全局变量'
         db_table="haptest_global_data"
     objects=GlobalDataManager()
+
 class DataFile(models.Model):
     #数据文件
     project=models.ForeignKey(Project,on_delete=models.CASCADE,verbose_name='所属项目')
@@ -89,6 +96,7 @@ class DataFile(models.Model):
     class Meta:
         verbose_name = '文件管理'
         db_table = 'haptest_datafile'
+
 class TestCase(models.Model):
     #用例
     objects=TestCaseManager()
@@ -116,6 +124,7 @@ class TestCase(models.Model):
         verbose_name = '测试用例'
         db_table = 'haptest_testcase'
         ordering=["case_code"]
+
 class CaseStep(models.Model):
     #步骤
     objects=CaseStepManager()
@@ -139,6 +148,7 @@ class CaseStep(models.Model):
     class Meta:
         verbose_name = '测试步骤'
         db_table = 'haptest_casestep'
+
 class Environment(models.Model):
     # 环境
     env_name=models.CharField('环境名称',max_length=20)
@@ -149,6 +159,7 @@ class Environment(models.Model):
     server_url=models.URLField('server_url',max_length=50,blank=True,default="http://127.0.0.1:4723/wd/hub")
     def __str__(self):
         return self.env_name
+
 class RunCase(models.Model):
     # 运行用例
     runcase_name=models.CharField("构建名称",max_length=20)

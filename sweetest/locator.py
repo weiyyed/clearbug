@@ -48,9 +48,11 @@ def _locating_element(element,waittime,action='',):
             (getattr(By, el['by'].upper()), value)))
     else:
         logger.debug('locating the element %s'%value)
-        el_location = wait.until(EC.presence_of_element_located(
-            (getattr(By, el['by'].upper()), value)))
-
+        try:
+            el_location = wait.until(EC.presence_of_element_located(
+                (getattr(By, el['by'].upper()), value)))
+        except TimeoutException:
+            raise TimeoutException("元素：“{}”通过“{}-{}”定位超时".format(element,el['by'], value))
     return el_location
 
 

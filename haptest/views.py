@@ -11,10 +11,10 @@ from django.views.decorators.csrf import csrf_exempt
 import os
 from haptest.utils.common import dic2database, upload2dicts,testcase2database
 from .forms import AddProjectForm, AddElementForm, AddTestCaseForm, AddCaseStepForm, get_CaseStepFormSet, RunCaseForm, \
-    AddEnvironmentForm
+    AddEnvironmentForm, DataForm
 from django.contrib import auth
 from django.contrib.auth.models import User
-from haptest.models import Project, Element, Platform, TestCase, CaseStep, RunCase, Module, Environment
+from haptest.models import Project, Element, Platform, TestCase, CaseStep, RunCase, Module, Environment, Data
 from sweetest.runcase import Autotest4database
 
 
@@ -120,7 +120,7 @@ def element_add(request, id):
 
 # @login_required
 def element_list(request):
-    paginator = Paginator(Element.objects.all(), 10)
+    paginator = Paginator(Element.objects.all(), 15)
     page = request.GET.get('page')
     manage_info = {
         'data_set': paginator.get_page(page),
@@ -311,3 +311,28 @@ def environment(request):
         'model_set': Environment.objects.all(),
     }
     return render(request, 'haptest/environment.html', manage_info)
+
+# @login_required
+def data(request):
+    manage_info = {
+        'model_set': Data.objects.all(),
+    }
+    return render(request, 'haptest/data.html', manage_info)
+
+# @login_required
+def data_add(request, pk):
+    if request.method == 'POST':
+        if pk != 0:
+            form = DataForm(request.POST, instance=Data.objects.get(id=pk))
+        else:
+            form = DataForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('haptest:data'))
+
+    else:
+        if pk != 0:
+            form = DataForm(instance=Data.objects.get(id=pk))
+        else:
+            form = DataForm()
+        return render(request, 'haptest/data_add.html', {'form': form,})

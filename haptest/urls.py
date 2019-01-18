@@ -27,5 +27,7 @@ urlpatterns = [
     path('run_case_add/<int:id>/', views.run_case_add, name='run_case_add'),
     path('environment_add/<int:pk>/', views.environment_add, name='environment_add'),
     path('environment/', views.environment, name='environment'),
+    path('data/', views.data, name='data'),
+    path('data_add/<int:pk>/', views.data_add, name='data_add'),
 
 ]

@@ -1,0 +1,36 @@
+{% extends "haptest/base.html" %}
+{% load staticfiles %}
+{% block content %}
+
+    <div class=" admin-content">
+        <div class="admin-biaogelist">
+            <div class="listbiaoti am-cf">
+                <ul class="am-icon-flag on">数据维护</ul>
+            </div>
+            <div class="fbneirong">
+
+                <form class="form-horizontal" id="add_project" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="保存返回" class="am-btn am-btn-success  am-btn-sm am-radius">
+                    <div style="margin-top: 2%;"></div>
+
+                    <form class="am-form">
+                        <fieldset>
+                            {% for f in form %}
+                                <div class="am-form-group">
+                                    <label
+                                           for={{ f.name }}> {{ f.label }}</label>
+                                    {{ f }}
+                                </div>
+
+                            {% endfor %}
+                        </fieldset>
+                    </form>
+
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
