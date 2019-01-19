@@ -123,7 +123,7 @@ class TestCase(models.Model):
     class Meta:
         verbose_name = '测试用例'
         db_table = 'haptest_testcase'
-        ordering=["case_code"]
+        ordering=["-condition","case_code",]
 
 class CaseStep(models.Model):
     #步骤
@@ -136,7 +136,7 @@ class CaseStep(models.Model):
     page = models.CharField('页面', max_length=20,blank=True )
     element = models.CharField('元素', max_length=20,blank=True )
     ele_parameter=models.CharField("元素参数",max_length=20,blank=True)
-    data = models.CharField('测试数据', max_length=80,blank=True )
+    data = models.CharField('测试数据', max_length=100,blank=True )
     expected = models.CharField('预期结果', max_length=20, blank=True)
     output = models.CharField('输出数据', max_length=20, blank=True)
     # remark = models.CharField('备注', max_length=50,blank=True )

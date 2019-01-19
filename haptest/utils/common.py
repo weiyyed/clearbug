@@ -26,7 +26,7 @@ def upload2dicts(file_obj,platform_id=None,module_name_id=None):
     return datas_dic_list
 
 def testcases2standard(testcase_dics):
-#     用例字典转换为用例主子：[{testcase:{..},steps{[...]}},{....}]
+#     用例字典转换为标准用例主子：[{testcase:{..},steps{[...]}},{....}]
     testsuite = [] #返回值
     testcase_step_dic = {} #用例步骤字典
     testcase_dic_std ={} #标准用例字典
@@ -71,7 +71,11 @@ def testcases2standard(testcase_dics):
             if s=="keyword":
                 step_dic[s] = all_keywords.get(testcase_dic[s])
             else:
-                step_dic[s]=testcase_dic[s]
+                try:
+                    step_dic[s]=testcase_dic[s]
+                except KeyError :
+                    raise KeyError("excel模板缺少“{}”字段".format(s))
+
         step_dic["no"]=testcase_dic["step"]
         step_dic_list.append(step_dic.copy())
         testcase_step_dic["steps"] = step_dic_list
