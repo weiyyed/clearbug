@@ -2,9 +2,9 @@ from django.db import models
 
 class Base(models.Manager):
 
-    def to_testcase_dicts(self, **kwargs):
+    def get_dicts(self, **kwargs):
         # 获取字典列表，[{field:vlaue},{}]
-        return  [m for m in super().filter(**kwargs).values()]
+        return  [*super().filter(**kwargs).values()]
     def _get_tuples(self, field):
         # 获取元素值tuple
         ele_set = [('', "---")]
@@ -64,7 +64,7 @@ class GlobalDataManager(Base):
     def get_data_dict(self):
     #     获取全局变量字典
         data_dict={}
-        g_dic_list=self.to_testcase_dicts()
+        g_dic_list=self.get_dicts()
         for gdic in g_dic_list:
             data_dict[gdic["varible"]]=gdic["value"]
         return data_dict
@@ -73,7 +73,7 @@ class TestCaseManager(Base):
 
     def to_testcase_dicts(self, testcase_queryset):
         # 获取字典格式的用例，包含steps[{field:vlaue},{}],传入testcase的queryset，连接元素和元素参数
-        testcases_dicts=[t for t in testcase_queryset.values()]
+        testcases_dicts=[*testcase_queryset.values()]
         for case in testcases_dicts:
             steps=testcase_queryset.get(pk=case["id"]).casestep_set.all().values()
             case["steps"]=[]

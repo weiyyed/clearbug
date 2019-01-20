@@ -68,7 +68,7 @@ class Autotest4database:
         self.code = 0  # 返回码
         # 1.解析配置文件
         try:
-            e.get_elements4data(Element.objects.to_testcase_dicts(platform=self.platform_id))
+            e.get_elements4data(Element.objects.get_dicts(platform=self.platform_id))
         except:
             logger.exception('*** Parse config file fail ***')
             self.code = -1

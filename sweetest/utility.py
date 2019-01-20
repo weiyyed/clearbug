@@ -106,11 +106,10 @@ def data2dict(data):
     return list_dict_data
 
 def set_g_header(testcases):
-#     data为用例字典
+#   g添加header_custom变量{}，内容为{用例标准字段:数据库中列名}
     g.header_custom = {}  # 用户自定义的标题
     for d,v in testcases[0].items():
         k = d.strip().split('#')[0]
-        # 如果为中文，则替换成英文
         h = d.lower()
         g.header_custom[h] = d.strip()
     for sk,sv in testcases[0].get("steps")[0].items():

@@ -24,6 +24,7 @@ def check_keyword(kw):
 
 
 def data_format(data):
+    # 将data，如“用户=w”转为字典{用户：w}
     data = escape(data)
     data = data.replace('，', ',')
     data_list = {}
@@ -50,6 +51,7 @@ def parse(testsuit):
     '''
     将测试用例解析为可执行参数，如:
     打开首页，解析为：OPEN 127.0.0.1
+    data,expect转为字典的列表[{},]
     '''
     for testcase in testsuit:
         for step in testcase['steps']:

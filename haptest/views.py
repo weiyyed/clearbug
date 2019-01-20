@@ -269,7 +269,7 @@ def run_case(request, id=None):
         runobj = RunCase.objects.get(pk=int(choice_id))
         run_obj=Autotest4database(run_case_obj=RunCase.objects.get(pk=int(choice_id)))
         run_obj.plan()
-        return HttpResponse("执行用例成功")
+        return HttpResponse("已执行用例")
     else:
         manage_info = {
             'data_set': RunCase.objects.all(),
