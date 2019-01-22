@@ -3,7 +3,7 @@ import datetime
 from django.db import models
 from django.utils import timezone
 
-
+# 投票实例
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
@@ -12,7 +12,12 @@ class Question(models.Model):
         return self.question_text
 
     def was_published_recently(self):
-        return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+        now = timezone.now()
+        return now - datetime.timedelta(days=1) <= self.pub_date <= now
+
+    was_published_recently.admin_order_field = 'pub_date'
+    was_published_recently.boolean = True
+    was_published_recently.short_description = 'Published recently?'
 
 
 class Choice(models.Model):
@@ -90,3 +95,43 @@ class Entry(models.Model):
 
     def __str__(self):
         return self.headline
+
+
+# # 图片评论实例
+# class Author2(models.Model):
+#     name = models.CharField(max_length=100)
+#
+#     email = models.EmailField()
+#
+# class Picture(models.Model):
+#     DOG = 1
+#
+#     CAT = 2
+#
+#     ANIMAL_KIND_CHOICES = (
+#
+#         (DOG, 'dog'),
+#
+#         (CAT, 'cat'),
+#
+#     )
+#
+#     title = models.CharField(max_length=200)
+#
+#     author = models.ForeignKey(Author2, on_delete=models.CASCADE,related_name='pictures')
+#
+#     animal_kind = models.IntegerField(choices=ANIMAL_KIND_CHOICES)
+#
+#     photo = models.ImageField(upload_to='animals')
+#
+#     is_promoted = models.BooleanField(default=False)
+#
+#
+# class Comment(models.Model):
+#     author = models.ForeignKey(Author2, on_delete=models.CASCADE,related_name='comments')
+#
+#     picture = models.ForeignKey(Picture, on_delete=models.CASCADE,related_name='comments')
+#
+#     comment = models.TextField()
+#
+#     editors_note = models.TextField()
