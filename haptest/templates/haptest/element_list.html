@@ -105,20 +105,20 @@
             {#  分页#}
             <div class="am-pagination am-fr">
                 <span class="step-links">
-                    {% if data_set.has_previous %}
+                    {% if page_obj.has_previous %}
                         <a href="?page=1"> 首页  &nbsp; </a>
-                        <a href="?page={{ data_set.previous_page_number }}">&laquo;</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
                     {% endif %}
 
                     <span class="current">
-                     {{ data_set.number }}
+                     {{ page_obj.number }}
                     </span>
 
-                    {% if data_set.has_next %}
-                        <a href="?page={{ data_set.next_page_number }}">&raquo;</a>
-                        <a href="?page={{ data_set.paginator.num_pages }}"> &nbsp;尾页&nbsp; </a>
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}"> &nbsp;尾页&nbsp; </a>
                     {% endif %}
-                    <span>共{{ data_set.paginator.num_pages }}页</span>
+                    <span>共{{ page_obj.paginator.num_pages }}页</span>
                 </span>
             </div>
         </div>

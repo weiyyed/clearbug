@@ -1,7 +1,7 @@
 from django.core.paginator import Paginator
 from django.forms import inlineformset_factory
 from django.urls import reverse
-# from django.views import generic
+from django.views import generic
 # from .models import Choice, Question,Project
 # from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.decorators import login_required
@@ -119,14 +119,25 @@ def element_add(request, id):
         return render(request, 'haptest/element_add.html', {'form': form, 'element_id': id})
 
 # @login_required
-def element_list(request):
-    paginator = Paginator(Element.objects.all(), 15)
-    page = request.GET.get('page')
-    manage_info = {
-        'data_set': paginator.get_page(page),
-        'platform': Platform.objects.all(),
-    }
-    return render(request, 'haptest/element_list.html', manage_info)
+class ElementView(generic.ListView):
+    model = Element
+    paginate_by = 15
+    context_object_name = "data_set"
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context=super().get_context_data(object_list=object_list, **kwargs)
+        context["platform"]=Platform.objects.all()
+        return context
+
+
+# def element_list(request):
+#     paginator = Paginator(Element.objects.all(), 15)
+#     page = request.GET.get('page')
+#     manage_info = {
+#         'data_set': paginator.get_page(page),
+#         'platform': Platform.objects.all(),
+#     }
+#     return render(request, 'haptest/element_list.html', manage_info)
+
 
 # @login_required
 def element_delete(request):
