@@ -28,7 +28,6 @@ def register(request):
         User.objects.create_user(username=name, password=password)
         return HttpResponseRedirect('/haptest/login/')
 
-
 def login(request):
     # 登录
     if request.method == 'GET':
