@@ -41,6 +41,7 @@ def cache(instance):
 
 # 创建字典构造函数，用户缓存K/V键值对
 class DictCache:
+   print("111")
    def __init__(self):
        self.cache = dict()
 
@@ -55,6 +56,7 @@ class DictCache:
 
    def __repr__(self):
        return repr(self.cache)
+
 
 
 # 创建缓存对象
@@ -72,4 +74,6 @@ def long_time_func(x):
 if __name__ == '__main__':
     # print(hello.__name__)
     # print(type(",".join(['1','2'])))
-    long_time_func(3)
+    # long_time_func(3)
+    # print(23)
+    pass

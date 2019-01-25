@@ -119,6 +119,7 @@ def element_add(request, id):
 
 # @login_required
 class ElementView(generic.ListView):
+
     model = Element
     paginate_by = 15
     context_object_name = "data_set"
