@@ -1,7 +1,7 @@
 from django.db import models
 from haptest.managers import TestCaseManager, CaseStepManager, ElementManager, RunCaseManager, DataManager, \
     GlobalDataManager
-from sweetest.config import web_keywords,common_keywords
+from haptest.utils.model_utils import get_keyword_choice
 
 class Platform(models.Model):
     platform_code=models.SlugField('平台编码',unique=True)
@@ -132,10 +132,10 @@ class CaseStep(models.Model):
     testcase = models.ForeignKey(TestCase, on_delete=models.CASCADE, verbose_name='所属用例')
     no = models.CharField('测试步骤', max_length=10, )
     # choices=[]
-    keyword = models.CharField('操作', max_length=20)
+    keyword = models.CharField('操作', choices=get_keyword_choice(),max_length=20)
     page = models.CharField('页面', max_length=20,blank=True )
     element = models.CharField('元素', max_length=20,blank=True )
-    ele_parameter=models.TextField("元素参数",max_length=20,blank=True)
+    ele_parameter=models.CharField("元素参数",max_length=20,blank=True)
     data = models.CharField('测试数据', max_length=100,blank=True )
     expected = models.CharField('预期结果', max_length=20, blank=True)
     output = models.CharField('输出数据', max_length=20, blank=True)
@@ -159,6 +159,8 @@ class Environment(models.Model):
     server_url=models.URLField('server_url',max_length=50,blank=True,default="http://127.0.0.1:4723/wd/hub")
     def __str__(self):
         return self.env_name
+    class Meta:
+        verbose_name = '测试环境'
 
 class RunCase(models.Model):
     # 运行用例

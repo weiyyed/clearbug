@@ -1,7 +1,11 @@
 from django.contrib import admin
-from haptest.models import Project,Platform,TestCase,CaseStep
+from haptest.models import Project,Platform,TestCase,CaseStep,Element,Data,Module,Environment
 admin.site.register(Project)
 admin.site.register(Platform)
+admin.site.register(Element)
+admin.site.register(Data)
+admin.site.register(Module)
+admin.site.register(Environment)
 
 class CasestepInline(admin.TabularInline):
     model = CaseStep

@@ -2,7 +2,6 @@ import os,copy
 from sweetest.utility import Excel,data2dict
 from sweetest.config import all_keywords
 from haptest.models import TestCase, CaseStep
-from django.db.models import Model
 
 def upload2dicts(file_obj,platform_id=None,module_name_id=None):
     # 处理上传文件存数据库,字典参数为id
