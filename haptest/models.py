@@ -135,7 +135,7 @@ class CaseStep(models.Model):
     keyword = models.CharField('操作', max_length=20)
     page = models.CharField('页面', max_length=20,blank=True )
     element = models.CharField('元素', max_length=20,blank=True )
-    ele_parameter=models.CharField("元素参数",max_length=20,blank=True)
+    ele_parameter=models.TextField("元素参数",max_length=20,blank=True)
     data = models.CharField('测试数据', max_length=100,blank=True )
     expected = models.CharField('预期结果', max_length=20, blank=True)
     output = models.CharField('输出数据', max_length=20, blank=True)

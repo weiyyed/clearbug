@@ -10,5 +10,10 @@ class TestCaseAdmin(admin.ModelAdmin):
     # fieldsets = {
     #     (None:{"fields":["case_code","case_title"]})
     # }
+    list_display = ("case_code","title","platform","module_name","designer")
+    list_display_links = ("case_code","title",)
+    list_filter = ("platform","module_name")
+    list_per_page = 10
+    search_fields = ("case_code","title",)
     inlines = [CasestepInline]
 admin.site.register(TestCase,TestCaseAdmin)
