@@ -1,0 +1,33 @@
+{
+  "uid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+  "name" : "timeline",
+  "children" : [ {
+    "name" : "single",
+    "children" : [ {
+      "name" : "登录",
+      "uid" : "ef772f4df04d892c",
+      "parentUid" : "a41f961e8f9e350ac59a40f332ed7744",
+      "status" : "passed",
+      "time" : {
+        "start" : 1543069121285,
+        "stop" : 1543069131271,
+        "duration" : 9986
+      },
+      "flaky" : false,
+      "parameters" : [ ]
+    }, {
+      "name" : "员工新增",
+      "uid" : "34d46eb7bcb9e6ac",
+      "parentUid" : "a41f961e8f9e350ac59a40f332ed7744",
+      "status" : "failed",
+      "time" : {
+        "start" : 1543069121285,
+        "stop" : 1543069228139,
+        "duration" : 106854
+      },
+      "flaky" : true,
+      "parameters" : [ ]
+    } ],
+    "uid" : "a41f961e8f9e350ac59a40f332ed7744"
+  } ]
+}

@@ -52,8 +52,8 @@ def logout(request):
 
 
 def index(request):
-    return render(request, 'haptest/index.html', )
-    # return render(request, r'C:/weiyongy/pyproject/hap_test/allure_report/index.html', )
+    # return render(request, 'haptest/index.html', )
+    return render(request, 'index.html', )
 
 # @login_required
 def add_project(request, project_id):

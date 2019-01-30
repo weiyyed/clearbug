@@ -1,0 +1,42 @@
+{
+  "uid" : "54b733601d47e873",
+  "name" : "员工新增",
+  "historyId" : "Prod3:sy_005#员工新增",
+  "time" : {
+    "start" : 1543068293542,
+    "stop" : 1543068313741,
+    "duration" : 20199
+  },
+  "status" : "failed",
+  "statusMessage" : "step-10|CHECK|通用-提示#保存成功: Message:  ",
+  "statusTrace" : "",
+  "flaky" : false,
+  "beforeStages" : [ ],
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "resultFormat",
+    "value" : "junit"
+  }, {
+    "name" : "suite",
+    "value" : "Prod3"
+  }, {
+    "name" : "host",
+    "value" : "single"
+  }, {
+    "name" : "testClass",
+    "value" : "sy_005"
+  }, {
+    "name" : "package",
+    "value" : "sy_005"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : true,
+  "retry" : true,
+  "extra" : {
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "54b733601d47e873.json",
+  "parameterValues" : [ ]
+}
