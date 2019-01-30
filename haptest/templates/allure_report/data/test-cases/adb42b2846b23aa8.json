@@ -1,0 +1,40 @@
+{
+  "uid" : "adb42b2846b23aa8",
+  "name" : "登录",
+  "historyId" : "Prod3:passport_001#登录",
+  "time" : {
+    "start" : 1543067283020,
+    "stop" : 1543067288423,
+    "duration" : 5403
+  },
+  "status" : "passed",
+  "flaky" : false,
+  "beforeStages" : [ ],
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "resultFormat",
+    "value" : "junit"
+  }, {
+    "name" : "suite",
+    "value" : "Prod3"
+  }, {
+    "name" : "host",
+    "value" : "single"
+  }, {
+    "name" : "testClass",
+    "value" : "passport_001"
+  }, {
+    "name" : "package",
+    "value" : "passport_001"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : true,
+  "retry" : true,
+  "extra" : {
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "adb42b2846b23aa8.json",
+  "parameterValues" : [ ]
+}

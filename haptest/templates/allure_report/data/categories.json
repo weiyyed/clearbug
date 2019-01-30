@@ -1,0 +1,25 @@
+{
+  "uid" : "4b4757e66a1912dae1a509f688f20b0f",
+  "name" : "categories",
+  "children" : [ {
+    "name" : "Product defects",
+    "children" : [ {
+      "name" : "step-10|CHECK|通用-提示#保存成功: Message:  ",
+      "children" : [ {
+        "name" : "员工新增",
+        "uid" : "34d46eb7bcb9e6ac",
+        "parentUid" : "90b3fc65d59a6fc66dcd5375a8d20833",
+        "status" : "failed",
+        "time" : {
+          "start" : 1543069121285,
+          "stop" : 1543069228139,
+          "duration" : 106854
+        },
+        "flaky" : true,
+        "parameters" : [ ]
+      } ],
+      "uid" : "90b3fc65d59a6fc66dcd5375a8d20833"
+    } ],
+    "uid" : "8fb3a91ba5aaf9de24cc8a92edc82b5d"
+  } ]
+}

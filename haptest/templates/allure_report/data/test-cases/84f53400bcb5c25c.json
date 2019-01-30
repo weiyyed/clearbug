@@ -1,0 +1,42 @@
+{
+  "uid" : "84f53400bcb5c25c",
+  "name" : "员工新增",
+  "historyId" : "Prod3:sy_005#员工新增",
+  "time" : {
+    "start" : 1543067089693,
+    "stop" : 1543067131524,
+    "duration" : 41831
+  },
+  "status" : "failed",
+  "statusMessage" : "",
+  "statusTrace" : "",
+  "flaky" : false,
+  "beforeStages" : [ ],
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "resultFormat",
+    "value" : "junit"
+  }, {
+    "name" : "suite",
+    "value" : "Prod3"
+  }, {
+    "name" : "host",
+    "value" : "single"
+  }, {
+    "name" : "testClass",
+    "value" : "sy_005"
+  }, {
+    "name" : "package",
+    "value" : "sy_005"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : true,
+  "retry" : true,
+  "extra" : {
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "84f53400bcb5c25c.json",
+  "parameterValues" : [ ]
+}

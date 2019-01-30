@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 app_name = 'haptest'
 urlpatterns = [
     path('', views.index, name='index'),
+    path('allure_report/', views.allure_index, name='allure_index'),
     path('register/', views.register, name='register'),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),

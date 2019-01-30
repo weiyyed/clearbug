@@ -1,0 +1,90 @@
+{
+  "uid" : "ef772f4df04d892c",
+  "name" : "登录",
+  "historyId" : "Prod3:passport_001#登录",
+  "time" : {
+    "start" : 1543069121285,
+    "stop" : 1543069131271,
+    "duration" : 9986
+  },
+  "status" : "passed",
+  "flaky" : false,
+  "beforeStages" : [ ],
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "resultFormat",
+    "value" : "junit"
+  }, {
+    "name" : "suite",
+    "value" : "Prod3"
+  }, {
+    "name" : "host",
+    "value" : "single"
+  }, {
+    "name" : "testClass",
+    "value" : "passport_001"
+  }, {
+    "name" : "package",
+    "value" : "passport_001"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ {
+      "uid" : "3e4b1437b3b4f6c6",
+      "status" : "passed",
+      "time" : {
+        "start" : 1543068293542,
+        "stop" : 1543068298499,
+        "duration" : 4957
+      }
+    }, {
+      "uid" : "247bccd2a2fec77b",
+      "status" : "passed",
+      "time" : {
+        "start" : 1543068072225,
+        "stop" : 1543068077396,
+        "duration" : 5171
+      }
+    }, {
+      "uid" : "da81b9c6c98a4281",
+      "status" : "passed",
+      "time" : {
+        "start" : 1543067549361,
+        "stop" : 1543067554940,
+        "duration" : 5579
+      }
+    }, {
+      "uid" : "adb42b2846b23aa8",
+      "status" : "passed",
+      "time" : {
+        "start" : 1543067283020,
+        "stop" : 1543067288423,
+        "duration" : 5403
+      }
+    }, {
+      "uid" : "205bb6f71320c807",
+      "status" : "passed",
+      "time" : {
+        "start" : 1543067201813,
+        "stop" : 1543067207806,
+        "duration" : 5993
+      }
+    }, {
+      "uid" : "d497cb53e12514c1",
+      "status" : "passed",
+      "time" : {
+        "start" : 1543067089693,
+        "stop" : 1543067104157,
+        "duration" : 14464
+      }
+    } ],
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "ef772f4df04d892c.json",
+  "parameterValues" : [ ]
+}

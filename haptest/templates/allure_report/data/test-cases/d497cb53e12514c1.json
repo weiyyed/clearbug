@@ -1,0 +1,40 @@
+{
+  "uid" : "d497cb53e12514c1",
+  "name" : "登录",
+  "historyId" : "Prod3:passport_001#登录",
+  "time" : {
+    "start" : 1543067089693,
+    "stop" : 1543067104157,
+    "duration" : 14464
+  },
+  "status" : "passed",
+  "flaky" : false,
+  "beforeStages" : [ ],
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "resultFormat",
+    "value" : "junit"
+  }, {
+    "name" : "suite",
+    "value" : "Prod3"
+  }, {
+    "name" : "host",
+    "value" : "single"
+  }, {
+    "name" : "testClass",
+    "value" : "passport_001"
+  }, {
+    "name" : "package",
+    "value" : "passport_001"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : true,
+  "retry" : true,
+  "extra" : {
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "d497cb53e12514c1.json",
+  "parameterValues" : [ ]
+}

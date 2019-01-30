@@ -129,6 +129,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),  # 静态文件额外目录
+    os.path.join(BASE_DIR, '/allure_report/'),  # 静态文件额外目录
 )
 
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')

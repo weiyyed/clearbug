@@ -6,7 +6,7 @@ from django.views import generic
 # from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, render_to_response
 from django.views.decorators.csrf import csrf_exempt
 import os
 from haptest.utils.common import dic2database, upload2dicts,testcase2database
@@ -52,8 +52,10 @@ def logout(request):
 
 
 def index(request):
-    # return render(request, 'haptest/index.html', )
-    return render(request, 'index.html', )
+    return render(request, 'haptest/index.html', )
+def allure_index(request):
+    # return render(request, 'allure_report/index.html', )
+    return render_to_response('allure_report/index.html')
 
 # @login_required
 def add_project(request, project_id):
