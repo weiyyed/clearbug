@@ -2,6 +2,7 @@ from django.db import models
 from haptest.managers import TestCaseManager, CaseStepManager, ElementManager, RunCaseManager, DataManager, \
     GlobalDataManager
 from haptest.utils.model_utils import get_keyword_choice
+from django.db.models import F
 
 class Platform(models.Model):
     platform_code=models.SlugField('平台编码',unique=True)
@@ -10,6 +11,7 @@ class Platform(models.Model):
         return self.platform_name
     class Meta:
         verbose_name = '平台信息'
+        verbose_name_plural='平台信息'
         db_table = 'haptest_Platform'
 
 class Project(models.Model):
@@ -19,6 +21,7 @@ class Project(models.Model):
         return self.project_name
     class Meta:
         verbose_name = '项目信息'
+        verbose_name_plural = '项目信息'
         db_table = 'haptest_Project'
 
 class Module(models.Model):
@@ -29,6 +32,7 @@ class Module(models.Model):
         return self.module_name
     class Meta:
         verbose_name = '模块'
+        verbose_name_plural = '模块/用例组'
         db_table = 'haptest_module'
 
 class Element(models.Model):
@@ -44,6 +48,7 @@ class Element(models.Model):
         return self.element
     class Meta:
         verbose_name = '元素管理'
+        verbose_name_plural= '元素管理'
         db_table = 'haptest_element'
         unique_together=('page','element')
 
@@ -65,6 +70,7 @@ class Data(models.Model):
 
     class Meta:
         verbose_name = '测试数据'
+        verbose_name_plural ='测试数据'
         db_table = 'haptest_data'
     objects=DataManager()
     def __str__(self):
@@ -95,6 +101,7 @@ class DataFile(models.Model):
         return self.file
     class Meta:
         verbose_name = '文件管理'
+        verbose_name_plural = '文件管理'
         db_table = 'haptest_datafile'
 
 class TestCase(models.Model):
@@ -118,12 +125,14 @@ class TestCase(models.Model):
     priority=models.CharField('优先级',max_length=20,blank=True)
     remark=models.TextField('备注',max_length=250,blank=True)
     flag=models.BooleanField('自动化标记',blank=True,default="True")
+    run_order=models.IntegerField("执行顺序",blank=True,null=True)
     def __str__(self):
         return self.title
     class Meta:
         verbose_name = '测试用例'
+        verbose_name_plural = '测试用例'
         db_table = 'haptest_testcase'
-        ordering=["-condition","case_code",]
+        ordering=[F("run_order").asc(nulls_last=True),"case_code",]
 
 class CaseStep(models.Model):
     #步骤
@@ -147,6 +156,7 @@ class CaseStep(models.Model):
         return self.element+self.ele_parameter
     class Meta:
         verbose_name = '测试步骤'
+        verbose_name_plural = '测试步骤'
         db_table = 'haptest_casestep'
 
 class Environment(models.Model):
@@ -161,6 +171,7 @@ class Environment(models.Model):
         return self.env_name
     class Meta:
         verbose_name = '测试环境'
+        verbose_name_plural = '测试环境'
 
 class RunCase(models.Model):
     # 运行用例
@@ -171,5 +182,7 @@ class RunCase(models.Model):
     environment=models.ForeignKey(Environment,on_delete=models.SET_NULL,null=True,verbose_name="运行环境")
     def __str__(self):
         return self.runcase_name
-
+    class Meta:
+        verbose_name = '用例运行'
+        verbose_name_plural = '用例运行'
     objects = RunCaseManager()

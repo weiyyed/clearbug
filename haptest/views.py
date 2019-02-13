@@ -53,9 +53,6 @@ def logout(request):
 
 def index(request):
     return render(request, 'haptest/index.html', )
-def allure_index(request):
-    # return render(request, 'allure_report/index.html', )
-    return render_to_response('allure_report/index.html')
 
 # @login_required
 def add_project(request, project_id):

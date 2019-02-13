@@ -7,3 +7,4 @@ polls/migrations/*
 junit/
 report/
 log/
+allure_report

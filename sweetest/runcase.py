@@ -1,5 +1,5 @@
 from os import path
-import os
+import os,subprocess
 import time
 import sys
 import json
@@ -93,7 +93,10 @@ class Autotest4database:
             self.report.write(f)
 
         self.report.data()
-
+    #     生成allure报告
+    #     import locale
+        cmd="cd {} & allure generate junit -o allure_report --clean".format(os.getcwd())
+        subprocess.Popen(cmd,shell=True)
     # 用例执行
     def run(self, runcase_name):
         # 1.从数据库获取测试用例集
