@@ -1,5 +1,5 @@
 from django.contrib import admin
-from haptest.models import Project,Platform,TestCase,CaseStep,Element,Data,Module,Environment,RunCase
+from haptest.models import Project,Platform,TestCase,CaseStep,Element,Data,Module,RunCase
 from sweetest.runcase import Autotest4database
 from django.utils.text import capfirst
 from django.utils.datastructures import OrderedDict
@@ -13,7 +13,6 @@ def find_model_index(name):
         else:
             count += 1
     return count
-
 def index_decorator(func):
     def inner(*args, **kwargs):
         templateresponse = func(*args, **kwargs)
@@ -21,7 +20,6 @@ def index_decorator(func):
             app['models'].sort(key=lambda x: find_model_index(x['name']))
         return templateresponse
     return inner
-
 admin.site.index = index_decorator(admin.site.index)
 admin.site.app_index = index_decorator(admin.site.app_index)
 
@@ -37,7 +35,6 @@ class ElementAdmin(admin.ModelAdmin):
 admin.site.register(Element,ElementAdmin)
 admin.site.register(Data)
 admin.site.register(Module)
-admin.site.register(Environment)
 
 
 class CasestepInline(admin.TabularInline):
@@ -53,11 +50,20 @@ class TestCaseAdmin(admin.ModelAdmin):
     list_per_page = 10
     search_fields = ("case_code","title",)
     inlines = [CasestepInline]
+    # 记录创建人
+    def save_model(self, request, obj, form, change):
+        if not obj.designer:
+            obj.designer = request.user.username
+            obj.save()
+
+    readonly_fields = ("designer",)
+
+
 admin.site.register(TestCase,TestCaseAdmin)
 
 import threading
 class RunCaseAdmin(admin.ModelAdmin):
-    list_display = ("runcase_name", "project", "environment", "platform",)
+    list_display = ("runcase_name", "project", "platform",)
     # list_filter = ("platform", "page")
     # list_per_page = 10
     # list_display_links = ("runcase_name",)

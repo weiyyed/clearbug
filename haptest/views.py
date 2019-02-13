@@ -11,10 +11,10 @@ from django.views.decorators.csrf import csrf_exempt
 import os
 from haptest.utils.common import dic2database, upload2dicts,testcase2database
 from .forms import AddProjectForm, AddElementForm, AddTestCaseForm, AddCaseStepForm, get_CaseStepFormSet, RunCaseForm, \
-    AddEnvironmentForm, DataForm
+     DataForm
 from django.contrib import auth
 from django.contrib.auth.models import User
-from haptest.models import Project, Element, Platform, TestCase, CaseStep, RunCase, Module, Environment, Data
+from haptest.models import Project, Element, Platform, TestCase, CaseStep, RunCase, Module, Data
 from sweetest.runcase import Autotest4database
 
 
@@ -299,29 +299,29 @@ def run_case_delete(request):
             return HttpResponse("没有选择数据")
 
 # @login_required
-def environment_add(request, pk):
-    if request.method == 'POST':
-        if pk != 0:
-            form = AddEnvironmentForm(request.POST, instance=Environment.objects.get(id=pk))
-        else:
-            form = AddEnvironmentForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('haptest:environment'))
+# def environment_add(request, pk):
+    # if request.method == 'POST':
+    #     if pk != 0:
+            # form = AddEnvironmentForm(request.POST, instance=Environment.objects.get(id=pk))
+        # else:
+            # form = AddEnvironmentForm(request.POST)
+        # if form.is_valid():
+        #     form.save()
+        #     return HttpResponseRedirect(reverse('haptest:environment'))
 
-    else:
-        if pk != 0:
-            form = AddEnvironmentForm(instance=Environment.objects.get(id=pk))
-        else:
-            form = AddEnvironmentForm()
-        return render(request, 'haptest/environment_add.html', {'form': form, 'project_id': pk})
+    # else:
+    #     if pk != 0:
+    #         form = AddEnvironmentForm(instance=Environment.objects.get(id=pk))
+    #     else:
+    #         form = AddEnvironmentForm()
+    #     return render(request, 'haptest/environment_add.html', {'form': form, 'project_id': pk})
 
 # @login_required
-def environment(request):
-    manage_info = {
-        'model_set': Environment.objects.all(),
-    }
-    return render(request, 'haptest/environment.html', manage_info)
+# def environment(request):
+#     manage_info = {
+#         'model_set': Environment.objects.all(),
+#     }
+#     return render(request, 'haptest/environment.html', manage_info)
 
 # @login_required
 def data(request):

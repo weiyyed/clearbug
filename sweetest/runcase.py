@@ -19,20 +19,20 @@ from sweetest.config import _testcase, _elements, _report
 
 # 数据库执行用例
 class Autotest4database:
-    def __init__(self, run_case_obj=RunCase.objects.get()):
+    def __init__(self, run_case_obj):
         g.start_time = time.strftime("@%Y%m%d_%H%M%S", time.localtime())
         self.run_obj=run_case_obj
         self.platform_id=run_case_obj.project.platform.id
         self.platform_name=run_case_obj.project.platform.platform_name
         self.project_id = run_case_obj.project
         self.modules_name = [m.module_name for m in run_case_obj.module.all()]
-        desired_caps = run_case_obj.environment.desired_caps
+        desired_caps = run_case_obj.desired_caps
         self.desired_caps=eval(desired_caps)
-        self.server_url = run_case_obj.environment.server_url
+        self.server_url = run_case_obj.server_url
         self.runcase_name=run_case_obj.runcase_name
-        self.login_url=run_case_obj.environment.pc_login_url
-        self.login_user=run_case_obj.environment.login_user
-        self.login_password=run_case_obj.environment.login_password
+        self.login_url=run_case_obj.pc_login_url
+        self.login_user=run_case_obj.login_user
+        self.login_password=run_case_obj.login_password
 
         if self.desired_caps:
             desired_caps_init = {

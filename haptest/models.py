@@ -115,15 +115,16 @@ class TestCase(models.Model):
                        ("SKIP","跳过不执行"),
                        ("SNIPPET","用例片段"),
                        ]
-    platform = models.ForeignKey(Platform, on_delete=models.SET_NULL, verbose_name='所属平台', null=True)
+    platform = models.ForeignKey(Platform, on_delete=models.SET_NULL, verbose_name='所属平台', null=True,default=1)
     # project=models.ForeignKey(Project,on_delete=models.SET_NULL,verbose_name='所属项目',blank=True,null=True)
     module_name=models.ForeignKey(Module,verbose_name='所属模块',on_delete=models.SET_NULL,null=True,blank=False)
     case_code=models.CharField('用例编号',max_length=40,unique=True)
     title=models.CharField('用例标题',max_length=40,)
     condition=models.CharField('前置条件',max_length=40,blank=True,choices=condition_choices)
     designer=models.CharField('设计者',max_length=20,blank=True)
+    creat_user=models.IntegerField('创建人',blank=True,null=True)
     priority=models.CharField('优先级',max_length=20,blank=True)
-    remark=models.TextField('备注',max_length=250,blank=True)
+    remark=models.TextField('备注',max_length=250,blank=True,help_text="备注记录")
     flag=models.BooleanField('自动化标记',blank=True,default="True")
     run_order=models.IntegerField("执行顺序",blank=True,null=True)
     def __str__(self):
@@ -159,19 +160,19 @@ class CaseStep(models.Model):
         verbose_name_plural = '测试步骤'
         db_table = 'haptest_casestep'
 
-class Environment(models.Model):
-    # 环境
-    env_name=models.CharField('环境名称',max_length=20)
-    desired_caps=models.TextField('运行参数',default="{'platformName': 'Desktop', 'browserName': 'Chrome'}")
-    pc_login_url=models.URLField('登录地址',default='',max_length=50)
-    login_user=models.CharField('用户',max_length=10)
-    login_password=models.CharField('密码',max_length=10)
-    server_url=models.URLField('server_url',max_length=50,blank=True,default="http://127.0.0.1:4723/wd/hub")
-    def __str__(self):
-        return self.env_name
-    class Meta:
-        verbose_name = '测试环境'
-        verbose_name_plural = '测试环境'
+# class Environment(models.Model):
+#     # 环境
+#     env_name=models.CharField('环境名称',max_length=20)
+#     desired_caps=models.TextField('运行参数',default="{'platformName': 'Desktop', 'browserName': 'Chrome'}")
+#     pc_login_url=models.URLField('登录地址',default='',max_length=50)
+#     login_user=models.CharField('用户',max_length=10)
+#     login_password=models.CharField('密码',max_length=10)
+#     server_url=models.URLField('server_url',max_length=50,blank=True,default="http://127.0.0.1:4723/wd/hub")
+#     def __str__(self):
+#         return self.env_name
+#     class Meta:
+#         verbose_name = '测试环境'
+#         verbose_name_plural = '测试环境'
 
 class RunCase(models.Model):
     # 运行用例
@@ -179,7 +180,14 @@ class RunCase(models.Model):
     platform = models.ForeignKey(Platform, on_delete=models.SET_NULL, verbose_name='所属平台', null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name='所属项目')
     module=models.ManyToManyField(Module,verbose_name="包含模块")
-    environment=models.ForeignKey(Environment,on_delete=models.SET_NULL,null=True,verbose_name="运行环境")
+    # environment=models.ForeignKey(Environment,on_delete=models.SET_NULL,null=True,verbose_name="运行环境")
+    desired_caps = models.TextField('运行参数', default="{'platformName': 'Desktop', 'browserName': 'Chrome'}")
+    pc_login_url = models.URLField('登录地址', default='', max_length=50)
+    login_user = models.CharField('用户', max_length=10)
+    login_password = models.CharField('密码', max_length=10)
+    server_url = models.URLField('server_url', max_length=50, blank=True, default="http://127.0.0.1:4723/wd/hub")
+    remote_ip = models.URLField('远程运行ip', max_length=50, blank=True)
+
     def __str__(self):
         return self.runcase_name
     class Meta:
